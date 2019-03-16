@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_message"
+            android:title="Message">
+
+
+        </item>
+
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:title="share"></item>
+
+
+        </menu>
+
+
+    </item>
+    <item
+        android:id="@+id/app_bar_switch"
+        android:title="@string/dark"
+        app:actionLayout="@layout/switch_item"/>
+
+
+</menu>
