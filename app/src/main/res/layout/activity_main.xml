@@ -6,10 +6,11 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFE299"
+    android:background="@color/CreamBackground"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    >
 
 
     <LinearLayout
@@ -21,9 +22,10 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:fontFamily="casual"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/Cream"
+            android:background="@color/CreamBackground"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
@@ -38,12 +40,15 @@
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
-        android:layout_gravity="start"
-        android:layout_height="match_parent"
-        android:layout_width="wrap_content"
         android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/CreamBackground"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu"/>
+        app:itemTextColor="?attr/colorBackgroundFloating"
+        app:menu="@menu/drawer_menu"
+        />
 
 
 
