@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         itemSwitch.setActionView(R.layout.switch_item);
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
-
     }
 
 
