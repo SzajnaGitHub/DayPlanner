@@ -78,4 +78,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:onClick="onClickCreateFile"
+        android:text="Zapisz przykładowy plik na dysku"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/openButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:onClick="onClickOpenFile"
+        android:text="Otwórz pliki z dysku"
+        app:layout_constraintTop_toBottomOf="@+id/logoutButton"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:onClick="onClickLogout"
+        android:text="Wyloguj"
+        app:layout_constraintTop_toBottomOf="@+id/saveButton"
+        tools:layout_editor_absoluteX="0dp" />
 </android.support.constraint.ConstraintLayout>
