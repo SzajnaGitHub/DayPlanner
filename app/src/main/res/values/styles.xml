@@ -21,11 +21,11 @@
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">60dp</item>
         <item name="android:background">@drawable/border_shape</item>
         <item name="android:layout_weight">0</item>
         <item name="android:layout_marginRight">30dp</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">312dp</item>
 
 
     </style>
@@ -38,7 +38,7 @@
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">60dp</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:background">@drawable/border_shape</item>
         <item name="android:layout_marginLeft">0dp</item>

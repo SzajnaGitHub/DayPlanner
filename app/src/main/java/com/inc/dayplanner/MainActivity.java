@@ -1,5 +1,6 @@
 package com.inc.dayplanner;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 
 
@@ -48,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         itemSwitch.setActionView(R.layout.switch_item);
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+        drawer.closeDrawer(GravityCompat.START);
+        toolbar.setTitle("Message");
+
     }
 
 
@@ -56,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.nav_message:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new opt1Fragment(), null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Message");
                 break;
@@ -102,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }//#564559
+
+
+
+
 
 }
 
