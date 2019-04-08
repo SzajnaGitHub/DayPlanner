@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseDriveActivity{
 
 
 
-    private static final String TAG = "Google Drive Activity";
+    //private static final String TAG = "Google Drive Activity";
 
 
     @Override
@@ -20,10 +20,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(View view) {
-        BaseDriveActivity baseDriveActivity = new BaseDriveActivity();
-        baseDriveActivity.signIn();
-        //Intent intent = new Intent(this, GoogleDriveFileHolder.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 
