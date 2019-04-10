@@ -66,13 +66,9 @@ import static com.google.android.gms.drive.DriveId.decodeFromString;
 public class LoginActivity extends BaseDemoActivity{
 
 
-    private DataBufferAdapter<Metadata> mResultsAdapter;
-
-
     private TextView mFileContents;
     private DriveFile driveFileToOpen;
     String pathToDataFile=null;
-    String username=null;
 
 
     //private static final String TAG = "Google Drive Activity";
@@ -80,15 +76,6 @@ public class LoginActivity extends BaseDemoActivity{
     protected void onDriveClientReady() {
         //listFiles();
 //        createFile();
-
-//        pickTextFile()
-//                .addOnSuccessListener(this,
-//                        driveId -> retrieveContents(driveId.asDriveFile()))
-//                .addOnFailureListener(this, e -> {
-//                    Log.e(TAG, "No file selected", e);
-//                    showMessage(getString(R.string.file_not_selected));
-////                    finish();
-//                });
     }
 
     @Override
@@ -100,7 +87,8 @@ public class LoginActivity extends BaseDemoActivity{
     }
 
     public void Login(View view) {
-//        saveFile();
+            SaveFileLocal saveFileLocal = new SaveFileLocal();
+//            saveFileLocal.saveFile(getApplicationContext(),getUsername(), pathToDataFile);
             readFile();
             rewriteContents(driveFileToOpen);
             retrieveContents(driveFileToOpen);
@@ -349,95 +337,6 @@ public class LoginActivity extends BaseDemoActivity{
         // [END drive_android_read_contents]
     }
 
-    private void listFiles() {
-        // [START drive_android_query_title]
-        Query query = new Query.Builder()
-                .addFilter(Filters.eq(SearchableField.TITLE, "DayPlanner.txt"))
-                .build();
-        // [END drive_android_query_title]
-        Task<MetadataBuffer> queryTask =
-                getDriveResourceClient()
-                        .query(query)
-                        .addOnSuccessListener(this,
-                                metadataBuffer -> mResultsAdapter.append(metadataBuffer))
-                        .addOnFailureListener(this, e -> {
-                            Log.e(TAG, "Error retrieving files", e);
-                            showMessage(getString(R.string.query_failed));
-                            finish();
-                        });
-    }
-
-
-
-    private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
-    public void readFile(){
-        String filename = "DayPlannerIDdataFile";
-        Context ctx = getApplicationContext();
-
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = ctx.openFileInput(filename);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String fileData = readFromFileInputStream(fileInputStream);
-
-        if(fileData.length()>0) {
-            Toast.makeText(ctx, "Load saved data complete.", Toast.LENGTH_SHORT).show();
-        }
-
-        String [] dataFromFile;
-        dataFromFile=fileData.split("\\|");
-        pathToDataFile=dataFromFile[1];
-        driveFileToOpen= decodeFromString(pathToDataFile).asDriveFile();
-        retrieveContents(driveFileToOpen);
-    }
-
-    private String readFromFileInputStream(FileInputStream fileInputStream)
-    {
-        StringBuffer retBuf = new StringBuffer();
-
-        try {
-            if (fileInputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                String lineData = bufferedReader.readLine();
-                while (lineData != null) {
-                    retBuf.append(lineData);
-                    lineData = bufferedReader.readLine();
-                }
-            }
-        }catch(IOException ex)
-        {
-            Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
-        }finally
-        {
-            return retBuf.toString();
-        }
-    }
-
-    private void writeDataToFile(FileOutputStream fileOutputStream, String data)
-    {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-
-            bufferedWriter.write(data);
-
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStreamWriter.close();
-        }catch(FileNotFoundException ex)
-        {
-            Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
-        }catch(IOException ex)
-        {
-            Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
-        }
-    }
-
     public String getUsername() {
         AccountManager manager = AccountManager.get(this);
         Account[] accounts = manager.getAccountsByType("com.google");
@@ -461,6 +360,36 @@ public class LoginActivity extends BaseDemoActivity{
             return null;
     }
 
+//    private DataBufferAdapter<Metadata> mResultsAdapter;
+//    private void listFiles() {
+//        // [START drive_android_query_title]
+//        Query query = new Query.Builder()
+//                .addFilter(Filters.eq(SearchableField.TITLE, "DayPlanner.txt"))
+//                .build();
+//        // [END drive_android_query_title]
+//        Task<MetadataBuffer> queryTask =
+//                getDriveResourceClient()
+//                        .query(query)
+//                        .addOnSuccessListener(this,
+//                                metadataBuffer -> mResultsAdapter.append(metadataBuffer))
+//                        .addOnFailureListener(this, e -> {
+//                            Log.e(TAG, "Error retrieving files", e);
+//                            showMessage(getString(R.string.query_failed));
+//                            finish();
+//                        });
+//    }
+
+
+
+    public void readFile(){
+        SaveFileLocal saveFileLocal = new SaveFileLocal();
+        String fileData=saveFileLocal.readFile(getApplicationContext());
+        String [] dataFromFile;
+        dataFromFile=fileData.split("\\|");
+        pathToDataFile=dataFromFile[1];
+        driveFileToOpen= decodeFromString(pathToDataFile).asDriveFile();
+        retrieveContents(driveFileToOpen);
+    }
 
 }
 
