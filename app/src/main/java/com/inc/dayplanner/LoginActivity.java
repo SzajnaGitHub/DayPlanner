@@ -102,7 +102,7 @@ public class LoginActivity extends BaseDemoActivity{
     public void Login(View view) {
 //        saveFile();
             readFile();
-            appendContents(driveFileToOpen);
+            rewriteContents(driveFileToOpen);
             retrieveContents(driveFileToOpen);
 //        String filename = "DayPlannerIDdataFile";
 //        File directory = Environment.getFilesDir();
@@ -227,25 +227,11 @@ public class LoginActivity extends BaseDemoActivity{
                             showMessage(getString(R.string.file_created,
                                     driveFile.getDriveId().encodeToString()));
                             pathToDataFile=driveFile.getDriveId().encodeToString();
-//                            finish();
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
                     showMessage(getString(R.string.file_create_error));
-//                    finish();
                 });
-
-//        String filename = "DayPlannerIDdataFile";
-//        FileOutputStream outputStream;
-//        try {
-//            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-//            outputStream.write(pathToDataFile.getBytes());
-//            outputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        retrieveContents( driveFileToRead);
-
         // [END drive_android_create_file]
     }
 
@@ -292,11 +278,38 @@ public class LoginActivity extends BaseDemoActivity{
         // [END drive_android_append_contents]
     }
 
-    private void retrieveContents(DriveFile file) {
-//        final Task<DriveFolder> rootFolderTask = getDriveResourceClient().getRootFolder();
-//        DriveFolder parent = rootFolderTask.getResult();
+    private void rewriteContents(DriveFile file) {
+        // [START drive_android_open_for_write]
+        Task<DriveContents> openTask =
+                getDriveResourceClient().openFile(file, DriveFile.MODE_WRITE_ONLY);
+        // [END drive_android_open_for_write]
+        // [START drive_android_rewrite_contents]
+        openTask.continueWithTask(task -> {
+            DriveContents driveContents = task.getResult();
+            try (OutputStream out = driveContents.getOutputStream()) {
+                out.write("Hello world".getBytes());
+            }
+            // [START drive_android_commit_content]
+            Task<Void> commitTask =
+                    getDriveResourceClient().commitContents(driveContents, null);
+            // [END drive_android_commit_content]
+            return commitTask;
+        })
+                .addOnSuccessListener(this,
+                        aVoid -> {
+                            showMessage(getString(R.string.content_updated));
+//                            finish();
+                        })
+                .addOnFailureListener(this, e -> {
+                    Log.e(TAG, "Unable to update contents", e);
+                    showMessage(getString(R.string.content_update_failed));
+//                    finish();
+                });
+        // [END drive_android_rewrite_contents]
+    }
 
-//String driveIdString=file.getDriveId().asDriveFile().getDriveId().encodeToString();
+    private void retrieveContents(DriveFile file) {
+
         // [START drive_android_open_file]
         Task<DriveContents> openFileTask =
                 getDriveResourceClient().openFile(file, DriveFile.MODE_READ_ONLY);
@@ -331,7 +344,6 @@ public class LoginActivity extends BaseDemoActivity{
                     // [START_EXCLUDE]
                     Log.e(TAG, "Unable to read contents", e);
                     showMessage(getString(R.string.read_failed));
-                    //finish();
                     // [END_EXCLUDE]
                 });
         // [END drive_android_read_contents]
@@ -355,23 +367,7 @@ public class LoginActivity extends BaseDemoActivity{
                         });
     }
 
-    private void saveFile(){
-        Context ctx = getApplicationContext();
-        String filename = "DayPlannerIDdataFile";
-        username=getUsername();
-        String content =username+"|"+pathToDataFile;
 
-        try
-        {
-            FileOutputStream fileOutputStream = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
-            writeDataToFile(fileOutputStream, content);
-        }catch(FileNotFoundException ex)
-        {
-            Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
-        }
-
-        //Toast.makeText(ctx, "Data has been written to file " + userEmalFileName, Toast.LENGTH_LONG).show();
-    }
 
     private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
     public void readFile(){
