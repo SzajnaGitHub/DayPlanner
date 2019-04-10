@@ -218,7 +218,7 @@ public class GoogleDriveFileHolder extends BaseDriveActivity {
     /**
      * Launches an {@link Intent} to create a new Drive file.
      */
-    private void createDriveFile() {
+    public void createDriveFile() {
         Log.i(TAG, "Create drive file.");
 
         if (!isSignedIn()) {
