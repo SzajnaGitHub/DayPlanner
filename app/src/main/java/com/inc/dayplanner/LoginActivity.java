@@ -2,59 +2,28 @@ package com.inc.dayplanner;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.content.SharedPreferences;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.drive.DriveContents;
-import com.google.android.gms.drive.DriveId;
-import com.google.android.gms.drive.Metadata;
-import com.google.android.gms.drive.MetadataBuffer;
-import com.google.android.gms.drive.OpenFileActivityOptions;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.Query;
-import com.google.android.gms.drive.query.SearchableField;
-import com.google.android.gms.drive.widget.DataBufferAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,8 +43,8 @@ public class LoginActivity extends BaseDemoActivity{
     //private static final String TAG = "Google Drive Activity";
     @Override
     protected void onDriveClientReady() {
-        //listFiles();
 //        createFile();
+//        listFiles();
     }
 
     @Override
@@ -343,9 +312,6 @@ public class LoginActivity extends BaseDemoActivity{
         List<String> possibleEmails = new LinkedList<String>();
 
         for (Account account : accounts) {
-            // TODO: Check possibleEmail against an email regex or treat
-            // account.name as an email address only for certain account.type
-            // values.
             possibleEmails.add(account.name);
         }
 
@@ -382,8 +348,8 @@ public class LoginActivity extends BaseDemoActivity{
 
 
     public void readFile(){
-        SaveFileLocal saveFileLocal = new SaveFileLocal();
-        String fileData=saveFileLocal.readFile(getApplicationContext());
+        ReadFileLocal readFileLocal = new ReadFileLocal();
+        String fileData=readFileLocal.readFile(getApplicationContext());
         String [] dataFromFile;
         dataFromFile=fileData.split("\\|");
         pathToDataFile=dataFromFile[1];

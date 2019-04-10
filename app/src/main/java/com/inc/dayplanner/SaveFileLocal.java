@@ -40,48 +40,10 @@ public class SaveFileLocal extends AppCompatActivity {
         //Toast.makeText(ctx, "Data has been written to file " + userEmalFileName, Toast.LENGTH_LONG).show();
     }
 
-    public String readFile(Context ctx){
-        String filename = "DayPlannerIDdataFile";
-
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = ctx.openFileInput(filename);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        String fileData = readFromFileInputStream(fileInputStream);
-
-        if(fileData.length()>0) {
-            Toast.makeText(ctx, "Load saved data complete.", Toast.LENGTH_SHORT).show();
-        }
-        return fileData;
-    }
 
 
-    private String readFromFileInputStream(FileInputStream fileInputStream)
-    {
-        StringBuffer retBuf = new StringBuffer();
 
-        try {
-            if (fileInputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-                String lineData = bufferedReader.readLine();
-                while (lineData != null) {
-                    retBuf.append(lineData);
-                    lineData = bufferedReader.readLine();
-                }
-            }
-        }catch(IOException ex)
-        {
-            Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
-        }finally
-        {
-            return retBuf.toString();
-        }
-    }
 
     private void writeDataToFile(FileOutputStream fileOutputStream, String data)
     {
