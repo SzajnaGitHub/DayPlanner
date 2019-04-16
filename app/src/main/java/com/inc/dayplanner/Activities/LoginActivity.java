@@ -1,9 +1,11 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.inc.dayplanner.R;
 
 public class LoginActivity extends AppCompatActivity {
 

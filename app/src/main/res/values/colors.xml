@@ -3,8 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="CreamToolbar">#e6b778</color>
+    <color name="CreamToolbar">#FFE299</color>
     <color name="DarkBackground">#120e13</color>
     <color name="DarkToolbar">#372c39</color>
-    <color name="CreamBackground">#deb887</color>
+    <color name="CreamBackground">#FFE299</color>
 </resources>
