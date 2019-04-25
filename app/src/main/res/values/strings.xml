@@ -3,6 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="dark">Dark</string>
+
     <string name="msg_errconnect">An error occoured while trying to connect.</string>
     <string name="msg_errretrieval">An error occoured while retrieving the file.</string>
     <string name="msg_errsaving">An error occoured while saving.</string>
@@ -39,4 +40,5 @@
     <string name="init_failed">Unable to initialize activity.</string>
     <string name="file_not_selected">No file selected, can not continue.</string>
     <string name="folder_not_selected">No folder selected, can not continue.</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

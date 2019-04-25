@@ -1,6 +1,5 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.Activities;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Switch;
+
+import com.inc.dayplanner.Fragments.CreatePlanFragment;
+import com.inc.dayplanner.Fragments.PlannerFragment;
+import com.inc.dayplanner.R;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,15 +26,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MenuItem itemSwitch;
     private Toolbar toolbar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
+
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
-        //  setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -52,9 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+ /*       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
         drawer.closeDrawer(GravityCompat.START);
-        toolbar.setTitle("Message");
+        toolbar.setTitle("Plan");*/
 
     }
 
@@ -63,11 +65,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.nav_message:
+            case R.id.nav_plan:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
                 drawer.closeDrawer(GravityCompat.START);
-                toolbar.setTitle("Message");
+                toolbar.setTitle("Plan");
                 break;
+
+            case R.id.nav_create_planer:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanFragment(), null).commit();
+                drawer.closeDrawer(GravityCompat.START);
+                toolbar.setTitle("Daily");
+
+
+                break;
+
 
             case R.id.app_bar_switch:
                 switchButtonHandler(sw);
@@ -109,10 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-    }//#564559
-
-
-
+    }
 
 
 }
