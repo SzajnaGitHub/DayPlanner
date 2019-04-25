@@ -10,14 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class PlannerFragment extends Fragment {
 
     private GridLayout gridLayout;
-    DynamicViews dynamicViews;
+    private DynamicViews dynamicViews;
+    private TextView dayTextView;
     private Context context;
-    GridLayout.LayoutParams lp;
+    private GridLayout.LayoutParams lp;
+
 
     @Nullable
     @Override
@@ -25,7 +32,12 @@ public class PlannerFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         gridLayout = view.findViewById(R.id.gridLayout);
+        dayTextView = view.findViewById(R.id.dayText);
 
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+
+       dayTextView.setText(new SimpleDateFormat("EEEE",Locale.ENGLISH).format(date.getTime()));
 
         final ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -33,10 +45,9 @@ public class PlannerFragment extends Fragment {
 
             public void onClick(View v) {
 
-                dynamicViews = new DynamicViews(context);
+              dynamicViews = new DynamicViews(context);
 
-                gridLayout.addView(dynamicViews.hourTextView(getContext(),"9:30-10:30"));
-                gridLayout.addView(dynamicViews.activityTextView(getContext(),"Basen"));
+            gridLayout.addView(dynamicViews.linearLayout(getContext(),"7:30-9:30","Siłownia"));
 
             }
         });
