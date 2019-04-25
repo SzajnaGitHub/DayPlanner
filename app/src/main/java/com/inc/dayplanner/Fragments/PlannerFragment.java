@@ -49,7 +49,7 @@ public class PlannerFragment extends Fragment {
 
         String message = null;
         if (getArguments() != null) {
-            message = getArguments().getString("lol");
+            message = getArguments().getString("dayOfTheWeek");
         }
 
 
@@ -73,7 +73,6 @@ public class PlannerFragment extends Fragment {
 
                 if(muteCheckbox.isChecked())  {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    // mutePhone(audioManager);
             }}
         });
 
