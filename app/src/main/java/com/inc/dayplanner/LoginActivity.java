@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.drive.DriveContents;
 import android.widget.TextView;
 
@@ -59,7 +60,8 @@ public class LoginActivity extends BaseDemoActivity{
     }
 
     public void Login(View view) {
-        createFile();
+//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+//        createFile();
 //        createNewGoogleFileAndAppendID();
         readFile();
         if(driveFileToOpen==null){
@@ -100,7 +102,7 @@ public class LoginActivity extends BaseDemoActivity{
                     DriveContents contents = createContentsTask.getResult();
                     OutputStream outputStream = contents.getOutputStream();
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writer.write(signInAccount.getEmail());
+                        writer.write(getUsername());
                     }
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
@@ -251,23 +253,26 @@ public class LoginActivity extends BaseDemoActivity{
 
 
     public String getUsername() {
-        AccountManager manager = AccountManager.get(this);
-        Account[] accounts = manager.getAccountsByType("com.google");
-        List<String> possibleEmails = new LinkedList<String>();
+//        AccountManager manager = AccountManager.get(this);
+//        Account[] accounts = manager.getAccountsByType("com.google");
+//        List<String> possibleEmails = new LinkedList<String>();
+//
+//        for (Account account : accounts) {
+//            possibleEmails.add(account.name);
+//        }
+//
+//        if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
+//            String email = possibleEmails.get(0);
+//            String[] parts = email.split("@");
+//            if (parts.length > 0 && parts[0] != null)
+//                return parts[0];
+//            else
+//                return null;
+//        } else
+//            return null;
+        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        return signInAccount.getEmail();
 
-        for (Account account : accounts) {
-            possibleEmails.add(account.name);
-        }
-
-        if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
-            String email = possibleEmails.get(0);
-            String[] parts = email.split("@");
-            if (parts.length > 0 && parts[0] != null)
-                return parts[0];
-            else
-                return null;
-        } else
-            return null;
     }
 
 
@@ -289,9 +294,9 @@ public class LoginActivity extends BaseDemoActivity{
             }
         }
         if(pathToDataFile.equals("")){
-//            createNewGoogleFileAndAppendID();
+            //TODO:zapytac uzytkownika czy chce import
+            createFile();
         }
-        //TODO:sprawdzic czy w pliku jest tylko jedno ID
         try {
             driveFileToOpen = decodeFromString(pathToDataFile).asDriveFile();
         }catch(Exception e){

@@ -58,6 +58,8 @@ public abstract class BaseDemoActivity extends Activity {
      */
     private TaskCompletionSource<DriveId> mOpenItemTaskSource;
 
+    public static GoogleSignInOptions gso;
+
     @Override
     protected void onStart() {
 //        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -109,7 +111,7 @@ public abstract class BaseDemoActivity extends Activity {
     /**
      * Starts the sign-in process and initializes the Drive client.
      */
-    public static GoogleSignInAccount signInAccount;
+    public GoogleSignInAccount signInAccount;
     protected void signIn() {
         Set<Scope> requiredScopes = new HashSet<>(2);
         requiredScopes.add(Drive.SCOPE_FILE);
@@ -126,6 +128,7 @@ public abstract class BaseDemoActivity extends Activity {
                             .build();
             GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
             startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+
         }
     }
 
@@ -193,7 +196,7 @@ public abstract class BaseDemoActivity extends Activity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public static GoogleSignInOptions gso;
+
     GoogleSignInClient mGoogleSignInClient;
     public void signOut() {
 
@@ -203,7 +206,7 @@ public abstract class BaseDemoActivity extends Activity {
                             .requestScopes(Drive.SCOPE_APPFOLDER)
                             .requestEmail()
                             .build();
-        
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
