@@ -1,4 +1,4 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.Activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -18,6 +18,10 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.inc.dayplanner.BaseDemoActivity;
+import com.inc.dayplanner.R;
+import com.inc.dayplanner.ReadFileLocal;
+import com.inc.dayplanner.SaveFileLocal;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -35,7 +39,7 @@ import java.util.List;
 import static com.google.android.gms.drive.DriveId.decodeFromString;
 
 
-public class LoginActivity extends BaseDemoActivity{
+public class LoginActivity extends BaseDemoActivity {
 
 
     private TextView mFileContents;
