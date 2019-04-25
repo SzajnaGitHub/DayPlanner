@@ -14,11 +14,10 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.R;
-
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import static android.view.View.INVISIBLE;
 
 
@@ -35,6 +34,8 @@ public class PlannerFragment extends Fragment {
     private TextView activityText;
     private boolean flag=false;
     private CheckBox muteCheckbox;
+    Date now = new Date();
+
 
 
     @Nullable
@@ -45,16 +46,18 @@ public class PlannerFragment extends Fragment {
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
         messageFrame = view.findViewById(R.id.messageFrame);
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE"); //
 
 
         String message = null;
+
         if (getArguments() != null) {
             message = getArguments().getString("dayOfTheWeek");
+            dayTextView.setText(message);
+        }else {
+            dayTextView.setText(simpleDateformat.format(now));
         }
 
-
-
-        dayTextView.setText(message);
 
          final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
 
@@ -84,14 +87,12 @@ public class PlannerFragment extends Fragment {
             public void onClick(View v) {
                 dynamicViews = new DynamicViews(context);
 
-
                     if(!flag) {
                         messageFrame.setVisibility(View.VISIBLE);
                         flag = true;
                     }else{
                         flag = false;
                         messageFrame.setVisibility(INVISIBLE);
-
 
                 }
 

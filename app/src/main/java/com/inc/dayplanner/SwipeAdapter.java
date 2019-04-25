@@ -43,7 +43,6 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         // System.out.println("pozycja" + position);
 
 
-
         bundle.putString("Date", date);
         bundle.putString("dayOfTheWeek", setDay(position));
         pageFragment.setArguments(bundle);

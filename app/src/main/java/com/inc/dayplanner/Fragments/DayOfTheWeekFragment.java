@@ -20,11 +20,11 @@ public class DayOfTheWeekFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_day_of_the_week, container, false);
 
-       // textView = view.findViewById(R.id.demoText);
+        textView = view.findViewById(R.id.demoText);
 
-       // String message = getArguments().getString("message");
+        String message = getArguments().getString("message");
 
-       // textView.setText(message);
+        textView.setText(message);
         return  view;
     }
 
