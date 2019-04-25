@@ -2,11 +2,13 @@ package com.inc.dayplanner;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.drive.DriveContents;
 import android.widget.TextView;
 
@@ -37,14 +39,15 @@ public class LoginActivity extends BaseDemoActivity{
 
     private TextView mFileContents;
     private DriveFile driveFileToOpen;
-    String pathToDataFile=null;
+    static String pathToDataFile=null;
+    private static final String TAG = "LoginActivity";
 
 
     //private static final String TAG = "Google Drive Activity";
     @Override
     protected void onDriveClientReady() {
 //        createFile();
-//        listFiles();
+//        createNewGoogleFileAndAppendID();
     }
 
     @Override
@@ -56,9 +59,11 @@ public class LoginActivity extends BaseDemoActivity{
     }
 
     public void Login(View view) {
+        createFile();
+//        createNewGoogleFileAndAppendID();
         readFile();
         if(driveFileToOpen==null){
-            createNewGoogleFileAndAppendID();
+            //createNewGoogleFileAndAppendID();
         }else {
             try {
                 retrieveContents(driveFileToOpen);
@@ -67,114 +72,21 @@ public class LoginActivity extends BaseDemoActivity{
                 createNewGoogleFileAndAppendID();
             }
         }
-//            saveFileLocal.saveFile(getApplicationContext(),getUsername(), pathToDataFile);
 
-        //rewriteContents(driveFileToOpen);
-        //retrieveContents(driveFileToOpen);
-//        String filename = "DayPlannerIDdataFile";
-//        File directory = Environment.getFilesDir();
-//        File file = new File(directory, filename);
-//        StringBuilder text = new StringBuilder();
-//        try {
-//            BufferedReader br = new BufferedReader(new FileReader(file));
-//            String line;
-//
-//            while ((line = br.readLine()) != null) {
-//                text.append(line);
-//                text.append('\n');
-//            }
-//            br.close();
-//        }
-//        catch (IOException e) {
-            //You'll need to add proper error handling here
-        //}
-
-//        createFile();
-
-//        driveFileToOpen= decodeFromString(pathToDataFile).asDriveFile();
-//        retrieveContents(driveFileToRead);
-
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
+        ReadFileLocal readFileLocal = new ReadFileLocal();
+        String fileData=readFileLocal.readFile(getApplicationContext());
+        System.out.println(fileData);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
-//    /**
-//     * Request code for file creator activity.
-//     */
-//    private static final int REQUEST_CODE_CREATOR = NEXT_AVAILABLE_REQUEST_CODE;
-//
-//    /**
-//     * Request code for the file opener activity.
-//     */
-//    private static final int REQUEST_CODE_OPENER = NEXT_AVAILABLE_REQUEST_CODE + 1;
-//
-//    /**
-//     * Text file MIME type.
-//     */
-//    private static final String MIME_TYPE_TEXT = "text/plain";
-//
-//    /**
-//     * Drive ID of the currently opened Drive file.
-//     */
-//    private DriveId mCurrentDriveId;
-//
-//    /**
-//     * Currently opened file's metadata.
-//     */
-//    private Metadata mMetadata;
-//
-//    /**
-//     * Currently opened file's contents.
-//     */
-//    private DriveContents mDriveContents;
 
-    private static final String TAG = "LoginActivity";
-//    private void openDriveFile() {
-//        Log.i(TAG, "Open Drive file.");
-//
-//        if (!isSignedIn()) {
-//            Log.w(TAG, "Failed to open file, user is not signed in.");
-//            return;
-//        }
-//
-//        // Build activity options.
-//        final OpenFileActivityOptions openFileActivityOptions =
-//                new OpenFileActivityOptions.Builder()
-//                        .setMimeType(Collections.singletonList(MIME_TYPE_TEXT))
-//                        .build();
-//
-//        // Start a OpenFileActivityIntent
-//        mDriveClient.newOpenFileActivityIntentSender(openFileActivityOptions)
-//                .addOnSuccessListener(new OnSuccessListener<IntentSender>() {
-//                    @Override
-//                    public void onSuccess(IntentSender intentSender) {
-//                        try {
-//                            startIntentSenderForResult(
-//                                    intentSender,
-//                                    REQUEST_CODE_OPENER,
-//                                    /* fillInIntent= */ null,
-//                                    /* flagsMask= */ 0,
-//                                    /* flagsValues= */ 0,
-//                                    /* extraFlags= */ 0);
-//                        } catch (IntentSender.SendIntentException e) {
-//                            Log.w(TAG, "Unable to send intent.", e);
-//                        }
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.e(TAG, "Unable to create OpenFileActivityIntent.", e);
-//            }
-//        });
-//    }
     public void createNewGoogleFileAndAppendID(){
-//        SaveFileLocal saveFileLocal = new SaveFileLocal();
-//        ReadFileLocal readFileLocal = new ReadFileLocal();
+        SaveFileLocal saveFileLocal = new SaveFileLocal();
 //        createFile();
-//        String fileData=readFileLocal.readFile(getApplicationContext());
 //        fileData +="|"+pathToDataFile;
-//        saveFileLocal.saveFile(getApplicationContext(),getUsername(), fileData);
-        System.out.println("Blad");
+        saveFileLocal.saveFile(getApplicationContext(),getUsername(), pathToDataFile);
+//        System.out.println("Blad");
     }
 
 
@@ -188,7 +100,7 @@ public class LoginActivity extends BaseDemoActivity{
                     DriveContents contents = createContentsTask.getResult();
                     OutputStream outputStream = contents.getOutputStream();
                     try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writer.write("MAMY TOO!!!");
+                        writer.write(signInAccount.getEmail());
                     }
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
@@ -204,6 +116,7 @@ public class LoginActivity extends BaseDemoActivity{
                             showMessage(getString(R.string.file_created,
                                     driveFile.getDriveId().encodeToString()));
                             pathToDataFile=driveFile.getDriveId().encodeToString();
+                            createNewGoogleFileAndAppendID();
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
@@ -212,7 +125,9 @@ public class LoginActivity extends BaseDemoActivity{
         // [END drive_android_create_file]
     }
 
-    private void appendContents(DriveFile file) {
+
+
+    private void appendContents(DriveFile file, String contentToAppend) {
         // [START drive_android_open_for_append]
         Task<DriveContents> openTask =
                 getDriveResourceClient().openFile(file, DriveFile.MODE_READ_WRITE);
@@ -230,7 +145,7 @@ public class LoginActivity extends BaseDemoActivity{
                 }
             }
             try (OutputStream out = new FileOutputStream(pfd.getFileDescriptor())) {
-                out.write("Hello world".getBytes());
+                out.write(contentToAppend.getBytes());
             }
             // [START drive_android_commit_contents_with_metadata]
             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
@@ -255,7 +170,9 @@ public class LoginActivity extends BaseDemoActivity{
         // [END drive_android_append_contents]
     }
 
-    private void rewriteContents(DriveFile file) {
+
+
+    private void rewriteContents(DriveFile file, String contentToRewrite) {
         // [START drive_android_open_for_write]
         Task<DriveContents> openTask =
                 getDriveResourceClient().openFile(file, DriveFile.MODE_WRITE_ONLY);
@@ -264,7 +181,7 @@ public class LoginActivity extends BaseDemoActivity{
         openTask.continueWithTask(task -> {
             DriveContents driveContents = task.getResult();
             try (OutputStream out = driveContents.getOutputStream()) {
-                out.write("Hello world".getBytes());
+                out.write(contentToRewrite.getBytes());
             }
             // [START drive_android_commit_content]
             Task<Void> commitTask =
@@ -285,49 +202,53 @@ public class LoginActivity extends BaseDemoActivity{
         // [END drive_android_rewrite_contents]
     }
 
-    private void retrieveContents(DriveFile file) throws NullPointerException {
-try {
-    // [START drive_android_open_file]
-    Task<DriveContents> openFileTask =
-            getDriveResourceClient().openFile(file, DriveFile.MODE_READ_ONLY);
-    // [END drive_android_open_file]
-    // [START drive_android_read_contents]
-    openFileTask
-            .continueWithTask(task -> {
-                DriveContents contents = task.getResult();
-                // Process contents...
-                // [START_EXCLUDE]
-                // [START drive_android_read_as_string]
 
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(contents.getInputStream()))) {
-                    StringBuilder builder = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        builder.append(line).append("\n");
-                    }
-                    showMessage(getString(R.string.content_loaded));
-                    mFileContents.setText(builder.toString());
-                }
-                // [END drive_android_read_as_string]
-                // [END_EXCLUDE]
-                // [START drive_android_discard_contents]
-                Task<Void> discardTask = getDriveResourceClient().discardContents(contents);
-                // [END drive_android_discard_contents]
-                return discardTask;
-            })
-            .addOnFailureListener(e -> {
-                // Handle failure
-                // [START_EXCLUDE]
-                Log.e(TAG, "Unable to read contents", e);
-                showMessage(getString(R.string.read_failed));
-                // [END_EXCLUDE]
-            });
-    // [END drive_android_read_contents]
-}catch(NullPointerException e){
-    throw new NullPointerException(e.toString());
-}
-    }
+
+    private void retrieveContents(DriveFile file) throws NullPointerException {
+        try {
+            // [START drive_android_open_file]
+            Task<DriveContents> openFileTask =
+                    getDriveResourceClient().openFile(file, DriveFile.MODE_READ_ONLY);
+            // [END drive_android_open_file]
+            // [START drive_android_read_contents]
+            openFileTask
+                    .continueWithTask(task -> {
+                        DriveContents contents = task.getResult();
+                        // Process contents...
+                        // [START_EXCLUDE]
+                        // [START drive_android_read_as_string]
+
+                        try (BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(contents.getInputStream()))) {
+                            StringBuilder builder = new StringBuilder();
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                builder.append(line).append("\n");
+                            }
+                            showMessage(getString(R.string.content_loaded));
+                            mFileContents.setText(builder.toString());
+                        }
+                        // [END drive_android_read_as_string]
+                        // [END_EXCLUDE]
+                        // [START drive_android_discard_contents]
+                        Task<Void> discardTask = getDriveResourceClient().discardContents(contents);
+                        // [END drive_android_discard_contents]
+                        return discardTask;
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle failure
+                        // [START_EXCLUDE]
+                        Log.e(TAG, "Unable to read contents", e);
+                        showMessage(getString(R.string.read_failed));
+                        // [END_EXCLUDE]
+                    });
+            // [END drive_android_read_contents]
+        }catch(NullPointerException e){
+            throw new NullPointerException(e.toString());
+        }
+            }
+
+
 
     public String getUsername() {
         AccountManager manager = AccountManager.get(this);
@@ -349,33 +270,27 @@ try {
             return null;
     }
 
-//    private DataBufferAdapter<Metadata> mResultsAdapter;
-//    private void listFiles() {
-//        // [START drive_android_query_title]
-//        Query query = new Query.Builder()
-//                .addFilter(Filters.eq(SearchableField.TITLE, "DayPlanner.txt"))
-//                .build();
-//        // [END drive_android_query_title]
-//        Task<MetadataBuffer> queryTask =
-//                getDriveResourceClient()
-//                        .query(query)
-//                        .addOnSuccessListener(this,
-//                                metadataBuffer -> mResultsAdapter.append(metadataBuffer))
-//                        .addOnFailureListener(this, e -> {
-//                            Log.e(TAG, "Error retrieving files", e);
-//                            showMessage(getString(R.string.query_failed));
-//                            finish();
-//                        });
-//    }
-
 
 
     public void readFile(){
         ReadFileLocal readFileLocal = new ReadFileLocal();
         String fileData=readFileLocal.readFile(getApplicationContext());
-        String [] dataFromFile;
-        dataFromFile=fileData.split("\\|");
-        pathToDataFile=dataFromFile[1];
+        String [] recordsFromFile;
+        recordsFromFile = fileData.split("///");
+        String [] [] usersAndIDFromFile = new String[recordsFromFile.length][];
+        for(int i=0;i<recordsFromFile.length;i++){
+            usersAndIDFromFile[i]=recordsFromFile[i].split("\\|");
+        }
+
+        pathToDataFile="";
+        for(int i=0; i<recordsFromFile.length;i++){
+            if(usersAndIDFromFile[i][0].equals(getUsername())){
+                pathToDataFile=usersAndIDFromFile[i][1];
+            }
+        }
+        if(pathToDataFile.equals("")){
+//            createNewGoogleFileAndAppendID();
+        }
         //TODO:sprawdzic czy w pliku jest tylko jedno ID
         try {
             driveFileToOpen = decodeFromString(pathToDataFile).asDriveFile();
@@ -383,6 +298,12 @@ try {
             driveFileToOpen=null;
         }
         //retrieveContents(driveFileToOpen);
+    }
+
+    public void signOutGoogleAccount(View view){
+        signOut();
+        revokeAccess();
+        signIn();
     }
 
 }

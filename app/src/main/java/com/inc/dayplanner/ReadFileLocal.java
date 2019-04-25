@@ -21,7 +21,8 @@ public class ReadFileLocal {
         try {
             fileInputStream = ctx.openFileInput(filename);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            return "";
         }
 
         String fileData = readFromFileInputStream(fileInputStream);
