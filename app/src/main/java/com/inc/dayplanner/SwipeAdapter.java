@@ -23,6 +23,8 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
 
+    private int previousPosition = 4999;
+    private int penultimatePosition = 4998;
 
     public SwipeAdapter(FragmentManager fm) {
         super(fm);
@@ -35,22 +37,32 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         Bundle bundle = new Bundle();
 
 
-        String date = df.format(calendar.getTime());
+/*        if(previousPosition<position){
 
-        //System.out.println(date);
-        // System.out.println("numer dnia tygodnia " + setDay(position));
-        // System.out.println("pozycja" + position);
+            previousPosition = position;
+            System.out.println("+++++++++++++");
+        }
+        if (previousPosition>position) {
+            calendar.add(Calendar.DATE, -1);
+            previousPosition = position;
+            System.out.println("-------------");
+        }*/
+
+         calendar.add(Calendar.DATE,position-previousPosition);
+         String date = df.format(calendar.getTime());
+
+         System.out.println(date);
+         System.out.println("numer dnia tygodnia " + setDay(position));
+         System.out.println("pozycja" + position);
 
 
-
-        bundle.putString("Date", date);
-        bundle.putString("dayOfTheWeek", setDay(position));
+        //bundle.putString("dayOfTheWeek", setDay(position));
         pageFragment.setArguments(bundle);
 
-
+        bundle.putString("Date", date);
         mPageReferenceMap.put(position, pageFragment);
 
-
+        previousPosition=position;
         return pageFragment;
     }
 
@@ -105,7 +117,6 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
                 break;
         }
 
-        //  System.out.println("DAY: " + realDay);
         return dayofTheWeek;
     }
 

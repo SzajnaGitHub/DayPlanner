@@ -14,15 +14,11 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.SwipeAdapter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import static android.view.View.INVISIBLE;
 
@@ -58,7 +54,8 @@ public class PlannerFragment extends Fragment {
         String message = null;
 
         if (getArguments() != null) {
-            message = getArguments().getString("dayOfTheWeek");
+           // message = getArguments().getString("dayOfTheWeek");
+            message = getArguments().getString("Date");
             dayTextView.setText(message);
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
@@ -109,9 +106,8 @@ public class PlannerFragment extends Fragment {
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
-
-
         remindCheckbox = view.findViewById(R.id.remindCheckBox);
+
 
 
         return view;

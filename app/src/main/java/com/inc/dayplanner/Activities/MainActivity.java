@@ -18,10 +18,6 @@ import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,9 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private MenuItem itemSwitch;
     private Toolbar toolbar;
-    private TextView toolbarDateTextView;
-    DateFormat df = new SimpleDateFormat("d MMM yyyy");
-    Date dateobj = new Date();
+
 
 
     @Override
@@ -41,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
-        toolbarDateTextView = findViewById(R.id.toolbarDate);
-        toolbarDateTextView.setText(df.format(dateobj));
 
 
         drawer = findViewById(R.id.drawer_layout);
