@@ -15,6 +15,8 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.R;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ import static android.view.View.INVISIBLE;
 
 
 public class PlannerFragment extends Fragment {
+
 
     private GridLayout gridLayout;
     private DynamicViews dynamicViews;
@@ -79,7 +82,9 @@ public class PlannerFragment extends Fragment {
                 audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 
 
-            }});
+            }
+            save(fromText.getText().toString(),toText.getText().toString(),activityText.getText().toString(),muteCheckbox);
+        });
 
 
         final ImageButton button = view.findViewById(R.id.addButton);
@@ -110,15 +115,26 @@ public class PlannerFragment extends Fragment {
     }
 
 
+    private void save(String fromText,String toText, String activityText, CheckBox muteCheckbox){
+        LoginActivity saveToGoogleDrive = new LoginActivity();
+        String mute;
+        if(muteCheckbox.isChecked()){
+            mute="true";
+        }else{
+            mute="false";
+        }
+        String textToSave="!^$$$$$^!"+fromText+"&^&^&"+toText+"&^&^&"+activityText+"&^&^&"+mute;
+        saveToGoogleDrive.appendContents(LoginActivity.driveFileToOpen,textToSave);
+    }
+
+
+
     private void unMutePhone(AudioManager audioManager) {
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
     }
-
-
-
 
 
 }

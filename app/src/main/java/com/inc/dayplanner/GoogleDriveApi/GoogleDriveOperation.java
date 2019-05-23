@@ -1,34 +1,23 @@
-package com.inc.dayplanner.Activities;
+package com.inc.dayplanner.GoogleDriveApi;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveContents;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.Metadata;
-import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.Query;
-import com.google.android.gms.drive.query.SearchableField;
-import com.google.android.gms.drive.widget.DataBufferAdapter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
+import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.GoogleDriveApi.ReadFileLocal;
-import com.inc.dayplanner.GoogleDriveApi.SaveFileLocal;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -40,14 +29,10 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Date;
 
-
 import static com.google.android.gms.drive.DriveId.decodeFromString;
 
+public class GoogleDriveOperation extends BaseDemoActivity {
 
-public class LoginActivity extends BaseDemoActivity {
-
-
-    private TextView mFileContents;
     public static DriveFile driveFileToOpen;
     static String pathToDataFile=null;
     private static final String TAG = "LoginActivity";
@@ -59,14 +44,6 @@ public class LoginActivity extends BaseDemoActivity {
 //        createFile();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        mFileContents = findViewById(R.id.mFileContents);
-        mFileContents.setText("");
-    }
-
     public void Login(View view) {
 
         readFile();
@@ -75,7 +52,6 @@ public class LoginActivity extends BaseDemoActivity {
         }else {
             try {
                 retrieveContents(driveFileToOpen);
-                changeActivity();
             } catch (Exception e) {
                 selectDatabaseFileFromGoogleDrive();
             }
@@ -230,7 +206,6 @@ public class LoginActivity extends BaseDemoActivity {
                                 builder.append(line).append("\n");
                             }
                             showMessage(getString(R.string.content_loaded));
-                            mFileContents.setText(builder.toString());
                         }
                         // [END drive_android_read_as_string]
                         // [END_EXCLUDE]
@@ -250,28 +225,11 @@ public class LoginActivity extends BaseDemoActivity {
         }catch(NullPointerException e){
             throw new NullPointerException(e.toString());
         }
-            }
+    }
 
 
 
     public String getUsername() {
-//        AccountManager manager = AccountManager.get(this);
-//        Account[] accounts = manager.getAccountsByType("com.google");
-//        List<String> possibleEmails = new LinkedList<String>();
-//
-//        for (Account account : accounts) {
-//            possibleEmails.add(account.name);
-//        }
-//
-//        if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
-//            String email = possibleEmails.get(0);
-//            String[] parts = email.split("@");
-//            if (parts.length > 0 && parts[0] != null)
-//                return parts[0];
-//            else
-//                return null;
-//        } else
-//            return null;
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         return signInAccount.getEmail();
 
@@ -304,10 +262,6 @@ public class LoginActivity extends BaseDemoActivity {
         decodePathToGoogleFile();
     }
 
-    private void changeActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
     private void selectDatabaseFileFromGoogleDrive(){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -316,12 +270,10 @@ public class LoginActivity extends BaseDemoActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         openFileExplorerGoogleDrive();
-                        changeActivity();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
                         createFile();
-                        changeActivity();
                         break;
                 }
             }
@@ -361,9 +313,4 @@ public class LoginActivity extends BaseDemoActivity {
                     finish();
                 });
     }
-
-
 }
-
-
-
