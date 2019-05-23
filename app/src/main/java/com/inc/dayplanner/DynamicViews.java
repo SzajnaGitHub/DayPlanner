@@ -28,7 +28,7 @@ public class DynamicViews {
         this.ctx = ctx;
     }
 
-    public TextView hourTextView(Context context, String text) {
+    private TextView hourTextView(Context context, String text) {
 
         final TextView textView = new TextView(context);
 
@@ -36,19 +36,14 @@ public class DynamicViews {
         textView.setWidth((int) (getWidth(context)*0.2));
         textView.setTextSize(15);
         textView.setClickable(true);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textView.setText("7:30-9:00");
-            }
-        });
+        textView.setOnClickListener(v -> textView.setText("7:30-9:00"));
 
 
         return textView;
     }
 
 
-    public TextView activityTextView(Context context, final String text) {
+    private TextView activityTextView(Context context, final String text) {
 
         final TextView textView = new TextView(context);
         textView.setText(text);
@@ -56,12 +51,7 @@ public class DynamicViews {
         textView.setTextSize(20);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setClickable(true);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textView.setText("twoja stara");
-            }
-        });
+        textView.setOnClickListener(v -> textView.setText("twoja stara"));
 
         return textView;
     }

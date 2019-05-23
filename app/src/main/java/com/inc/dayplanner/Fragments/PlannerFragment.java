@@ -20,6 +20,7 @@ import com.inc.dayplanner.R;
 import com.inc.dayplanner.SwipeAdapter;
 
 
+
 import static android.view.View.INVISIBLE;
 
 
@@ -30,15 +31,16 @@ public class PlannerFragment extends Fragment {
     private TextView dayTextView;
     private Context context;
     private FrameLayout messageFrame;
-    private TextView fromText;
-    private TextView toText;
     private TextView activityText;
     private CheckBox muteCheckbox;
     private CheckBox remindCheckbox;
     private Spinner remindSpinner;
+    private TextView fromHourPickerTextView;
+    private TextView toHourPickerTextView;
 
-    private boolean flag=false;
-
+    private boolean frameVisibility = false;
+    private String hour1;
+    private String hour2;
 
 
     @Nullable
@@ -49,10 +51,18 @@ public class PlannerFragment extends Fragment {
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
         messageFrame = view.findViewById(R.id.messageFrame);
+        activityText = view.findViewById(R.id.activityText);
+        muteCheckbox = view.findViewById(R.id.muteCheckBox);
+        remindSpinner = view.findViewById(R.id.reminderSpinner);
+        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+        fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
+        toHourPickerTextView = view.findViewById(R.id.toHourPicker);
+        final ImageButton addButton = view.findViewById(R.id.addButton2);
+        final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+
 
 
         String message = null;
-
         if (getArguments() != null) {
            // message = getArguments().getString("dayOfTheWeek");
             message = getArguments().getString("Date");
@@ -62,27 +72,41 @@ public class PlannerFragment extends Fragment {
         }
 
 
-        final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+
+        toHourPickerTextView.setOnClickListener(v -> {
+
+            TimePickerFragment timePickerFragment = new TimePickerFragment(toHourPickerTextView,"To: ");
+            assert getFragmentManager() != null;
+            timePickerFragment.show(getFragmentManager(),"timePicker");
+        });
 
 
-        fromText = view.findViewById(R.id.fromText);
-        toText = view.findViewById(R.id.toText);
-        activityText = view.findViewById(R.id.activityText);
-        muteCheckbox = view.findViewById(R.id.muteCheckBox);
 
-        final ImageButton addButton = view.findViewById(R.id.addButton2);
+        fromHourPickerTextView.setOnClickListener(v -> {
+
+            TimePickerFragment timePickerFragment = new TimePickerFragment(fromHourPickerTextView,"From: ");
+            assert getFragmentManager() != null;
+            timePickerFragment.show(getFragmentManager(),"timePicker");
+        });
+
+
+
+
         addButton.setOnClickListener(v -> {
-            gridLayout.addView(dynamicViews.linearLayout(getContext(),
-                    fromText.getText()+"-"+toText.getText(), ""+activityText.getText()));
+
+            hour1 = toHourPickerTextView.getText().toString().substring(4,9);
+            hour2 = fromHourPickerTextView.getText().toString().substring(6,11);
+
+            gridLayout.addView(dynamicViews.linearLayout(getContext(),hour2+ " - "+hour1
+                    , ""+activityText.getText()));
+
+
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
-
                 if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                  }
-
-
 
             }});
 
@@ -91,22 +115,16 @@ public class PlannerFragment extends Fragment {
         button.setOnClickListener(v -> {
             dynamicViews = new DynamicViews(context);
 
-            if(!flag) {
+            if(!frameVisibility) {
                 messageFrame.setVisibility(View.VISIBLE);
-                flag = true;
+                frameVisibility = true;
             }else{
-                flag = false;
+                frameVisibility = false;
                 messageFrame.setVisibility(INVISIBLE);
 
             }
 
         });
-
-
-        remindSpinner = view.findViewById(R.id.reminderSpinner);
-
-
-        remindCheckbox = view.findViewById(R.id.remindCheckBox);
 
 
 
@@ -120,8 +138,6 @@ public class PlannerFragment extends Fragment {
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
     }
-
-
 
 
 

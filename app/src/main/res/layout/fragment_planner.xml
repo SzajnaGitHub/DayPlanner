@@ -72,39 +72,6 @@
             android:visibility="visible">
 
             <EditText
-                android:id="@+id/fromText"
-                android:layout_width="61dp"
-                android:layout_height="46dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:ems="10"
-                android:hint="From"
-                android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/toText"
-                app:layout_constraintHorizontal_bias="0.236"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/toText"
-                android:layout_width="59dp"
-                android:layout_height="46dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="68dp"
-                android:ems="10"
-                android:hint="To"
-                android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
                 android:id="@+id/activityText"
                 android:layout_width="230dp"
                 android:layout_height="45dp"
@@ -165,8 +132,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/remindCheckBox"
-                app:layout_constraintTop_toTopOf="@+id/activityText"
-                />
+                app:layout_constraintTop_toTopOf="@+id/activityText" />
+
+            <TextView
+                android:id="@+id/fromHourPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Start hour"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/toHourPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="44dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="End hour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

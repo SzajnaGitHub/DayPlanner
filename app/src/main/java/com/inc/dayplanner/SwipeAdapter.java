@@ -24,7 +24,6 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
     private Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
 
     private int previousPosition = 4999;
-    private int penultimatePosition = 4998;
 
     public SwipeAdapter(FragmentManager fm) {
         super(fm);
@@ -36,25 +35,8 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         Fragment pageFragment = new PlannerFragment();
         Bundle bundle = new Bundle();
 
-
-/*        if(previousPosition<position){
-
-            previousPosition = position;
-            System.out.println("+++++++++++++");
-        }
-        if (previousPosition>position) {
-            calendar.add(Calendar.DATE, -1);
-            previousPosition = position;
-            System.out.println("-------------");
-        }*/
-
          calendar.add(Calendar.DATE,position-previousPosition);
          String date = df.format(calendar.getTime());
-
-         System.out.println(date);
-         System.out.println("numer dnia tygodnia " + setDay(position));
-         System.out.println("pozycja" + position);
-
 
         //bundle.putString("dayOfTheWeek", setDay(position));
         pageFragment.setArguments(bundle);
