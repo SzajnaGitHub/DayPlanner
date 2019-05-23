@@ -1,18 +1,27 @@
 package com.inc.dayplanner.Activities;
 
-import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.IntentSender;
 import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveContents;
 import android.widget.TextView;
 
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.Metadata;
+import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
+import com.google.android.gms.drive.widget.DataBufferAdapter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
@@ -47,7 +56,6 @@ public class LoginActivity extends BaseDemoActivity {
     @Override
     protected void onDriveClientReady() {
 //        createFile();
-//        createNewGoogleFileAndAppendID();
     }
 
     @Override
@@ -59,9 +67,7 @@ public class LoginActivity extends BaseDemoActivity {
     }
 
     public void Login(View view) {
-//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-//        createFile();
-//        createNewGoogleFileAndAppendID();
+
         readFile();
         if(driveFileToOpen==null){
             //createNewGoogleFileAndAppendID();
@@ -70,24 +76,22 @@ public class LoginActivity extends BaseDemoActivity {
                 retrieveContents(driveFileToOpen);
             } catch (Exception e) {
                 //TODO:zapytac uzytkownika czy chce zaimportowac dane
-                createNewGoogleFileAndAppendID();
+                selectDatabaseFileFromGoogleDrive();
+                retrieveContents(driveFileToOpen);
             }
         }
 
         ReadFileLocal readFileLocal = new ReadFileLocal();
         String fileData=readFileLocal.readFile(getApplicationContext());
         System.out.println(fileData);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     public void createNewGoogleFileAndAppendID(){
         SaveFileLocal saveFileLocal = new SaveFileLocal();
-//        createFile();
-//        fileData +="|"+pathToDataFile;
         saveFileLocal.saveFile(getApplicationContext(),getUsername(), pathToDataFile);
-//        System.out.println("Blad");
     }
 
 
@@ -128,7 +132,7 @@ public class LoginActivity extends BaseDemoActivity {
 
 
 
-    private void appendContents(DriveFile file, String contentToAppend) {
+    public void appendContents(DriveFile file, String contentToAppend) {
         // [START drive_android_open_for_append]
         Task<DriveContents> openTask =
                 getDriveResourceClient().openFile(file, DriveFile.MODE_READ_WRITE);
@@ -173,7 +177,7 @@ public class LoginActivity extends BaseDemoActivity {
 
 
 
-    private void rewriteContents(DriveFile file, String contentToRewrite) {
+    public void rewriteContents(DriveFile file, String contentToRewrite) {
         // [START drive_android_open_for_write]
         Task<DriveContents> openTask =
                 getDriveResourceClient().openFile(file, DriveFile.MODE_WRITE_ONLY);
@@ -205,7 +209,7 @@ public class LoginActivity extends BaseDemoActivity {
 
 
 
-    private void retrieveContents(DriveFile file) throws NullPointerException {
+    public void retrieveContents(DriveFile file) throws NullPointerException {
         try {
             // [START drive_android_open_file]
             Task<DriveContents> openFileTask =
@@ -292,16 +296,44 @@ public class LoginActivity extends BaseDemoActivity {
                 pathToDataFile=usersAndIDFromFile[i][1];
             }
         }
+
         if(pathToDataFile.equals("")){
             //TODO:zapytac uzytkownika czy chce import
-            createFile();
+            selectDatabaseFileFromGoogleDrive();
+
         }
+        decodePathToGoogleFile();
+    }
+
+
+
+    private void selectDatabaseFileFromGoogleDrive(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        openFileExplorerGoogleDrive();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        createFile();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Czy posiadasz juz baze danych ze swoimi aktywnościami i chcesz ją zaimportować?").setPositiveButton("Tak, zaimportuj dane", dialogClickListener)
+                .setNegativeButton("Nie, stworz nową baze", dialogClickListener).show();
+    }
+
+    private void decodePathToGoogleFile(){
         try {
             driveFileToOpen = decodeFromString(pathToDataFile).asDriveFile();
         }catch(Exception e){
             driveFileToOpen=null;
         }
-        //retrieveContents(driveFileToOpen);
     }
 
     public void signOutGoogleAccount(View view){
@@ -309,6 +341,23 @@ public class LoginActivity extends BaseDemoActivity {
         revokeAccess();
         signIn();
     }
+
+
+
+    protected void openFileExplorerGoogleDrive() {
+        pickTextFile()
+                .addOnSuccessListener(this,
+                        driveId -> {
+                            pathToDataFile=driveId.encodeToString();
+                            createNewGoogleFileAndAppendID();
+                        })
+                .addOnFailureListener(this, e -> {
+                    Log.e(TAG, "No file selected", e);
+                    showMessage(getString(R.string.file_not_selected));
+                    finish();
+                });
+    }
+
 
 }
 
