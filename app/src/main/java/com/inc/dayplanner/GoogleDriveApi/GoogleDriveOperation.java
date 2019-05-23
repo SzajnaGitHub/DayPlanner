@@ -1,5 +1,6 @@
 package com.inc.dayplanner.GoogleDriveApi;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,46 +32,29 @@ import java.util.Date;
 
 import static com.google.android.gms.drive.DriveId.decodeFromString;
 
+
+
+
 public class GoogleDriveOperation extends BaseDemoActivity {
 
+
     public static DriveFile driveFileToOpen;
-    static String pathToDataFile=null;
-    private static final String TAG = "LoginActivity";
+    public static String pathToDataFile=null;
+    private static final String TAG = "GoogleActivity";
 
 
-    //private static final String TAG = "Google Drive Activity";
     @Override
     protected void onDriveClientReady() {
 //        createFile();
     }
 
-    public void Login(View view) {
-
-        readFile();
-        if(driveFileToOpen==null){
-            //createNewGoogleFileAndAppendID();
-        }else {
-            try {
-                retrieveContents(driveFileToOpen);
-            } catch (Exception e) {
-                selectDatabaseFileFromGoogleDrive();
-            }
-        }
-
-        ReadFileLocal readFileLocal = new ReadFileLocal();
-        String fileData=readFileLocal.readFile(getApplicationContext());
-        System.out.println(fileData);
-
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void createNewGoogleFileAndAppendID(){
+    public void createNewGoogleFileAndAppendID(Context context){
         SaveFileLocal saveFileLocal = new SaveFileLocal();
-        saveFileLocal.saveFile(getApplicationContext(),getUsername(), pathToDataFile);
+        saveFileLocal.saveFile(context,getUsername(context), pathToDataFile);
     }
 
 
-    private void createFile() {
+    public void createFile(Context context) {
         // [START drive_android_create_file]
         final Task<DriveFolder> rootFolderTask = getDriveResourceClient().getRootFolder();
         final Task<DriveContents> createContentsTask = getDriveResourceClient().createContents();
@@ -93,14 +77,14 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                 })
                 .addOnSuccessListener(this,
                         driveFile -> {
-                            showMessage(getString(R.string.file_created,
-                                    driveFile.getDriveId().encodeToString()));
+//                            showMessage(getString(R.string.file_created, driveFile.getDriveId().encodeToString()));
                             pathToDataFile=driveFile.getDriveId().encodeToString();
-                            createNewGoogleFileAndAppendID();
+                            createNewGoogleFileAndAppendID(context);
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to create file", e);
-                    showMessage(getString(R.string.file_create_error));
+//                    showMessage(getString(R.string.file_create_error));
+                    finish();
                 });
         // [END drive_android_create_file]
     }
@@ -139,13 +123,13 @@ public class GoogleDriveOperation extends BaseDemoActivity {
         })
                 .addOnSuccessListener(this,
                         aVoid -> {
-                            showMessage(getString(R.string.content_updated));
-//                            finish();
+//                            showMessage(getString(R.string.content_updated));
+                            finish();
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to update contents", e);
-                    showMessage(getString(R.string.content_update_failed));
-//                    finish();
+//                    showMessage(getString(R.string.content_update_failed));
+                    finish();
                 });
         // [END drive_android_append_contents]
     }
@@ -171,13 +155,13 @@ public class GoogleDriveOperation extends BaseDemoActivity {
         })
                 .addOnSuccessListener(this,
                         aVoid -> {
-                            showMessage(getString(R.string.content_updated));
-//                            finish();
+//                            showMessage(getString(R.string.content_updated));
+                            finish();
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Unable to update contents", e);
-                    showMessage(getString(R.string.content_update_failed));
-//                    finish();
+//                    showMessage(getString(R.string.content_update_failed));
+                    finish();
                 });
         // [END drive_android_rewrite_contents]
     }
@@ -205,7 +189,8 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                             while ((line = reader.readLine()) != null) {
                                 builder.append(line).append("\n");
                             }
-                            showMessage(getString(R.string.content_loaded));
+//                            showMessage(getString(R.string.content_loaded));
+                            finish();
                         }
                         // [END drive_android_read_as_string]
                         // [END_EXCLUDE]
@@ -218,7 +203,8 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         // Handle failure
                         // [START_EXCLUDE]
                         Log.e(TAG, "Unable to read contents", e);
-                        showMessage(getString(R.string.read_failed));
+//                        showMessage(getString(R.string.read_failed));
+                        finish();
                         // [END_EXCLUDE]
                     });
             // [END drive_android_read_contents]
@@ -229,17 +215,17 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
 
 
-    public String getUsername() {
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+    public String getUsername(Context context) {
+        signInAccount = GoogleSignIn.getLastSignedInAccount(context);
         return signInAccount.getEmail();
 
     }
 
 
 
-    public void readFile(){
+    public void readFile(Context context){
         ReadFileLocal readFileLocal = new ReadFileLocal();
-        String fileData=readFileLocal.readFile(getApplicationContext());
+        String fileData=readFileLocal.readFile(context);
         String [] recordsFromFile;
         recordsFromFile = fileData.split("///");
         String [] [] usersAndIDFromFile = new String[recordsFromFile.length][];
@@ -249,40 +235,15 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
         pathToDataFile="";
         for(int i=0; i<recordsFromFile.length;i++){
-            if(usersAndIDFromFile[i][0].equals(getUsername())){
+            if(usersAndIDFromFile[i][0].equals(getUsername(context))){
                 pathToDataFile=usersAndIDFromFile[i][1];
             }
-        }
-
-        if(pathToDataFile.equals("")){
-            //TODO:zapytac uzytkownika czy chce import
-            selectDatabaseFileFromGoogleDrive();
-
         }
         decodePathToGoogleFile();
     }
 
 
-    private void selectDatabaseFileFromGoogleDrive(){
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        openFileExplorerGoogleDrive();
-                        break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        createFile();
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Czy posiadasz juz baze danych ze swoimi aktywnościami i chcesz ją zaimportować?").setPositiveButton("Tak, zaimportuj dane", dialogClickListener)
-                .setNegativeButton("Nie, stworz nową baze", dialogClickListener).show();
-    }
 
     private void decodePathToGoogleFile(){
         try {
@@ -300,12 +261,12 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
 
 
-    protected void openFileExplorerGoogleDrive() {
+    public void openFileExplorerGoogleDrive(Context context) {
         pickTextFile()
                 .addOnSuccessListener(this,
                         driveId -> {
                             pathToDataFile=driveId.encodeToString();
-                            createNewGoogleFileAndAppendID();
+                            createNewGoogleFileAndAppendID(context);
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "No file selected", e);

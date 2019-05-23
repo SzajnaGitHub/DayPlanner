@@ -53,7 +53,7 @@ public abstract class BaseDemoActivity extends Activity {
     /**
      * Handle access to Drive resources/files.
      */
-    private DriveResourceClient mDriveResourceClient;
+    private static DriveResourceClient mDriveResourceClient;
 
     /**
      * Tracks completion of the drive picker

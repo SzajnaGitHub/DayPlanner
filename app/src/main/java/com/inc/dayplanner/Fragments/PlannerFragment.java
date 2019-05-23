@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.DynamicViews;
+import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,6 +41,7 @@ public class PlannerFragment extends Fragment {
     private Date now = new Date();
     private CheckBox remindCheckbox;
     private Spinner remindSpinner;
+    private GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
 
 
     @Nullable
@@ -116,7 +118,6 @@ public class PlannerFragment extends Fragment {
 
 
     private void save(String fromText,String toText, String activityText, CheckBox muteCheckbox){
-        LoginActivity saveToGoogleDrive = new LoginActivity();
         String mute;
         if(muteCheckbox.isChecked()){
             mute="true";
@@ -124,7 +125,7 @@ public class PlannerFragment extends Fragment {
             mute="false";
         }
         String textToSave="!^$$$$$^!"+fromText+"&^&^&"+toText+"&^&^&"+activityText+"&^&^&"+mute;
-        saveToGoogleDrive.appendContents(LoginActivity.driveFileToOpen,textToSave);
+        saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
 
