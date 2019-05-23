@@ -14,11 +14,16 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.R;
+import com.inc.dayplanner.SwipeAdapter;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
+
 import static android.view.View.INVISIBLE;
 
 
@@ -32,11 +37,12 @@ public class PlannerFragment extends Fragment {
     private TextView fromText;
     private TextView toText;
     private TextView activityText;
-    private boolean flag=false;
     private CheckBox muteCheckbox;
-    private Date now = new Date();
     private CheckBox remindCheckbox;
     private Spinner remindSpinner;
+
+    private boolean flag=false;
+
 
 
     @Nullable
@@ -47,7 +53,6 @@ public class PlannerFragment extends Fragment {
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
         messageFrame = view.findViewById(R.id.messageFrame);
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
 
 
         String message = null;
@@ -56,7 +61,7 @@ public class PlannerFragment extends Fragment {
             message = getArguments().getString("dayOfTheWeek");
             dayTextView.setText(message);
         }else {
-            dayTextView.setText(simpleDateformat.format(now));
+            dayTextView.setText(SwipeAdapter.setDay(1));
         }
 
 
@@ -76,7 +81,10 @@ public class PlannerFragment extends Fragment {
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
 
-                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                 }
+
 
 
             }});

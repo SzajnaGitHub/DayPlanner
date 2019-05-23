@@ -20,7 +20,6 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
 
     private Calendar calendar = Calendar.getInstance();
-    private int day = calendar.get(Calendar.DAY_OF_YEAR);
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
 
@@ -72,10 +71,14 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         mPageReferenceMap.remove(position);
     }
 
-    private String setDay(int position) {
+    static public String setDay(int position) {
+
+        Calendar setCalendar = Calendar.getInstance();
+        int days = setCalendar.get(Calendar.DAY_OF_YEAR);
+
 
         String dayofTheWeek = null;
-        int realDay = (day - 7 + position) % 7 + 1;
+        int realDay = (days - 7 + position) % 7 + 1;
 
         switch (realDay) {
 
