@@ -1,4 +1,4 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.GoogleDriveApi;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.inc.dayplanner.R;
 
 import java.util.HashSet;
 import java.util.Set;

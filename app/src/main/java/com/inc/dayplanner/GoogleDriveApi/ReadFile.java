@@ -1,4 +1,4 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.GoogleDriveApi;
 
 import java.io.BufferedReader;
 import java.io.IOException;

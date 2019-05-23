@@ -1,4 +1,4 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.GoogleDriveApi;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;

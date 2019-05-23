@@ -1,14 +1,11 @@
 package com.inc.dayplanner.Activities;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.drive.DriveContents;
 import android.widget.TextView;
@@ -18,10 +15,10 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.inc.dayplanner.BaseDemoActivity;
+import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.ReadFileLocal;
-import com.inc.dayplanner.SaveFileLocal;
+import com.inc.dayplanner.GoogleDriveApi.ReadFileLocal;
+import com.inc.dayplanner.GoogleDriveApi.SaveFileLocal;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -32,8 +29,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 
 import static com.google.android.gms.drive.DriveId.decodeFromString;
