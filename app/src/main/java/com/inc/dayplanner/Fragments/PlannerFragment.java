@@ -41,13 +41,19 @@ public class PlannerFragment extends Fragment {
     private Date now = new Date();
     private CheckBox remindCheckbox;
     private Spinner remindSpinner;
-    private GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
+    public static GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
+    private AudioManager audioManager;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
@@ -65,7 +71,7 @@ public class PlannerFragment extends Fragment {
         }
 
 
-        final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
 
 
         fromText = view.findViewById(R.id.fromText);
@@ -75,16 +81,13 @@ public class PlannerFragment extends Fragment {
 
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         addButton.setOnClickListener(v -> {
-            gridLayout.addView(dynamicViews.linearLayout(getContext(),
-                    fromText.getText()+"-"+toText.getText(), ""+activityText.getText()));
-
-            if(muteCheckbox.isChecked())  {
-                //ADD BUTTON METHODS
-
-                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-
-
+            String mute;
+            if(muteCheckbox.isChecked()){
+                mute="true";
+            }else{
+                mute="false";
             }
+            addToListActivity(fromText.getText().toString(),toText.getText().toString(),activityText.getText().toString(),mute);
             save(fromText.getText().toString(),toText.getText().toString(),activityText.getText().toString(),muteCheckbox);
         });
 
@@ -92,7 +95,7 @@ public class PlannerFragment extends Fragment {
         final ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
             dynamicViews = new DynamicViews(context);
-
+            read();
             if(!flag) {
                 messageFrame.setVisibility(View.VISIBLE);
                 flag = true;
@@ -112,8 +115,17 @@ public class PlannerFragment extends Fragment {
 
         remindCheckbox = view.findViewById(R.id.remindCheckBox);
 
-
+//        read();
         return view;
+    }
+
+    private void addToListActivity(String from, String to, String activ, String mute){
+        gridLayout.addView(dynamicViews.linearLayout(getContext(),
+                from+"-"+to, ""+activ));
+
+        if(mute.equals("true"))  {
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+        }
     }
 
 
@@ -124,8 +136,17 @@ public class PlannerFragment extends Fragment {
         }else{
             mute="false";
         }
-        String textToSave="!^$$$$$^!"+fromText+"&^&^&"+toText+"&^&^&"+activityText+"&^&^&"+mute;
+        String textToSave=fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
+    }
+
+    public void read(){
+        int numberOfActivity=GoogleDriveOperation.contentFromGoogleFile.size();
+        String[][]activityToAdd = new String[numberOfActivity][];
+        for(int i=0; i<numberOfActivity;i++){
+            activityToAdd[i]=GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&");
+            addToListActivity(activityToAdd[i][0],activityToAdd[i][1],activityToAdd[i][2],activityToAdd[i][3]);
+        }
     }
 
 

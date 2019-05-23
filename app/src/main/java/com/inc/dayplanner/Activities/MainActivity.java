@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView toolbarDateTextView;
     DateFormat df = new SimpleDateFormat("d MMM yyyy");
     Date dateobj = new Date();
+    public static PlannerFragment plannerFragment = new PlannerFragment();
 
 
     @Override
@@ -62,9 +63,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
         toolbar.setTitle("Plan");
+
+        plannerFragment.read();
 
     }
 
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.nav_plan:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Plan");
                 break;

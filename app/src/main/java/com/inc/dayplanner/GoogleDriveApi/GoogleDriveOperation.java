@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.google.android.gms.drive.DriveId.decodeFromString;
@@ -167,8 +168,10 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
+    public static ArrayList<String> contentFromGoogleFile= new ArrayList<String>();
 
     public void retrieveContents(DriveFile file) throws NullPointerException {
+        contentFromGoogleFile.clear();
         try {
             // [START drive_android_open_file]
             Task<DriveContents> openFileTask =
@@ -187,10 +190,13 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                             StringBuilder builder = new StringBuilder();
                             String line;
                             while ((line = reader.readLine()) != null) {
-                                builder.append(line).append("\n");
+                                //builder.append(line).append("\n");
+                                if(!line.equals("")){
+                                    contentFromGoogleFile.add(line);
+                                }
                             }
 //                            showMessage(getString(R.string.content_loaded));
-                            finish();
+//                            finish();
                         }
                         // [END drive_android_read_as_string]
                         // [END_EXCLUDE]
