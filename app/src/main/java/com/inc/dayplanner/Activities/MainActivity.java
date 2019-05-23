@@ -12,10 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private MenuItem itemSwitch;
     private Toolbar toolbar;
+    private TextView toolbarDateTextView;
+    DateFormat df = new SimpleDateFormat("d MMM yyyy");
+    Date dateobj = new Date();
 
 
     @Override
@@ -32,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Menu");
+        toolbarDateTextView = findViewById(R.id.toolbarDate);
+        toolbarDateTextView.setText(df.format(dateobj));
+
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -54,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
 
- /*       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
         drawer.closeDrawer(GravityCompat.START);
-        toolbar.setTitle("Plan");*/
+        toolbar.setTitle("Plan");
 
     }
 

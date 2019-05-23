@@ -82,8 +82,8 @@ public class LoginActivity extends BaseDemoActivity {
         ReadFileLocal readFileLocal = new ReadFileLocal();
         String fileData=readFileLocal.readFile(getApplicationContext());
         System.out.println(fileData);
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
 

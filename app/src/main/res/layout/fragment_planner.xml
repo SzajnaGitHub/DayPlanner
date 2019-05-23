@@ -63,81 +63,46 @@
         android:background="@drawable/bubble"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/addButton"
-        app:layout_constraintEnd_toStartOf="@+id/addButton">
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        tools:visibility="visible">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="92dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
-                android:text="Rozpoczęcie"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="97dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="40dp"
-                android:text="Zakończenie"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <EditText
                 android:id="@+id/fromText"
                 android:layout_width="61dp"
                 android:layout_height="46dp"
                 android:layout_marginStart="28dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
-                android:hint="Od"
+                android:hint="From"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/toText"
-                app:layout_constraintHorizontal_bias="0.285"
+                app:layout_constraintHorizontal_bias="0.236"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/toText"
                 android:layout_width="59dp"
                 android:layout_height="46dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="60dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="68dp"
                 android:ems="10"
-                android:hint="Do"
+                android:hint="To"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Aktywność"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/activityText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/activityText"
@@ -145,8 +110,9 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="88dp"
                 android:ems="10"
+                android:hint="Activity"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
@@ -155,15 +121,15 @@
 
             <CheckBox
                 android:id="@+id/muteCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                android:text="Tryb wyciszenia"
+                android:text="Mute mode"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintHorizontal_bias="0.306"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
@@ -176,6 +142,31 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_plus" />
+
+            <CheckBox
+                android:id="@+id/remindCheckBox"
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:text="Remind me"
+                app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.246"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Spinner
+                android:id="@+id/reminderSpinner"
+                android:layout_width="79dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="71dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/remindCheckBox"
+                app:layout_constraintTop_toTopOf="@+id/activityText"
+                />
 
         </android.support.constraint.ConstraintLayout>
 

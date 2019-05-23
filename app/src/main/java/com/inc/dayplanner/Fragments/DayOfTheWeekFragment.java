@@ -13,18 +13,12 @@ import com.inc.dayplanner.R;
 
 public class DayOfTheWeekFragment extends Fragment {
 
-    private TextView textView;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_day_of_the_week, container, false);
-
-       // textView = view.findViewById(R.id.demoText);
-
-       // String message = getArguments().getString("message");
-
-       // textView.setText(message);
         return  view;
     }
 

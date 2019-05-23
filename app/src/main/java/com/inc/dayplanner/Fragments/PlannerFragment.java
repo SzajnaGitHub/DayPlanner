@@ -13,12 +13,12 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.R;
-
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import static android.view.View.INVISIBLE;
 
 
@@ -28,13 +28,15 @@ public class PlannerFragment extends Fragment {
     private DynamicViews dynamicViews;
     private TextView dayTextView;
     private Context context;
-    private GridLayout.LayoutParams lp;
     private FrameLayout messageFrame;
     private TextView fromText;
     private TextView toText;
     private TextView activityText;
     private boolean flag=false;
     private CheckBox muteCheckbox;
+    private Date now = new Date();
+    private CheckBox remindCheckbox;
+    private Spinner remindSpinner;
 
 
     @Nullable
@@ -45,18 +47,20 @@ public class PlannerFragment extends Fragment {
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
         messageFrame = view.findViewById(R.id.messageFrame);
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
 
 
         String message = null;
+
         if (getArguments() != null) {
-            message = getArguments().getString("lol");
+            message = getArguments().getString("dayOfTheWeek");
+            dayTextView.setText(message);
+        }else {
+            dayTextView.setText(simpleDateformat.format(now));
         }
 
 
-
-        dayTextView.setText(message);
-
-         final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
 
 
         fromText = view.findViewById(R.id.fromText);
@@ -65,39 +69,41 @@ public class PlannerFragment extends Fragment {
         muteCheckbox = view.findViewById(R.id.muteCheckBox);
 
         final ImageButton addButton = view.findViewById(R.id.addButton2);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gridLayout.addView(dynamicViews.linearLayout(getContext(),
-                        fromText.getText()+"-"+toText.getText(), ""+activityText.getText()));
+        addButton.setOnClickListener(v -> {
+            gridLayout.addView(dynamicViews.linearLayout(getContext(),
+                    fromText.getText()+"-"+toText.getText(), ""+activityText.getText()));
 
-                if(muteCheckbox.isChecked())  {
-                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    // mutePhone(audioManager);
-            }}
-        });
+            if(muteCheckbox.isChecked())  {
+                //ADD BUTTON METHODS
+
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+
+
+            }});
 
 
         final ImageButton button = view.findViewById(R.id.addButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(v -> {
+            dynamicViews = new DynamicViews(context);
 
-
-            public void onClick(View v) {
-                dynamicViews = new DynamicViews(context);
-
-
-                    if(!flag) {
-                        messageFrame.setVisibility(View.VISIBLE);
-                        flag = true;
-                    }else{
-                        flag = false;
-                        messageFrame.setVisibility(INVISIBLE);
-
-
-                }
+            if(!flag) {
+                messageFrame.setVisibility(View.VISIBLE);
+                flag = true;
+            }else{
+                flag = false;
+                messageFrame.setVisibility(INVISIBLE);
 
             }
+
         });
+
+
+        remindSpinner = view.findViewById(R.id.reminderSpinner);
+
+
+
+
+        remindCheckbox = view.findViewById(R.id.remindCheckBox);
 
 
         return view;
