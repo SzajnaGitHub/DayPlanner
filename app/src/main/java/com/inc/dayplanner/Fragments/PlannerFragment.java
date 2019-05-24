@@ -72,10 +72,9 @@ public class PlannerFragment extends Fragment {
         }
 
 
-
         toHourPickerTextView.setOnClickListener(v -> {
 
-            TimePickerFragment timePickerFragment = new TimePickerFragment(toHourPickerTextView,"To: ");
+            TimePickerFragment timePickerFragment = new TimePickerFragment(toHourPickerTextView);
             assert getFragmentManager() != null;
             timePickerFragment.show(getFragmentManager(),"timePicker");
         });
@@ -84,7 +83,7 @@ public class PlannerFragment extends Fragment {
 
         fromHourPickerTextView.setOnClickListener(v -> {
 
-            TimePickerFragment timePickerFragment = new TimePickerFragment(fromHourPickerTextView,"From: ");
+            TimePickerFragment timePickerFragment = new TimePickerFragment(fromHourPickerTextView);
             assert getFragmentManager() != null;
             timePickerFragment.show(getFragmentManager(),"timePicker");
         });
@@ -94,8 +93,12 @@ public class PlannerFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
 
-            hour1 = toHourPickerTextView.getText().toString().substring(4,9);
-            hour2 = fromHourPickerTextView.getText().toString().substring(6,11);
+            hour1 = toHourPickerTextView.getText().toString();
+            hour2 = fromHourPickerTextView.getText().toString();
+            if(activityText.getText().length()>20){
+                activityText.setText(activityText.getText().toString().substring(0,19)+"...");
+            }
+
 
             gridLayout.addView(dynamicViews.linearLayout(getContext(),hour2+ " - "+hour1
                     , ""+activityText.getText()));

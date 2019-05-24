@@ -18,15 +18,14 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
 
     private  TextView tv1;
-    private String text;
+
 
 
 
     @SuppressLint("ValidFragment")
-    public TimePickerFragment(TextView tv1, String text) {
+    public TimePickerFragment(TextView tv1) {
 
         this.tv1 = tv1;
-        this.text = text;
     }
 
     public TimePickerFragment(){
@@ -49,7 +48,21 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-            tv1.setText(text+ hourOfDay+ ":"+ minute);
+        String minutes;
+        String hours;
+
+        if(minute<10) {
+            minutes = 0 + "" + minute;
+        }else{
+            minutes=minute+"";
+        }
+        if(hourOfDay<10){
+            hours = 0+""+hourOfDay;
+        }else{
+        hours=hourOfDay+"";
+    }
+
+        tv1.setText(hours+ ":"+ minutes);
 
     }
 
