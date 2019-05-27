@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,11 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.inc.dayplanner.Activities.LoginActivity;
+import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.DynamicViews;
+import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.SwipeAdapter;
 
@@ -25,6 +30,7 @@ import static android.view.View.INVISIBLE;
 
 
 public class PlannerFragment extends Fragment {
+
 
     private GridLayout gridLayout;
     private DynamicViews dynamicViews;
@@ -37,16 +43,43 @@ public class PlannerFragment extends Fragment {
     private Spinner remindSpinner;
     private TextView fromHourPickerTextView;
     private TextView toHourPickerTextView;
-
     private boolean frameVisibility = false;
     private String hour1;
     private String hour2;
+    public static GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
+    private AudioManager audioManager;
 
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        read();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        read();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        read();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //saveToGoogleDrive.retrieveContents(GoogleDriveOperation.driveFileToOpen);
+//        read();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         gridLayout = view.findViewById(R.id.gridLayout);
         dayTextView = view.findViewById(R.id.dayText);
@@ -58,7 +91,7 @@ public class PlannerFragment extends Fragment {
         fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
-        final AudioManager audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
 
 
 
@@ -70,6 +103,7 @@ public class PlannerFragment extends Fragment {
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
         }
+
 
 
         toHourPickerTextView.setOnClickListener(v -> {
@@ -92,18 +126,11 @@ public class PlannerFragment extends Fragment {
 
 
         addButton.setOnClickListener(v -> {
-
-            hour1 = toHourPickerTextView.getText().toString();
-            hour2 = fromHourPickerTextView.getText().toString();
+            hour2 = toHourPickerTextView.getText().toString();
+            hour1 = fromHourPickerTextView.getText().toString();
             if(activityText.getText().length()>20){
                 activityText.setText(activityText.getText().toString().substring(0,19)+"...");
             }
-
-
-            gridLayout.addView(dynamicViews.linearLayout(getContext(),hour2+ " - "+hour1
-                    , ""+activityText.getText()));
-
-
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
@@ -111,12 +138,25 @@ public class PlannerFragment extends Fragment {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                  }
 
-            }});
+            }
+            String mute;
+            if(muteCheckbox.isChecked()){
+                mute="true";
+            }else{
+                mute="false";
+            }
+            addToListActivity(hour1,hour2,activityText.getText().toString(),mute);
+            save(hour1,hour2,activityText.getText().toString(),muteCheckbox);
+        });
+
+
+
+
 
 
         final ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
-            dynamicViews = new DynamicViews(context);
+
 
             if(!frameVisibility) {
                 messageFrame.setVisibility(View.VISIBLE);
@@ -131,8 +171,49 @@ public class PlannerFragment extends Fragment {
 
 
 
+
+        remindSpinner = view.findViewById(R.id.reminderSpinner);
+
+
+        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+
         return view;
     }
+
+    private void addToListActivity(String from, String to, String activ, String mute){
+        dynamicViews = new DynamicViews(context);
+
+        gridLayout.addView(dynamicViews.linearLayout(getContext(),
+                from+"-"+to, ""+activ));
+
+
+        if(mute.equals("true"))  {
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+        }
+    }
+
+
+    private void save(String fromText,String toText, String activityText, CheckBox muteCheckbox){
+        String mute;
+        if(muteCheckbox.isChecked()){
+            mute="true";
+        }else{
+            mute="false";
+        }
+        String textToSave=fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
+        saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
+    }
+
+    public void read(){
+        int numberOfActivity=GoogleDriveOperation.contentFromGoogleFile.size();
+        String[][]activityToAdd = new String[numberOfActivity][];
+        gridLayout.removeAllViews();
+        for(int i=0; i<numberOfActivity;i++){
+            activityToAdd[i]=GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&");
+            addToListActivity(activityToAdd[i][0],activityToAdd[i][1],activityToAdd[i][2],activityToAdd[i][3]);
+        }
+    }
+
 
 
     private void unMutePhone(AudioManager audioManager) {

@@ -1,6 +1,7 @@
 package com.inc.dayplanner.Activities;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,10 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +32,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private MenuItem itemSwitch;
     private Toolbar toolbar;
+    private TextView toolbarDateTextView;
+    DateFormat df = new SimpleDateFormat("d MMM yyyy");
+    Date dateobj = new Date();
+    public final PlannerFragment plannerFragment = new PlannerFragment();
 
 
 
@@ -54,9 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
         toolbar.setTitle("Plan");
+
+//        plannerFragment.read();
 
     }
 
@@ -66,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.nav_plan:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Plan");
                 break;
