@@ -47,6 +47,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     @Override
     protected void onDriveClientReady() {
 //        createFile();
+//        retrieveContents(GoogleDriveOperation.driveFileToOpen);
     }
 
     public void createNewGoogleFileAndAppendID(Context context){
@@ -80,6 +81,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         driveFile -> {
 //                            showMessage(getString(R.string.file_created, driveFile.getDriveId().encodeToString()));
                             pathToDataFile=driveFile.getDriveId().encodeToString();
+                            decodePathToGoogleFile();
                             createNewGoogleFileAndAppendID(context);
                         })
                 .addOnFailureListener(this, e -> {
@@ -194,6 +196,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                                 if(!line.equals("")){
                                     contentFromGoogleFile.add(line);
                                 }
+
                             }
 //                            showMessage(getString(R.string.content_loaded));
 //                            finish();
@@ -201,9 +204,17 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         // [END drive_android_read_as_string]
                         // [END_EXCLUDE]
                         // [START drive_android_discard_contents]
+
                         Task<Void> discardTask = getDriveResourceClient().discardContents(contents);
                         // [END drive_android_discard_contents]
                         return discardTask;
+                    })
+                    .addOnCompleteListener(e -> {
+                        // Handle failure
+                        // [START_EXCLUDE]
+                        completeLoadingData=true;
+//                        showMessage(getString(R.string.read_failed));
+                        // [END_EXCLUDE]
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
@@ -273,11 +284,12 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         driveId -> {
                             pathToDataFile=driveId.encodeToString();
                             createNewGoogleFileAndAppendID(context);
+                            onDriveClientReady();
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "No file selected", e);
                     showMessage(getString(R.string.file_not_selected));
-                    finish();
                 });
+        completeLoadingData=false;
     }
 }

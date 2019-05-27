@@ -1,6 +1,7 @@
 package com.inc.dayplanner.Activities;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView toolbarDateTextView;
     DateFormat df = new SimpleDateFormat("d MMM yyyy");
     Date dateobj = new Date();
-    public static PlannerFragment plannerFragment = new PlannerFragment();
+    public final PlannerFragment plannerFragment = new PlannerFragment();
+
 
 
     @Override
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         toolbar.setTitle("Plan");
 
-        plannerFragment.read();
+//        plannerFragment.read();
 
     }
 

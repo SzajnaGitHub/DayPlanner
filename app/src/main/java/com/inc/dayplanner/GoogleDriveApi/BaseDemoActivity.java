@@ -114,6 +114,7 @@ public abstract class BaseDemoActivity extends Activity {
      * Starts the sign-in process and initializes the Drive client.
      */
     public GoogleSignInAccount signInAccount;
+    public static boolean completeLoadingData;
     protected void signIn() {
         Set<Scope> requiredScopes = new HashSet<>(2);
         requiredScopes.add(Drive.SCOPE_FILE);
@@ -130,7 +131,6 @@ public abstract class BaseDemoActivity extends Activity {
                             .build();
             GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
             startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-
         }
     }
 

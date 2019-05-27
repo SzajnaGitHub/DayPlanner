@@ -51,6 +51,24 @@ public class LoginActivity extends GoogleDriveOperation {
 
     private TextView mFileContents;
 
+    @Override
+    protected void onDriveClientReady() {
+
+        super.onDriveClientReady();
+        readFile(getApplicationContext());
+
+        if (GoogleDriveOperation.pathToDataFile.equals("")) {
+            selectDatabaseFileFromGoogleDrive();
+        } else if (GoogleDriveOperation.driveFileToOpen == null) {
+            selectDatabaseFileFromGoogleDrive();
+        } else {
+                    try {
+                        retrieveContents(GoogleDriveOperation.driveFileToOpen);
+                    } catch (Exception e) {
+                        selectDatabaseFileFromGoogleDrive();
+                    }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,22 +79,10 @@ public class LoginActivity extends GoogleDriveOperation {
     }
 
     public void Login(View view) {
+              changeActivity();
 
-        readFile(getApplicationContext());
+//        changeActivity();
 
-        if(GoogleDriveOperation.pathToDataFile.equals("")){
-            selectDatabaseFileFromGoogleDrive();
-        }
-        else if(GoogleDriveOperation.driveFileToOpen==null){
-            selectDatabaseFileFromGoogleDrive();
-        }else {
-            try {
-                retrieveContents(GoogleDriveOperation.driveFileToOpen);
-                changeActivity();
-            } catch (Exception e) {
-                selectDatabaseFileFromGoogleDrive();
-            }
-        }
 
 //        ReadFileLocal readFileLocal = new ReadFileLocal();
 //        String fileData=readFileLocal.readFile(getApplicationContext());
@@ -89,14 +95,6 @@ public class LoginActivity extends GoogleDriveOperation {
     private void changeActivity(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    private void decodePathToGoogleFile(){
-        try {
-            GoogleDriveOperation.driveFileToOpen = decodeFromString(GoogleDriveOperation.pathToDataFile).asDriveFile();
-        }catch(Exception e){
-            GoogleDriveOperation.driveFileToOpen=null;
-        }
     }
 
 

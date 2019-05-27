@@ -27,9 +27,9 @@ public class ReadFileLocal {
 
         String fileData = readFromFileInputStream(fileInputStream);
 
-        if(fileData.length()>0) {
-            Toast.makeText(ctx, "Load saved data complete.", Toast.LENGTH_SHORT).show();
-        }
+//        if(fileData.length()>0) {
+//            Toast.makeText(ctx, "Load saved data complete.", Toast.LENGTH_SHORT).show();
+//        }
         return fileData;
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.inc.dayplanner.Activities.LoginActivity;
+import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -46,9 +48,28 @@ public class PlannerFragment extends Fragment {
 
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        read();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        read();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        read();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //saveToGoogleDrive.retrieveContents(GoogleDriveOperation.driveFileToOpen);
+//        read();
     }
 
     @Nullable
@@ -94,8 +115,8 @@ public class PlannerFragment extends Fragment {
 
         final ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
-            dynamicViews = new DynamicViews(context);
-            read();
+
+
             if(!flag) {
                 messageFrame.setVisibility(View.VISIBLE);
                 flag = true;
@@ -111,15 +132,14 @@ public class PlannerFragment extends Fragment {
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
-
-
         remindCheckbox = view.findViewById(R.id.remindCheckBox);
 
-//        read();
         return view;
     }
 
     private void addToListActivity(String from, String to, String activ, String mute){
+        dynamicViews = new DynamicViews(context);
+
         gridLayout.addView(dynamicViews.linearLayout(getContext(),
                 from+"-"+to, ""+activ));
 
@@ -143,6 +163,7 @@ public class PlannerFragment extends Fragment {
     public void read(){
         int numberOfActivity=GoogleDriveOperation.contentFromGoogleFile.size();
         String[][]activityToAdd = new String[numberOfActivity][];
+        gridLayout.removeAllViews();
         for(int i=0; i<numberOfActivity;i++){
             activityToAdd[i]=GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&");
             addToListActivity(activityToAdd[i][0],activityToAdd[i][1],activityToAdd[i][2],activityToAdd[i][3]);
