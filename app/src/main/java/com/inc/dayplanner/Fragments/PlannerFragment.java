@@ -25,6 +25,9 @@ import com.inc.dayplanner.R;
 import com.inc.dayplanner.SwipeAdapter;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.view.View.INVISIBLE;
 
@@ -32,10 +35,10 @@ import static android.view.View.INVISIBLE;
 public class PlannerFragment extends Fragment {
 
 
-    private GridLayout gridLayout;
+    private static GridLayout gridLayout;
     private DynamicViews dynamicViews;
     private TextView dayTextView;
-    private Context context;
+    private static Context context;
     private FrameLayout messageFrame;
     private TextView activityText;
     private CheckBox muteCheckbox;
@@ -47,34 +50,24 @@ public class PlannerFragment extends Fragment {
     private String hour1;
     private String hour2;
     public static GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
-    private AudioManager audioManager;
+    private static AudioManager audioManager;
+    private DateFormat df = new SimpleDateFormat("d MMM yyyy");
+    private Calendar calendar = Calendar.getInstance();
 
 
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        read();
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        read();
+        String date = df.format(calendar.getTime());
+//        read(date);
+        context=getContext();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-//        read();
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //saveToGoogleDrive.retrieveContents(GoogleDriveOperation.driveFileToOpen);
-//        read();
+    public void onAttach(Context mcontext) {
+        super.onAttach(context);
+        context = mcontext;
     }
 
     @Nullable
@@ -82,6 +75,7 @@ public class PlannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         gridLayout = view.findViewById(R.id.gridLayout);
+        gridLayout.removeAllViews();
         dayTextView = view.findViewById(R.id.dayText);
         messageFrame = view.findViewById(R.id.messageFrame);
         activityText = view.findViewById(R.id.activityText);
@@ -100,8 +94,13 @@ public class PlannerFragment extends Fragment {
            // message = getArguments().getString("dayOfTheWeek");
             message = getArguments().getString("Date");
             dayTextView.setText(message);
+            context=getContext();
+            read(dayTextView.getText().toString());
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
+            context=getContext();
+            String date = df.format(calendar.getTime());
+            read(date);
         }
 
 
@@ -126,6 +125,8 @@ public class PlannerFragment extends Fragment {
 
 
         addButton.setOnClickListener(v -> {
+//            String date = df.format(calendar.getTime());
+            String date = dayTextView.getText().toString();
             hour2 = toHourPickerTextView.getText().toString();
             hour1 = fromHourPickerTextView.getText().toString();
             if(activityText.getText().length()>20){
@@ -146,7 +147,7 @@ public class PlannerFragment extends Fragment {
                 mute="false";
             }
             addToListActivity(hour1,hour2,activityText.getText().toString(),mute);
-            save(hour1,hour2,activityText.getText().toString(),muteCheckbox);
+            save(date,hour1,hour2,activityText.getText().toString(),muteCheckbox);
         });
 
 
@@ -176,14 +177,15 @@ public class PlannerFragment extends Fragment {
 
 
         remindCheckbox = view.findViewById(R.id.remindCheckBox);
-
+//        read(dayTextView.getText().toString());
         return view;
     }
 
     private void addToListActivity(String from, String to, String activ, String mute){
+        if(getContext() != null)context=getContext();
         dynamicViews = new DynamicViews(context);
-
-        gridLayout.addView(dynamicViews.linearLayout(getContext(),
+//        if(getContext() != null)context=getContext();
+        gridLayout.addView(dynamicViews.linearLayout(context,
                 from+"-"+to, ""+activ));
 
 
@@ -193,24 +195,27 @@ public class PlannerFragment extends Fragment {
     }
 
 
-    private void save(String fromText,String toText, String activityText, CheckBox muteCheckbox){
+    private void save(String dateString, String fromText,String toText, String activityText, CheckBox muteCheckbox){
         String mute;
         if(muteCheckbox.isChecked()){
             mute="true";
         }else{
             mute="false";
         }
-        String textToSave=fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
+        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
-    public void read(){
+    public void read(String date){
+
         int numberOfActivity=GoogleDriveOperation.contentFromGoogleFile.size();
         String[][]activityToAdd = new String[numberOfActivity][];
         gridLayout.removeAllViews();
         for(int i=0; i<numberOfActivity;i++){
             activityToAdd[i]=GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&");
-            addToListActivity(activityToAdd[i][0],activityToAdd[i][1],activityToAdd[i][2],activityToAdd[i][3]);
+            if(activityToAdd[i][0].equals(date)) {
+                addToListActivity(activityToAdd[i][1], activityToAdd[i][2], activityToAdd[i][3], activityToAdd[i][4]);
+            }
         }
     }
 

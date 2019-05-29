@@ -32,19 +32,21 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        calendar.add(Calendar.DATE,position-previousPosition);
+        String date = df.format(calendar.getTime());
         Fragment pageFragment = new PlannerFragment();
         Bundle bundle = new Bundle();
 
-         calendar.add(Calendar.DATE,position-previousPosition);
-         String date = df.format(calendar.getTime());
 
         //bundle.putString("dayOfTheWeek", setDay(position));
         pageFragment.setArguments(bundle);
 
         bundle.putString("Date", date);
+
         mPageReferenceMap.put(position, pageFragment);
 
         previousPosition=position;
+//        ((PlannerFragment) pageFragment).read(date);
         return pageFragment;
     }
 

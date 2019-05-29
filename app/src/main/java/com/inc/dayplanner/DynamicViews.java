@@ -51,7 +51,15 @@ public class DynamicViews {
         textView.setTextSize(20);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setClickable(true);
-        textView.setOnClickListener(v -> textView.setText("twoja stara"));
+//        textView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                textView.setText("long CLICK");
+//                return false;
+//            }
+//        });
+        textView.setOnClickListener(v ->
+                textView.setText("twoja stara"));
 
         return textView;
     }
