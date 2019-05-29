@@ -1,7 +1,7 @@
 package com.inc.dayplanner.Activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,19 +11,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import com.inc.dayplanner.Utils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,17 +24,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private MenuItem itemSwitch;
     private Toolbar toolbar;
-    private TextView toolbarDateTextView;
-    DateFormat df = new SimpleDateFormat("d MMM yyyy");
-    Date dateobj = new Date();
     public final PlannerFragment plannerFragment = new PlannerFragment();
-
+    private String swipeChecked;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                swipeChecked = null;
+            } else {
+                swipeChecked = extras.getString("isCheched");
+            }
+        } else {
+            swipeChecked = (String) savedInstanceState.getSerializable("isCheched");
+        }
+
 
         toolbar = findViewById(R.id.toolbar);
 
@@ -66,11 +69,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
-        toolbar.setTitle("Plan");
+        toolbar.setTitle("Today");
 
-//        plannerFragment.read();
 
+        if (swipeChecked != null){
+
+            if(swipeChecked.equals("light")){
+                sw.setChecked(false);
+            }
+            else{
+                sw.setChecked(true);
+            }
+        }
     }
+
+
+
 
 
     @Override
@@ -80,15 +94,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_plan:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
                 drawer.closeDrawer(GravityCompat.START);
-                toolbar.setTitle("Plan");
+                toolbar.setTitle("Today");
                 break;
 
             case R.id.nav_create_planer:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanFragment(), null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Daily");
-
-
                 break;
 
 
@@ -114,26 +126,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void switchButtonHandler(Switch sw) {
 
-        View menuItems = findViewById(R.id.nav_view);
-        View toolobar = findViewById(R.id.toolbar);
+            if (sw.isChecked()) {
+                sw.setChecked(false);
+                Utils.changeToTheme(this, Utils.LIGHT_THEME, "light");
 
-        if (sw.isChecked()) {
-            sw.setChecked(false);
-            drawer.setBackgroundColor(getResources().getColor(R.color.CreamBackground));
-            menuItems.setBackgroundColor(getResources().getColor(R.color.CreamBackground));
-            toolobar.setBackgroundColor(getResources().getColor(R.color.CreamBackground));
+            } else {
+                sw.setChecked(true);
+                Utils.changeToTheme(this, Utils.DARK_THEME, "dark");
 
+            }
 
-        } else {
-            sw.setChecked(true);
-            drawer.setBackgroundColor(getResources().getColor(R.color.DarkToolbar));
-            menuItems.setBackgroundColor(getResources().getColor(R.color.DarkToolbar));
-            toolobar.setBackgroundColor(getResources().getColor(R.color.DarkBackground));
         }
 
 
-    }
 
 
 }
-

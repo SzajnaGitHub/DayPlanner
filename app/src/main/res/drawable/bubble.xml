@@ -8,9 +8,9 @@
     </corners>
     <stroke
         android:width="2dp"
-        android:color="#999999">
+        android:color="?attr/popupbordercolor">
     </stroke>
     <solid
-        android:color="#fefefe">
+        android:color="?attr/popupcolor">
     </solid>
 </shape>

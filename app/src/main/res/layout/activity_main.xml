@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/CreamBackground"
+    android:background="?attr/backgroundcolor"
     android:fitsSystemWindows="true"
     tools:context=".Activities.MainActivity"
     tools:openDrawer="start"
@@ -23,19 +23,19 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:fontFamily="casual"
+            app:titleTextColor="?attr/textcolor"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/CreamBackground"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:layout_height="wrap_content"
+            android:background="?attr/toolbarcolor"
+            android:elevation="4dp" />
 
 
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/backgroundcolor">
 
         </FrameLayout>
 
@@ -46,9 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/CreamBackground"
+        android:background="?attr/backgroundcolor"
         app:headerLayout="@layout/nav_header"
-        app:itemTextColor="?attr/colorBackgroundFloating"
+        app:itemTextColor="?attr/textcolor"
         app:menu="@menu/drawer_menu"
         />
 

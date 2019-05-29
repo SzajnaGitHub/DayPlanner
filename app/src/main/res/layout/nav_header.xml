@@ -7,4 +7,16 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
-    />
+    >
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="bottom|center"
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:inputType="textPersonName"
+        android:text="DayPlannner" />
+</LinearLayout>

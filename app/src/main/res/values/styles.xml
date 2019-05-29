@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/windowAnimationTransition</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="windowNoTitle">true</item>
@@ -12,11 +13,59 @@
         <item name="android:statusBarColor">#000</item>
         <item name="android:textSize">18sp</item>
 
+
+
+        <item name="backgroundcolor">#FFE299</item>
+        <item name="textcolor">#000</item>
+        <item name="toolbarcolor">#FFE299</item>
+        <item name="popupcolor">#fff</item>
+        <item name="popupbordercolor">#000</item>
+        <item name="buttoncolor">#FFE299</item>
+
+
+
     </style>
 
+
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/windowAnimationTransition</item>
+        <item name="android:actionMenuTextColor">#fff</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:statusBarColor">#000</item>
+        <item name="android:textSize">18sp</item>
+
+
+
+        <item name="backgroundcolor">#120e13</item>
+        <item name="textcolor">#fff</item>
+        <item name="toolbarcolor">#000</item>
+        <item name="popupcolor">#000</item>
+        <item name="popupbordercolor">#fff</item>
+        <item name="buttoncolor">#fff</item>
+
+
+
+
+    </style>
+
+
+
+
+    <style name="windowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+
+    </style>
+
+
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="colorControlNormal">#fff</item>
+        <item name="colorAccent">#FFE299</item>
+        <item name="colorControlNormal">#9e9e9e</item>
     </style>
 
 </resources>
