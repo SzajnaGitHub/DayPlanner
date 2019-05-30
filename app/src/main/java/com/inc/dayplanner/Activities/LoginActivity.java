@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.media.AudioManager;
 import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +27,8 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.drive.widget.DataBufferAdapter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.inc.dayplanner.CheckMuteThread;
+import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -82,6 +85,7 @@ public class LoginActivity extends GoogleDriveOperation {
     public void Login(View view) {
               changeActivity();
                 loginActivityInstance=this;
+
 //        changeActivity();
 
 

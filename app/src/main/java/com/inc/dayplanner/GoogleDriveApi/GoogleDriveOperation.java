@@ -302,6 +302,11 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "No file selected", e);
                     showMessage(getString(R.string.file_not_selected));
+                    if(MainActivity.importData==true) {
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        MainActivity.importData=false;
+                    }
                 });
         completeLoadingData=false;
     }

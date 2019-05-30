@@ -21,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -58,7 +59,7 @@ public class PlannerFragment extends Fragment {
     private String hour1;
     private String hour2;
     public static GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
-    private static AudioManager audioManager;
+    public static AudioManager audioManager;
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private Calendar calendar = Calendar.getInstance();
     public static List<String[]> activityList = new ArrayList<>();
@@ -99,6 +100,8 @@ public class PlannerFragment extends Fragment {
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        Thread thread = new Thread(new CheckMuteThread());
+        thread.start();
         delButton = view.findViewById(R.id.deleteButton);
 
         contextList.add(context);
@@ -144,9 +147,9 @@ public class PlannerFragment extends Fragment {
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
-                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
-                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                 }
+//                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
+//                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+//                 }
 
             }
             String mute;
@@ -258,12 +261,7 @@ public class PlannerFragment extends Fragment {
 
 
 
-    private void unMutePhone(AudioManager audioManager) {
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 
-        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
-    }
 
 
 }
