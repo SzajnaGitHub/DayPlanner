@@ -1,6 +1,5 @@
 package com.inc.dayplanner.Activities;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
+
+import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.Utils;
+import com.inc.dayplanner.ViewChange.Utils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+
+
+       //Runnable muteChecker = new CheckMuteThread();
+       // muteChecker.run();
+
+
 
 
         if (savedInstanceState == null) {

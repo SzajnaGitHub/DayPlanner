@@ -7,4 +7,5 @@
     <color name="DarkBackground">#120e13</color>
     <color name="DarkToolbar">#372c39</color>
     <color name="CreamBackground">#FFE299</color>
+    <color name="text">#fff</color>
 </resources>

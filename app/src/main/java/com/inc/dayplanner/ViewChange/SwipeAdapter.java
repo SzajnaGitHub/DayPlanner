@@ -1,4 +1,4 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.ViewChange;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

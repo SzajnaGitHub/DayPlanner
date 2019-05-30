@@ -1,7 +1,9 @@
-package com.inc.dayplanner;
+package com.inc.dayplanner.ViewChange;
 
 import android.app.Activity;
 import android.content.Intent;
+
+import com.inc.dayplanner.R;
 
 
 public class Utils {

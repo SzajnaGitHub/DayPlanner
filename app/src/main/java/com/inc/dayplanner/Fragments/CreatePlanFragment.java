@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.SwipeAdapter;
+import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 
 public class CreatePlanFragment extends Fragment {

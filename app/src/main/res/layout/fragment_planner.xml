@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ConstraintLay"
     android:layout_width="match_parent"
+    android:background="?attr/backgroundcolor"
     android:layout_height="match_parent">
-
 
     <ScrollView
         android:id="@+id/scrollPlanner"
@@ -14,6 +14,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="88dp"
+        android:background="?attr/backgroundcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -22,7 +23,10 @@
             android:id="@+id/gridLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="1" />
+            android:background="?attr/backgroundcolor"
+            android:columnCount="1">
+
+        </GridLayout>
 
 
     </ScrollView>
@@ -171,6 +175,14 @@
         </android.support.constraint.ConstraintLayout>
 
     </FrameLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete"
+        tools:layout_editor_absoluteX="243dp"
+        tools:layout_editor_absoluteY="606dp" />
 
 
 </android.support.constraint.ConstraintLayout>

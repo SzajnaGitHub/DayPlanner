@@ -8,34 +8,34 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.inc.dayplanner.Activities.LoginActivity;
-import com.inc.dayplanner.Activities.MainActivity;
-import com.inc.dayplanner.DynamicViews;
+import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.SwipeAdapter;
+import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import static android.view.View.INVISIBLE;
+import static android.view.View.resolveSize;
 
 
 public class PlannerFragment extends Fragment {
@@ -64,7 +64,8 @@ public class PlannerFragment extends Fragment {
     public static List<String[]> activityList = new ArrayList<>();
     public static List<Context> contextList = new ArrayList<>();
     private static boolean ifAddedNewElement=false;
-
+    private Button delButton;
+    private List<DynamicViews> idList = new ArrayList<>();
 
 
     @Override
@@ -98,6 +99,7 @@ public class PlannerFragment extends Fragment {
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        delButton = view.findViewById(R.id.deleteButton);
 
         contextList.add(context);
 
@@ -116,7 +118,6 @@ public class PlannerFragment extends Fragment {
         }
 
 
-
         toHourPickerTextView.setOnClickListener(v -> {
 
             TimePickerFragment timePickerFragment = new TimePickerFragment(toHourPickerTextView);
@@ -132,7 +133,6 @@ public class PlannerFragment extends Fragment {
             assert getFragmentManager() != null;
             timePickerFragment.show(getFragmentManager(),"timePicker");
         });
-
 
 
 
@@ -171,10 +171,6 @@ public class PlannerFragment extends Fragment {
         });
 
 
-
-
-
-
         final ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
 
@@ -185,7 +181,6 @@ public class PlannerFragment extends Fragment {
                 frameVisibility = true;
                 ifAddedNewElement=true;
                 contextToAddElement=getContext();
-                addToListActivity("10:10","11:11","test","true");
             }else{
                 frameVisibility = false;
                 messageFrame.setVisibility(INVISIBLE);
@@ -195,6 +190,16 @@ public class PlannerFragment extends Fragment {
         });
 
 
+        delButton.setOnClickListener(v ->{
+
+            for(int i =0; i<idList.size(); i++){
+                if(idList.get(i).isToDelete()){
+                    View viewToDelete = gridLayout.findViewById(idList.get(i).getId());
+                    gridLayout.removeView(viewToDelete);
+                }
+            }
+
+        });
 
 
         remindSpinner = view.findViewById(R.id.reminderSpinner);
@@ -205,19 +210,30 @@ public class PlannerFragment extends Fragment {
         return view;
     }
 
+
+
+
+
     private void addToListActivity(String from, String to, String activ, String mute){
 //        if(getContext() != null)context=getContext();
 //        if(ifAddedNewElement==true)context=contextToAddElement;
         dynamicViews = new DynamicViews(context);
 //        if(getContext() != null)context=getContext();
-        if(ifAddedNewElement==true){context=contextToAddElement;}
+        if(ifAddedNewElement){context=contextToAddElement;}
         gridLayout.addView(dynamicViews.linearLayout(context,
                 from+"-"+to, ""+activ));
 
+        idList.add(dynamicViews);
+
+        System.out.println(idList);
+
+
 
         if(mute.equals("true"))  {
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-        }
+           // audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            }
+
+
     }
 
     private void save(String dateString, String fromText,String toText, String activityText, String mute){
@@ -248,7 +264,6 @@ public class PlannerFragment extends Fragment {
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
     }
-
 
 
 }
