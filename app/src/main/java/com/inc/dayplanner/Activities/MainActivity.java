@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()) {
             case R.id.nav_plan:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, plannerFragment, null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Today");
                 break;

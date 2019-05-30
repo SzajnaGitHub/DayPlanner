@@ -106,3 +106,5 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
 
 }
+
+

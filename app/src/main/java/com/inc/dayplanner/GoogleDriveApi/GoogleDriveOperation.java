@@ -18,6 +18,7 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.inc.dayplanner.Activities.MainActivity;
+import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
 
 import java.io.BufferedReader;
@@ -126,6 +127,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
         })
                 .addOnSuccessListener(this,
                         aVoid -> {
+                            retrieveContents(driveFileToOpen);
 //                            showMessage(getString(R.string.content_updated));
                             finish();
                         })
@@ -213,6 +215,10 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         // Handle failure
                         // [START_EXCLUDE]
                         completeLoadingData=true;
+                        PlannerFragment.activityList.clear();
+                        for(int i=0; i<GoogleDriveOperation.contentFromGoogleFile.size();i++){
+                            PlannerFragment.activityList.add(GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&"));
+                        }
 //                        showMessage(getString(R.string.read_failed));
                         // [END_EXCLUDE]
                     })
