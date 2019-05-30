@@ -20,12 +20,9 @@ public class SaveFileLocal extends AppCompatActivity {
         String fileData=readFileLocal.readFile(ctx);
 
         String content =username+"|"+pathToDataFile;
-        if(fileData.equals("")){
+
             fileData=content;
-        }
-        else{
-            fileData+="///"+content;
-        }
+
 
         try
         {

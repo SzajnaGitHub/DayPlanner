@@ -50,6 +50,7 @@ public class LoginActivity extends GoogleDriveOperation {
 
 
     private TextView mFileContents;
+    public static LoginActivity loginActivityInstance;
 
     @Override
     protected void onDriveClientReady() {
@@ -80,7 +81,7 @@ public class LoginActivity extends GoogleDriveOperation {
 
     public void Login(View view) {
               changeActivity();
-
+                loginActivityInstance=this;
 //        changeActivity();
 
 
