@@ -1,7 +1,10 @@
 package com.inc.dayplanner.ViewChange;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,8 +14,10 @@ import com.inc.dayplanner.Fragments.PlannerFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,12 +26,17 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
     private Calendar calendar = Calendar.getInstance();
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
-    private Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
+    public static Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
+    public static List<PlannerFragment> plannerFragmentList = new ArrayList<>();
 
     private int previousPosition = 4999;
 
     public SwipeAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+    public int getItemPosition(Object object){
+        return POSITION_NONE;
     }
 
 
@@ -40,15 +50,33 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
         //bundle.putString("dayOfTheWeek", setDay(position));
         pageFragment.setArguments(bundle);
+        plannerFragmentList.add((PlannerFragment) pageFragment);
 
         bundle.putString("Date", date);
 
         mPageReferenceMap.put(position, pageFragment);
 
+
         previousPosition=position;
 //        ((PlannerFragment) pageFragment).read(date);
         return pageFragment;
     }
+
+    public static PlannerFragment getMiddleFragment(){
+
+        return (PlannerFragment) mPageReferenceMap.get(4998);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void replaceMiddleFragment(Fragment fr){
+
+        mPageReferenceMap.replace(4999,fr);
+
+
+    }
+
+
 
 
     @Override
