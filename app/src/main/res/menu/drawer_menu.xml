@@ -35,6 +35,10 @@
             android:id="@+id/app_bar_import"
             android:title="Import" />
 
+        <item
+            android:id="@+id/app_bar_logout"
+            android:title="Logout" />
+
     </group>
 
 

@@ -108,6 +108,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switchButtonHandler(sw);
                 break;
 
+            case R.id.app_bar_logout:
+
+                break;
+
+            case R.id.app_bar_import:
+
+                break;
+
+
         }
 
 
