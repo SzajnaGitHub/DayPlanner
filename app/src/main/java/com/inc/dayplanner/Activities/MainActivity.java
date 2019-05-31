@@ -1,5 +1,7 @@
 package com.inc.dayplanner.Activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,12 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
 
+import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.ViewChange.Utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends GoogleDriveOperation implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,6 +41,9 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     private String swipeChecked;
     private Intent intent;
     public static boolean importData;
+    public static MainActivity mainActivity;
+    public static String timeEarlierReminder;
+    public static String contentActivityReminder;
 
 
     @Override
@@ -40,6 +51,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         super.onCreate(savedInstanceState);
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+        mainActivity=this;
 
 
        //Runnable muteChecker = new CheckMuteThread();
@@ -105,6 +117,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
         switch (menuItem.getItemId()) {
             case R.id.nav_plan:
+//                setNotification();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 toolbar.setTitle("Today");
@@ -171,6 +184,28 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         }
 
 
+        public void setNotification(String dateToParse,String activity, String timeEarlier){
+            Calendar c = Calendar.getInstance();
+            timeEarlierReminder=timeEarlier;
+            contentActivityReminder=activity;
+
+            SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+            try {
+                c.setTime(reminderDF.parse(dateToParse));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+//            c.setTime(date);
+//            c.set(Calendar.HOUR_OF_DAY,hour);
+//            c.set(Calendar.MINUTE, minute);
+//            c.set(Calendar.SECOND, 0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        }
 
 
 }

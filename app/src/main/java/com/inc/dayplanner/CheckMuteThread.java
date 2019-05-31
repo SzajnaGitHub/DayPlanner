@@ -1,5 +1,6 @@
 package com.inc.dayplanner;
 
+import android.app.AlarmManager;
 import android.media.AudioManager;
 
 import com.inc.dayplanner.Fragments.PlannerFragment;
@@ -69,23 +70,6 @@ public class CheckMuteThread implements Runnable{
             realMinute = calendar.get(Calendar.MINUTE);
             if (!activitiesThreadList.isEmpty()) {
                 for (int i = 0; i < activitiesThreadList.size(); i++) {
-//-----------------------------------------------------------------------------------------REMAINDER-----------------------------------------------------------------------------------------//
-//                    realDate = df.format(calendar.getTime());
-                    TimeToRemaindInt=new int[2];
-                    if(!activitiesThreadList.get(i)[5].equals("Remaind me") && !activitiesThreadList.get(i)[5].equals("No remaind me")) {
-                        timeToRemaind = activitiesThreadList.get(i)[5].split("-");
-                        if (timeToRemaind[1].equals(df)) {
-                            TimeToRemaindString = timeToRemaind[0].split(":");
-                            TimeToRemaindInt[0] = Integer.valueOf(TimeToRemaindString[0]);
-                            TimeToRemaindInt[1] = Integer.valueOf(TimeToRemaindString[1]);
-                            if (TimeToRemaindInt[0] == realHour) {
-                                if (TimeToRemaindInt[1] == realMinute) {
-                                    System.out.println("REMAINDER");
-                                }
-                            }
-                        }
-                    }
-//---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------//
 
                     if (activitiesThreadList.get(i)[4].equals("true")&&activitiesThreadList.get(i)[0].equals(df)) {
                         TimeFrom = activitiesThreadList.get(i)[1];
@@ -125,6 +109,7 @@ public class CheckMuteThread implements Runnable{
             }
         }
     }
+
 
 
 }

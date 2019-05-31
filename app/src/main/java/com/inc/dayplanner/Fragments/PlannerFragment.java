@@ -1,6 +1,9 @@
 package com.inc.dayplanner.Fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inc.dayplanner.Activities.MainActivity;
+import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
@@ -201,6 +206,7 @@ public class PlannerFragment extends Fragment implements AdapterView.OnItemSelec
                 dateToSaveRemainder = "no remaind";
             }else{
                 dateToSaveRemainder = reminderDF.format(calendar.getTime());
+                MainActivity.mainActivity.setNotification(dateToSaveRemainder,activityText.getText().toString(),remainderTime);
             }
 
 
@@ -318,4 +324,6 @@ public class PlannerFragment extends Fragment implements AdapterView.OnItemSelec
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }
