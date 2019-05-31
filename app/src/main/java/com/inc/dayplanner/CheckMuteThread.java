@@ -27,6 +27,11 @@ public class CheckMuteThread implements Runnable{
     private int [] TimeToUnmute;
     private static AudioManager audioManager;
     private String df;
+    private String [] TimeToRemaindString;
+    private int [] TimeToRemaindInt;
+    private String[] timeToRemaind;
+    private String realDate;
+
 
 
     private void unMutePhone(AudioManager audioManager) {
@@ -59,10 +64,29 @@ public class CheckMuteThread implements Runnable{
                     }
                 }
             }
-            realHour = calendar.get(Calendar.HOUR);
+            calendar = Calendar.getInstance();
+            realHour = calendar.get(Calendar.HOUR_OF_DAY);
             realMinute = calendar.get(Calendar.MINUTE);
             if (!activitiesThreadList.isEmpty()) {
                 for (int i = 0; i < activitiesThreadList.size(); i++) {
+//-----------------------------------------------------------------------------------------REMAINDER-----------------------------------------------------------------------------------------//
+//                    realDate = df.format(calendar.getTime());
+                    TimeToRemaindInt=new int[2];
+                    if(!activitiesThreadList.get(i)[5].equals("Remaind me") && !activitiesThreadList.get(i)[5].equals("No remaind me")) {
+                        timeToRemaind = activitiesThreadList.get(i)[5].split("-");
+                        if (timeToRemaind[1].equals(df)) {
+                            TimeToRemaindString = timeToRemaind[0].split(":");
+                            TimeToRemaindInt[0] = Integer.valueOf(TimeToRemaindString[0]);
+                            TimeToRemaindInt[1] = Integer.valueOf(TimeToRemaindString[1]);
+                            if (TimeToRemaindInt[0] == realHour) {
+                                if (TimeToRemaindInt[1] == realMinute) {
+                                    System.out.println("REMAINDER");
+                                }
+                            }
+                        }
+                    }
+//---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------//
+
                     if (activitiesThreadList.get(i)[4].equals("true")&&activitiesThreadList.get(i)[0].equals(df)) {
                         TimeFrom = activitiesThreadList.get(i)[1];
                         TimeTo = activitiesThreadList.get(i)[2];
@@ -93,11 +117,9 @@ public class CheckMuteThread implements Runnable{
                 }
             }
 
-
-
             try {
-                Thread.sleep(60000);
-                System.out.println("Watek idzie spac na sekunde :-0");
+                Thread.sleep(30000);
+                System.out.println("Watek idzie spac :-0");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

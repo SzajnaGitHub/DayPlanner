@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.ViewChange.DynamicViews;
@@ -29,6 +32,7 @@ import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +43,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.resolveSize;
 
 
-public class PlannerFragment extends Fragment {
+public class PlannerFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
     private static GridLayout gridLayout;
@@ -67,6 +71,7 @@ public class PlannerFragment extends Fragment {
     private static boolean ifAddedNewElement=false;
     private Button delButton;
     private List<DynamicViews> idList = new ArrayList<>();
+    private String remainderTime;
 
 
     @Override
@@ -95,7 +100,7 @@ public class PlannerFragment extends Fragment {
         activityText = view.findViewById(R.id.activityText);
         muteCheckbox = view.findViewById(R.id.muteCheckBox);
         remindSpinner = view.findViewById(R.id.reminderSpinner);
-        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
         fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
@@ -158,13 +163,56 @@ public class PlannerFragment extends Fragment {
             }else{
                 mute="false";
             }
-            addToListActivity(hour1,hour2,activityText.getText().toString(),mute);
-            String[] addElement = {hour1,hour2,activityText.getText().toString(),mute};
+            //---------------------------------------------------------------------------------------REMAINDER---------------------------------------------------------------------------------------
+            calendar = Calendar.getInstance();
+            String dateToParse="";
+            if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
+                dateToParse = hour1+"-"+ df.format(calendar.getTime());
+            }else{
+                dateToParse = hour1+"-"+dayTextView.getText().toString();
+            }
+
+            SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+            try {
+                calendar.setTime(reminderDF.parse(dateToParse));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            switch(remainderTime){
+                case "15 minutes earlier":
+//                    calendar.add(Calendar.DATE,position-previousPosition);
+                    calendar.add(calendar.MINUTE,-15);
+                    break;
+                case "30 minutes earlier":
+                    calendar.add(calendar.MINUTE,-30);
+                    break;
+                case "1 hour earlier":
+                    calendar.add(calendar.MINUTE,-60);
+                    break;
+                case "2 hours earlier":
+                    calendar.add(calendar.MINUTE,-120);
+                    break;
+                case "1 day earlier":
+                    calendar.add(calendar.DATE,-1);
+                    break;
+            }
+            String dateToSaveRemainder;
+            if(remainderTime.equals("Remaind me")||remainderTime.equals("No remaind me")){
+                dateToSaveRemainder = "no remaind";
+            }else{
+                dateToSaveRemainder = reminderDF.format(calendar.getTime());
+            }
+
+
+            //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
+
+            addToListActivity(hour1,hour2,activityText.getText().toString());
+            String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
                 date=df.format(calendar.getTime());
             }
-            save(date,hour1,hour2,activityText.getText().toString(),mute);
+            save(date,hour1,hour2,activityText.getText().toString(),mute,dateToSaveRemainder);
 //            sortAndAddToLayout(dayTextView.getText().toString());
 
             if(activityText.getText().length()>20){
@@ -208,8 +256,14 @@ public class PlannerFragment extends Fragment {
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
-        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
 //        read(dayTextView.getText().toString());
+
+        Spinner spinner = view.findViewById(R.id.reminderSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.remainder, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
         return view;
     }
 
@@ -217,7 +271,7 @@ public class PlannerFragment extends Fragment {
 
 
 
-    private void addToListActivity(String from, String to, String activ, String mute){
+    private void addToListActivity(String from, String to, String activ){
 //        if(getContext() != null)context=getContext();
 //        if(ifAddedNewElement==true)context=contextToAddElement;
         dynamicViews = new DynamicViews(context);
@@ -231,16 +285,10 @@ public class PlannerFragment extends Fragment {
         System.out.println(idList);
 
 
-
-        if(mute.equals("true"))  {
-           // audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            }
-
-
     }
 
-    private void save(String dateString, String fromText,String toText, String activityText, String mute){
-        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
+    private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
+        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
@@ -254,14 +302,20 @@ public class PlannerFragment extends Fragment {
         //add all activities to PlannerActivity
         for(int i=0; i<activityList.size();i++){
             if(activityList.get(i)[0].equals(date)) {
-                addToListActivity(activityList.get(i)[1], activityList.get(i)[2], activityList.get(i)[3], activityList.get(i)[4]);
+                addToListActivity(activityList.get(i)[1], activityList.get(i)[2], activityList.get(i)[3]);
             }
         }
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        remainderTime = parent.getItemAtPosition(position).toString();
+//        Toast.makeText(parent.getContext(),remainderTime, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-
-
+    }
 }
