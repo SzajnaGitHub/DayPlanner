@@ -121,30 +121,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_plus" />
 
-            <CheckBox
-                android:id="@+id/remindCheckBox"
-                android:layout_width="130dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="32dp"
-                android:text="Remind me"
-                android:textColor="?attr/textcolor"
-                app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.246"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <Spinner
                 android:id="@+id/reminderSpinner"
-                android:layout_width="79dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="71dp"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center|center_horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/remindCheckBox"
-                app:layout_constraintTop_toTopOf="@+id/activityText" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activityText" />
 
             <TextView
                 android:id="@+id/fromHourPicker"

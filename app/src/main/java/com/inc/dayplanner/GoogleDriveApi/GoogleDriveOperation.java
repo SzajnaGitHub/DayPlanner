@@ -17,6 +17,7 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
@@ -219,6 +220,11 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         for(int i=0; i<GoogleDriveOperation.contentFromGoogleFile.size();i++){
                             PlannerFragment.activityList.add(GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&"));
                         }
+                        if(MainActivity.importData==true) {
+                            Intent intent = new Intent(this, LoginActivity.class);
+                            startActivity(intent);
+                            MainActivity.importData=false;
+                        }
 //                        showMessage(getString(R.string.read_failed));
                         // [END_EXCLUDE]
                     })
@@ -276,7 +282,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
         }
     }
 
-    public void signOutGoogleAccount(View view){
+    public void signOutGoogleAccount(){
         signOut();
         revokeAccess();
         signIn();
@@ -290,11 +296,17 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         driveId -> {
                             pathToDataFile=driveId.encodeToString();
                             createNewGoogleFileAndAppendID(context);
-                            onDriveClientReady();
+                            decodePathToGoogleFile();
+                            retrieveContents(GoogleDriveOperation.driveFileToOpen);
                         })
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "No file selected", e);
                     showMessage(getString(R.string.file_not_selected));
+                    if(MainActivity.importData==true) {
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        MainActivity.importData=false;
+                    }
                 });
         completeLoadingData=false;
     }

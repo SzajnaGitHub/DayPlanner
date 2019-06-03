@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ import java.util.Set;
 /**
  * An abstract activity that handles authorization and connection to the Drive services.
  */
-public abstract class BaseDemoActivity extends Activity {
+public abstract class BaseDemoActivity extends AppCompatActivity {
     private static final String TAG = "BaseDriveActivity";
 
     /**
