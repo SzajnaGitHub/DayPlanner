@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.media.AudioManager;
 import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +27,8 @@ import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.drive.widget.DataBufferAdapter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.inc.dayplanner.CheckMuteThread;
+import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -49,7 +52,7 @@ import static com.google.android.gms.drive.DriveId.decodeFromString;
 public class LoginActivity extends GoogleDriveOperation {
 
 
-    private TextView mFileContents;
+    public static LoginActivity loginActivityInstance;
 
     @Override
     protected void onDriveClientReady() {
@@ -62,11 +65,11 @@ public class LoginActivity extends GoogleDriveOperation {
         } else if (GoogleDriveOperation.driveFileToOpen == null) {
             selectDatabaseFileFromGoogleDrive();
         } else {
-                    try {
-                        retrieveContents(GoogleDriveOperation.driveFileToOpen);
-                    } catch (Exception e) {
-                        selectDatabaseFileFromGoogleDrive();
-                    }
+            try {
+                retrieveContents(GoogleDriveOperation.driveFileToOpen);
+            } catch (Exception e) {
+                selectDatabaseFileFromGoogleDrive();
+            }
         }
     }
 
@@ -74,11 +77,11 @@ public class LoginActivity extends GoogleDriveOperation {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
     }
 
     public void Login(View view) {
-              changeActivity();
+        changeActivity();
+        loginActivityInstance=this;
 
 //        changeActivity();
 
@@ -120,6 +123,5 @@ public class LoginActivity extends GoogleDriveOperation {
 
 
 }
-
 
 

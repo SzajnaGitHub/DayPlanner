@@ -1,6 +1,9 @@
 package com.inc.dayplanner.Fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +14,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -21,7 +26,11 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.inc.dayplanner.Activities.MainActivity;
+import com.inc.dayplanner.AlertReceiver;
+import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -29,6 +38,7 @@ import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +49,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.resolveSize;
 
 
-public class PlannerFragment extends Fragment  implements PopupFragment.ActivityHandlerListener {
+public class PlannerFragment extends Fragment  implements PopupFragment.ActivityHandlerListener, AdapterView.OnItemSelectedListener {
 
 
     private static GridLayout gridLayout;
@@ -59,7 +69,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private String hour1;
     private String hour2;
     public static GoogleDriveOperation saveToGoogleDrive = new GoogleDriveOperation();
-    private static AudioManager audioManager;
+    public static AudioManager audioManager;
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private Calendar calendar = Calendar.getInstance();
     public static List<String[]> activityList = new ArrayList<>();
@@ -67,6 +77,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private static boolean ifAddedNewElement=false;
     private Button delButton;
     private List<DynamicViews> idList = new ArrayList<>();
+    private String remainderTime;
 
 
     @Override
@@ -95,12 +106,15 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         activityText = view.findViewById(R.id.activityText);
         muteCheckbox = view.findViewById(R.id.muteCheckBox);
         remindSpinner = view.findViewById(R.id.reminderSpinner);
-        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
         fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
+        Thread thread = new Thread(new CheckMuteThread());
+        thread.start();
         delButton = view.findViewById(R.id.deleteButton);
+
         contextList.add(context);
 
 
@@ -145,9 +159,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
-                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
-                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                 }
+//                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
+//                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+//                 }
 
             }
             String mute;
@@ -156,13 +170,57 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             }else{
                 mute="false";
             }
-            addToListActivity(hour1,hour2,activityText.getText().toString(),mute);
-            String[] addElement = {hour1,hour2,activityText.getText().toString(),mute};
+            //---------------------------------------------------------------------------------------REMAINDER---------------------------------------------------------------------------------------
+            calendar = Calendar.getInstance();
+            String dateToParse="";
+            if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
+                dateToParse = hour1+"-"+ df.format(calendar.getTime());
+            }else{
+                dateToParse = hour1+"-"+dayTextView.getText().toString();
+            }
+
+            SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+            try {
+                calendar.setTime(reminderDF.parse(dateToParse));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            switch(remainderTime){
+                case "15 minutes earlier":
+//                    calendar.add(Calendar.DATE,position-previousPosition);
+                    calendar.add(calendar.MINUTE,-15);
+                    break;
+                case "30 minutes earlier":
+                    calendar.add(calendar.MINUTE,-30);
+                    break;
+                case "1 hour earlier":
+                    calendar.add(calendar.MINUTE,-60);
+                    break;
+                case "2 hours earlier":
+                    calendar.add(calendar.MINUTE,-120);
+                    break;
+                case "1 day earlier":
+                    calendar.add(calendar.DATE,-1);
+                    break;
+            }
+            String dateToSaveRemainder;
+            if(remainderTime.equals("Remaind me")||remainderTime.equals("No remaind me")){
+                dateToSaveRemainder = "no remaind";
+            }else{
+                dateToSaveRemainder = reminderDF.format(calendar.getTime());
+                MainActivity.mainActivity.setNotification(dateToSaveRemainder,activityText.getText().toString(),remainderTime);
+            }
+
+
+            //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
+
+            addToListActivity(hour1,hour2,activityText.getText().toString());
+            String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
                 date=df.format(calendar.getTime());
             }
-            save(date,hour1,hour2,activityText.getText().toString(),mute);
+            save(date,hour1,hour2,activityText.getText().toString(),mute,dateToSaveRemainder);
 //            sortAndAddToLayout(dayTextView.getText().toString());
 
             if(activityText.getText().length()>20){
@@ -207,8 +265,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
-        remindCheckbox = view.findViewById(R.id.remindCheckBox);
+//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
 //        read(dayTextView.getText().toString());
+
+        Spinner spinner = view.findViewById(R.id.reminderSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.remainder, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
         return view;
     }
 
@@ -216,7 +280,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
 
-    private void addToListActivity(String from, String to, String activ, String mute){
+    private void addToListActivity(String from, String to, String activ){
 //        if(getContext() != null)context=getContext();
 //        if(ifAddedNewElement==true)context=contextToAddElement;
 
@@ -251,22 +315,17 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         if(ifAddedNewElement){context=contextToAddElement;}
 
 
-
         gridLayout.addView(linearLayout);
         idList.add(dynamicViews);
         System.out.println(idList.size());
 
-
-
-        if(mute.equals("true"))  {
-           // audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            }
+        System.out.println(idList);
 
 
     }
 
-    private void save(String dateString, String fromText,String toText, String activityText, String mute){
-        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"\n";
+    private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
+        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
@@ -280,7 +339,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         //add all activities to PlannerActivity
         for(int i=0; i<activityList.size();i++){
             if(activityList.get(i)[0].equals(date)) {
-                addToListActivity(activityList.get(i)[1], activityList.get(i)[2], activityList.get(i)[3], activityList.get(i)[4]);
+                addToListActivity(activityList.get(i)[1], activityList.get(i)[2], activityList.get(i)[3]);
             }
         }
     }
@@ -294,6 +353,17 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
     }
 
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        remainderTime = parent.getItemAtPosition(position).toString();
+//        Toast.makeText(parent.getContext(),remainderTime, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
     @Override
     public void onDestroyView() {
@@ -310,4 +380,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public void edit() {
 
     }
+
+
 }
