@@ -74,8 +74,7 @@ public class LoginActivity extends GoogleDriveOperation {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mFileContents = findViewById(R.id.mFileContents);
-        mFileContents.setText("");
+
     }
 
     public void Login(View view) {

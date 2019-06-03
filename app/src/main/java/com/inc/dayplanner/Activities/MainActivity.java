@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        // muteChecker.run();
 
 
-
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -116,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.app_bar_logout:
-
                 break;
 
             case R.id.app_bar_import:

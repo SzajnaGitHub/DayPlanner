@@ -180,9 +180,11 @@
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="104dp"
         android:text="delete"
-        tools:layout_editor_absoluteX="243dp"
-        tools:layout_editor_absoluteY="606dp" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addButton" />
 
 
 </android.support.constraint.ConstraintLayout>

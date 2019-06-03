@@ -16,7 +16,8 @@ public class DynamicViews {
     private Context ctx;
     private int id;
     private boolean isToDelete = false;
-    LinearLayout linearLayout;
+    private LinearLayout linearLayout;
+
 
 
     private int getWidth(Context context) {
@@ -34,30 +35,20 @@ public class DynamicViews {
         this.ctx = ctx;
     }
 
-    private TextView hourTextView(Context context, String text) {
+    public TextView hourTextView(Context context, String text) {
 
         final TextView textView = new TextView(context);
+
 
         textView.setText(text);
         textView.setWidth((int) (getWidth(context) * 0.2));
         textView.setTextSize(15);
         textView.setClickable(true);
- /*       textView.setOnLongClickListener(v -> {
-                    this.idToDelete = linearLayout.getId();
-                    System.out.println("longClick");
-                    return false;
-                }
-
-        );*/
-        textView.setOnClickListener(v -> {
-            this.isToDelete = true;
-
-        });
         return textView;
     }
 
 
-    private TextView activityTextView(Context context, final String text) {
+    public TextView activityTextView(Context context, final String text) {
 
         final TextView textView = new TextView(context);
         textView.setText(text);
@@ -65,39 +56,16 @@ public class DynamicViews {
         textView.setTextSize(20);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setClickable(true);
-/*
-        textView.setOnLongClickListener(v -> {
-                    this.idToDelete = linearLayout.getId();
-                    System.out.println("longClick");
-                    return false;
-                }
-
-                );
-*/
-
-
-
-
-//        textView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                textView.setText("long CLICK");
-//                return false;
-//            }
-//        });
-      textView.setOnClickListener(v -> {
-          this.isToDelete = true;
-      });
 
         return textView;
     }
 
-    public LinearLayout linearLayout(Context context, String hour, String act) {
+    public LinearLayout linearLayout(Context context,TextView tvHour, TextView tvActivity) {
 
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.addView(hourTextView(context, hour));
-        linearLayout.addView(activityTextView(context, act));
+        linearLayout.addView(tvHour);
+        linearLayout.addView(tvActivity);
 
         linearLayout.setBackgroundResource(R.drawable.border_shape);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -111,6 +79,8 @@ public class DynamicViews {
         id = linearLayout.getId();
 
         linearLayout.setLayoutParams(params);
+
+
         return linearLayout;
     }
 
@@ -121,6 +91,9 @@ public class DynamicViews {
     public boolean isToDelete() {
         return isToDelete;
     }
+
+
+
 
 
 

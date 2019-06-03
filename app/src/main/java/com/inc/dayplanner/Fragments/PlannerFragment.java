@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -38,7 +39,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.resolveSize;
 
 
-public class PlannerFragment extends Fragment {
+public class PlannerFragment extends Fragment  implements PopupFragment.ActivityHandlerListener {
 
 
     private static GridLayout gridLayout;
@@ -100,8 +101,8 @@ public class PlannerFragment extends Fragment {
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
         delButton = view.findViewById(R.id.deleteButton);
-
         contextList.add(context);
+
 
         String message = null;
         if (getArguments() != null) {
@@ -196,6 +197,7 @@ public class PlannerFragment extends Fragment {
                 if(idList.get(i).isToDelete()){
                     View viewToDelete = gridLayout.findViewById(idList.get(i).getId());
                     gridLayout.removeView(viewToDelete);
+                    idList.remove(i);
                 }
             }
 
@@ -217,15 +219,42 @@ public class PlannerFragment extends Fragment {
     private void addToListActivity(String from, String to, String activ, String mute){
 //        if(getContext() != null)context=getContext();
 //        if(ifAddedNewElement==true)context=contextToAddElement;
-        dynamicViews = new DynamicViews(context);
+
 //        if(getContext() != null)context=getContext();
+
+
+        dynamicViews = new DynamicViews(context);
+        TextView tvHour = dynamicViews.hourTextView(context,from+"-"+to);
+        TextView tvActivity = dynamicViews.activityTextView(context,activ);
+        LinearLayout linearLayout = dynamicViews.linearLayout(context,tvHour,tvActivity);
+
+        tvHour.setOnLongClickListener(v ->
+        {
+            PopupFragment dialog = new PopupFragment();
+            if (getFragmentManager() != null) {
+                dialog.show(getFragmentManager(),"dialog");
+            }
+            return false;
+
+        });
+
+        tvActivity.setOnLongClickListener(v ->
+        {
+            PopupFragment dialog = new PopupFragment();
+            if (getFragmentManager() != null) {
+                dialog.show(getFragmentManager(),"dialog");
+            }
+            return false;
+        });
+
+
         if(ifAddedNewElement){context=contextToAddElement;}
-        gridLayout.addView(dynamicViews.linearLayout(context,
-                from+"-"+to, ""+activ));
 
+
+
+        gridLayout.addView(linearLayout);
         idList.add(dynamicViews);
-
-        System.out.println(idList);
+        System.out.println(idList.size());
 
 
 
@@ -266,4 +295,19 @@ public class PlannerFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        idList.clear();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void delete() {
+
+    }
+
+    @Override
+    public void edit() {
+
+    }
 }
