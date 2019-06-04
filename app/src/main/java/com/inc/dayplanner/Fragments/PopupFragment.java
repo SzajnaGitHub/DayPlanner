@@ -16,8 +16,6 @@ import com.inc.dayplanner.R;
 public class PopupFragment extends AppCompatDialogFragment {
 
 
-    private Button delButton;
-    private Button editButton;
     private ActivityHandlerListener activityHandlerListener;
     public PopupFragment(){
 
@@ -27,7 +25,7 @@ public class PopupFragment extends AppCompatDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            activityHandlerListener = (ActivityHandlerListener) context;
+            activityHandlerListener = (ActivityHandlerListener) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()+ "must implement ActivityHandlerListener");
         }
@@ -39,11 +37,13 @@ public class PopupFragment extends AppCompatDialogFragment {
 
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.pop_up,null);
 
+        Button delButton = v.findViewById(R.id.deleteDialogButton);
+        Button editButton = v.findViewById(R.id.editDialogButton);
 
-        delButton = v.findViewById(R.id.deleteDialogButton);
-        editButton = v.findViewById(R.id.editDialogButton);
-
-        delButton.setOnClickListener(v1 -> activityHandlerListener.delete());
+        delButton.setOnClickListener(v1 -> {
+                    activityHandlerListener.delete();
+                    dismiss();
+                });
         editButton.setOnClickListener(v2 -> activityHandlerListener.edit());
 
         return new AlertDialog.Builder(getActivity()).setView(v).create();

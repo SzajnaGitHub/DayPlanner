@@ -296,6 +296,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         {
             PopupFragment dialog = new PopupFragment();
             if (getFragmentManager() != null) {
+                dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
             }
             return false;
@@ -306,6 +307,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         {
             PopupFragment dialog = new PopupFragment();
             if (getFragmentManager() != null) {
+                dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
             }
             return false;
@@ -374,10 +376,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     @Override
     public void delete() {
 
+        System.out.println("del");
     }
 
     @Override
     public void edit() {
+        System.out.println("edit");
 
     }
 
