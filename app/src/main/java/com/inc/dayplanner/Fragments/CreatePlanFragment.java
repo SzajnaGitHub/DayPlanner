@@ -35,6 +35,7 @@ public class CreatePlanFragment extends Fragment {
         viewPager.setAdapter(swipeAdapter);
         viewPager.setCurrentItem(4999);
         viewPager.getAdapter().notifyDataSetChanged();
+        viewPager.getCurrentItem();
 
 
 

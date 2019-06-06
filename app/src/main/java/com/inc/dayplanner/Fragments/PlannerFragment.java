@@ -279,9 +279,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 dateToParse = hour1+"-"+dayTextView.getText().toString();
             }
 
-            SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+            SimpleDateFormat remainderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
             try {
-                calendar.setTime(reminderDF.parse(dateToParse));
+                calendar.setTime(remainderDF.parse(dateToParse));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -303,12 +303,17 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     calendar.add(Calendar.DATE,-1);
                     break;
             }
-            String dateToSaveRemainder;
+            String dateToSaveRemainder="";
             if(remainderTime.equals("Remaind me")||remainderTime.equals("No remaind me")){
                 dateToSaveRemainder = "no remaind";
             }else{
-                dateToSaveRemainder = reminderDF.format(calendar.getTime());
-                MainActivity.mainActivity.setNotification(dateToSaveRemainder,activityText.getText().toString(),remainderTime);
+                Calendar cCurrent = Calendar.getInstance();
+                Date date1 = calendar.getTime();
+                Date dateCurrent = cCurrent.getTime();
+                if(date1.after(dateCurrent)) {
+                    dateToSaveRemainder = remainderDF.format(calendar.getTime());
+                    MainActivity.mainActivity.setNotification(dateToSaveRemainder, activityText.getText().toString(), remainderTime);
+                }
             }
 
 
