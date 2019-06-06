@@ -181,6 +181,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
         return true;
     }
+/*
 
     @Override
     public void onBackPressed() {
@@ -191,6 +192,14 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         }
 
     }
+*/
+    //minimize instead of going back to loginActivity
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
+    }
+
+
 
     public void switchButtonHandler(Switch sw) {
 

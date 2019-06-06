@@ -349,6 +349,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
              //   button.callOnClick();
 
 
+
                 Handler handler = new Handler();
                 handler.postDelayed(this::refresh, 1000);
 
