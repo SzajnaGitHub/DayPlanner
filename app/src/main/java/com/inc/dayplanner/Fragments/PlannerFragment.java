@@ -385,19 +385,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         });
 
 
-        delButton.setOnClickListener(v ->{
-
-            for(int i =0; i<idList.size(); i++){
-                if(idList.get(i).isToDelete()){
-                    View viewToDelete = gridLayout.findViewById(idList.get(i).getId());
-                    gridLayout.removeView(viewToDelete);
-                    idList.remove(i);
-                }
-            }
-
-        });
-
-
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
@@ -521,7 +508,16 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public void onItemDeleted(){
 
         System.out.println("onItemDeleted");
-        refresh();
+
+        for(int i =0; i<idList.size(); i++){
+            if(idList.get(i).isToDelete()){
+                View viewToDelete = gridLayout.findViewById(idList.get(i).getId());
+                gridLayout.removeView(viewToDelete);
+                idList.remove(i);
+            }
+        }
+
+      // refresh();
     }
 
     @Override
