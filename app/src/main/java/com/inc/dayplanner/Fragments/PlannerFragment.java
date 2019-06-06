@@ -415,7 +415,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         LinearLayout linearLayout = dynamicViews.linearLayout(context,tvHour,tvActivity);
 
 
-
+       // System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
 
         tvHour.setTextColor(color);
         tvActivity.setTextColor(color);
@@ -428,6 +428,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
+                System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
             }
             return false;
 
@@ -439,6 +440,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
+                System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
             }
             return false;
         });
@@ -447,7 +449,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
       //  if(ifAddedNewElement){context=contextToAddElement;}
 
         gridLayout.addView(linearLayout);
+
         idList.add(dynamicViews);
+
    //     System.out.println(idList.size());
 
         //System.out.println(idList);
