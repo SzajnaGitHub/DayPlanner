@@ -168,7 +168,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
         delButton = view.findViewById(R.id.deleteButton);
-
+        activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
 
         contextList.add(context);
         TypedValue typedValue = new TypedValue();
