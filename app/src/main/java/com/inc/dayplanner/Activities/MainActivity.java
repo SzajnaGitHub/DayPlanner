@@ -30,6 +30,7 @@ import com.inc.dayplanner.ViewChange.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends GoogleDriveOperation implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -208,12 +209,14 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
     public void setNotification(String dateToParse,String activity, String timeEarlier){
             Calendar c = Calendar.getInstance();
+
             timeEarlierReminder=timeEarlier;
             contentActivityReminder=activity;
 
             SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
             try {
-                c.setTime(reminderDF.parse(dateToParse));
+                    c.setTime(reminderDF.parse(dateToParse));
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
