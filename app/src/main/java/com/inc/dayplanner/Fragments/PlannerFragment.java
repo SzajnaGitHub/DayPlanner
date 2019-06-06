@@ -243,7 +243,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             System.out.println(elapse);
 
-            if(elapse <=0){
+            if(elapse ==0){
                 messageFrame.setBackgroundResource(R.drawable.bubble_red);
                     fromHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
                     toHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
@@ -479,7 +479,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         //remove all elements from gridLayout
         gridLayout.removeAllViews();
         //compare
-
+        activityList.sort(((o1, o2) -> o1[1].compareTo(o2[1])));
         //add all activities to PlannerActivity
         for(int i=0; i<activityList.size();i++){
             if(activityList.get(i)[0].equals(date)) {

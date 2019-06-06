@@ -111,6 +111,7 @@ public class LoginActivity extends GoogleDriveOperation {
 
                     case DialogInterface.BUTTON_NEGATIVE:
                         createFile(getApplicationContext());
+                        PlannerFragment.activityList.clear();
                         break;
                 }
             }

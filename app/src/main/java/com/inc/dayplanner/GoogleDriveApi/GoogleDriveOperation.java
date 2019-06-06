@@ -294,17 +294,20 @@ public class GoogleDriveOperation extends BaseDemoActivity {
         pickTextFile()
                 .addOnSuccessListener(this,
                         driveId -> {
+                            PlannerFragment.activityList.clear();
                             pathToDataFile=driveId.encodeToString();
                             createNewGoogleFileAndAppendID(context);
                             decodePathToGoogleFile();
                             retrieveContents(GoogleDriveOperation.driveFileToOpen);
                         })
                 .addOnFailureListener(this, e -> {
-                    Log.e(TAG, "No file selected", e);
-                    showMessage(getString(R.string.file_not_selected));
-                    if(MainActivity.importData==true) {
+                    if(MainActivity.importData==false) {
+                        Log.e(TAG, "No file selected", e);
+                        showMessage(getString(R.string.file_not_selected));
                         Intent intent = new Intent(this, LoginActivity.class);
                         startActivity(intent);
+                        MainActivity.importData=false;
+                    }else {
                         MainActivity.importData=false;
                     }
                 });

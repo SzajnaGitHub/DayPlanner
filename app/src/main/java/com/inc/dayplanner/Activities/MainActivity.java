@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.Switch;
 
+import com.google.android.gms.drive.DriveFile;
 import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
 import com.inc.dayplanner.Fragments.DatePickerFragment;
@@ -164,13 +165,14 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 LoginActivity.loginActivityInstance.recreate();
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
+                GoogleDriveOperation.driveFileToOpen=null;
+                GoogleDriveOperation.pathToDataFile=null;
                 break;
 
             case R.id.app_bar_import:
-                GoogleDriveOperation.driveFileToOpen=null;
+
                 importData=true;
-                PlannerFragment.activityList.clear();
-                LoginActivity.pathToDataFile="";
+
                 openFileExplorerGoogleDrive(getApplicationContext());
 //                LoginActivity.loginActivityInstance.recreate();
                 break;
