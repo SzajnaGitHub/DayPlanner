@@ -48,7 +48,6 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
        switch(item.getItemId()){
            case R.id.goToButton:
-               System.out.println("lolo");
                return false;
 
        }
@@ -65,8 +64,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu,menu);
         goToItem = menu.findItem(R.id.goToButton);
-        goToItem.setVisible(false);
-
+      //  goToItem.setVisible(false);
         return true;
     }
 
@@ -144,13 +142,13 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             case R.id.nav_plan:
                 runFragmentMethod(new PlannerFragment());
                 toolbar.setTitle("Today");
-                goToItem.setVisible(false);
+             //   goToItem.setVisible(false);
                 break;
 
             case R.id.nav_create_planer:
                 runFragmentMethod(new CreatePlanFragment());
                 toolbar.setTitle("Daily");
-                goToItem.setVisible(true);
+             //   goToItem.setVisible(true);
                 break;
 
 

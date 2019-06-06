@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -89,6 +90,25 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private String remainderTime;
     private @ColorInt int color;
     private TextView wrongHourTextView;
+    private ImageButton button;
+
+
+    private String date;
+    private int position;
+
+
+    public static PlannerFragment newInstance(String date, int position) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString("Date", date);
+        bundle.putInt("Position",position);
+
+        PlannerFragment fragment = new PlannerFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
 
     @Override
     public void onStart() {
@@ -104,25 +124,34 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         context = mcontext;
     }
 
-   /* @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
-
             case R.id.goToButton:
-                System.out.println("lol");
+
+                DatePickerFragment datePicker = new DatePickerFragment();
+                datePicker.setCallBack(ondate);
+                datePicker.show(getFragmentManager(),"date picker");
                 return true;
 
         }
 
         return false;
-    }*/
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         gridLayout = view.findViewById(R.id.gridLayout);
         gridLayout.removeAllViews();
@@ -138,8 +167,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
         delButton = view.findViewById(R.id.deleteButton);
-  //      setHasOptionsMenu(true);
-
 
 
         contextList.add(context);
@@ -149,9 +176,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         color = typedValue.data;
 
 
-
         Thread thread = new Thread(new CheckMuteThread());
         thread.start();
+
+
+
+        readBundle(getArguments());
+
+
 
         //View fragment date
         String message = null;
@@ -303,12 +335,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 toHourPickerTextView.setText(R.string.end_hour);
                 activityText.setText("");
 
+                button.callOnClick();
 
             }
+
         });
 
 
-        final ImageButton button = view.findViewById(R.id.addButton);
+        button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
 
 //            context=getContext();
@@ -320,6 +354,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 contextToAddElement=getContext();
             }else{
                 frameVisibility = false;
+                refresh();
                 messageFrame.setVisibility(INVISIBLE);
             }
 
@@ -413,6 +448,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
+        refresh();
     }
 
 
@@ -463,6 +499,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public void onItemDeleted(){
 
         System.out.println("onItemDeleted");
+        refresh();
     }
 
     @Override
@@ -471,7 +508,38 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
     }
 
-    DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> System.out.println("lol");
+    DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
 
+        System.out.println("DateListener");
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, monthOfYear);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String goToSpecificDate = DateFormat.getDateInstance().format(c.getTime());
+
+       // dayTextView.setText(goToSpecificDate);
+
+        refresh();
+    };
+
+
+
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            date = bundle.getString("name");
+            position = bundle.getInt("age");
+        }
+
+    }
+
+    private void refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(this).attach(this).commit();
+    }
 
 }

@@ -103,7 +103,8 @@ public class CheckMuteThread implements Runnable{
 
             try {
                 Thread.sleep(30000);
-                System.out.println("Watek idzie spac :-0");
+              //  System.out.println("Watek idzie spac :-0");
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

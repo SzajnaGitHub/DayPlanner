@@ -1,6 +1,5 @@
 package com.inc.dayplanner.ViewChange;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,14 +26,6 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
     private static List<PlannerFragment> plannerFragmentList = new ArrayList<>();
 
 
-    public static Map<Integer, Fragment> getmPageReferenceMap() {
-        return mPageReferenceMap;
-    }
-
-    public static List<PlannerFragment> getPlannerFragmentList() {
-        return plannerFragmentList;
-    }
-
     private int previousPosition = 4999;
 
     public SwipeAdapter(FragmentManager fm) {
@@ -50,16 +41,11 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         calendar.add(Calendar.DATE,position-previousPosition);
         String date = df.format(calendar.getTime());
-        Fragment pageFragment = new PlannerFragment();
-        Bundle bundle = new Bundle();
 
+        PlannerFragment pageFragment = PlannerFragment.newInstance(date,position);
 
-        //bundle.putString("dayOfTheWeek", setDay(position));
-        pageFragment.setArguments(bundle);
-        plannerFragmentList.add((PlannerFragment) pageFragment);
+        plannerFragmentList.add(pageFragment);
 
-        bundle.putString("Date", date);
-        bundle.putInt("Position",position);
 
         mPageReferenceMap.put(position, pageFragment);
 
@@ -137,6 +123,8 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
         return dayofTheWeek;
     }
+
+
 
 
 }
