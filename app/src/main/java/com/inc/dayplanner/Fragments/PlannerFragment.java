@@ -92,6 +92,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private @ColorInt int color;
     private TextView wrongHourTextView;
     private ImageButton button;
+    private boolean isDaily = false;
 
 
     private String date;
@@ -193,12 +194,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             dayTextView.setText(message);
             context=getContext();
             read(dayTextView.getText().toString());
+            isDaily = false;
 
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
             context=getContext();
             String date = df.format(calendar.getTime());
             read(date);
+            isDaily = true;
         }
 
 
@@ -322,7 +325,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             if(allDataVerified) {
 
-           // addToListActivity(hour1,hour2,activityText.getText().toString());
+                if(isDaily){
+                    addToListActivity(hour1,hour2,activityText.getText().toString());
+                }
             String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
@@ -358,7 +363,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         button.setOnClickListener(v -> {
 
 //            context=getContext();
-            activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
+            //activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
 
             if(!frameVisibility) {
                 messageFrame.setVisibility(View.VISIBLE);
@@ -368,9 +373,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             }else{
                 frameVisibility = false;
-                refresh();
                 messageFrame.setVisibility(INVISIBLE);
 
+                if (isDaily) {
+                    refresh();
+                }
             }
 
 
@@ -463,7 +470,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
-        refresh();
     }
 
 

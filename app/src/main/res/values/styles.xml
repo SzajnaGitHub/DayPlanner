@@ -64,8 +64,12 @@
 
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">#FFE299</item>
+        <item name="colorAccent">#120e13</item>
         <item name="colorControlNormal">#9e9e9e</item>
+        <item name="colorControlActivated">#000</item>
+        <item name="colorControlHighlight">#6e1038 </item>
     </style>
+
+
 
 </resources>
