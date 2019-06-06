@@ -281,7 +281,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 messageFrame.setVisibility(INVISIBLE);
                 fromHourPickerTextView.setText(R.string.start_hour);
                 toHourPickerTextView.setText(R.string.end_hour);
-                activityText.setHint(R.string.activity_add_hint);
+                activityText.setText("");
 
 
             }
