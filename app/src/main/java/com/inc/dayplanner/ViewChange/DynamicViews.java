@@ -1,6 +1,7 @@
 package com.inc.dayplanner.ViewChange;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -56,7 +57,6 @@ public class DynamicViews {
         textView.setTextSize(20);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setClickable(true);
-
         return textView;
     }
 

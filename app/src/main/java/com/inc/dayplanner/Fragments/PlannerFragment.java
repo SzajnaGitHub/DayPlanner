@@ -1,16 +1,21 @@
 package com.inc.dayplanner.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +47,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -78,7 +84,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private Button delButton;
     private List<DynamicViews> idList = new ArrayList<>();
     private String remainderTime;
-
+    private @ColorInt int color;
+    private TextView wrongHourTextView;
 
     @Override
     public void onStart() {
@@ -94,6 +101,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         context = mcontext;
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
@@ -106,25 +114,33 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         activityText = view.findViewById(R.id.activityText);
         muteCheckbox = view.findViewById(R.id.muteCheckBox);
         remindSpinner = view.findViewById(R.id.reminderSpinner);
+        wrongHourTextView = view.findViewById(R.id.wrongHoursTextView);
 //        remindCheckbox = view.findViewById(R.id.remindCheckBox);
         fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
-        Thread thread = new Thread(new CheckMuteThread());
-        thread.start();
         delButton = view.findViewById(R.id.deleteButton);
 
         contextList.add(context);
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.textcolor, typedValue, true);
+        color = typedValue.data;
 
 
+
+        Thread thread = new Thread(new CheckMuteThread());
+        thread.start();
+
+        //View fragment date
         String message = null;
         if (getArguments() != null) {
-           // message = getArguments().getString("dayOfTheWeek");
             message = getArguments().getString("Date");
             dayTextView.setText(message);
             context=getContext();
             read(dayTextView.getText().toString());
+
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
             context=getContext();
@@ -133,6 +149,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
 
 
+        //Set activity starting hour
         toHourPickerTextView.setOnClickListener(v -> {
 
             TimePickerFragment timePickerFragment = new TimePickerFragment(toHourPickerTextView);
@@ -140,8 +157,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             timePickerFragment.show(getFragmentManager(),"timePicker");
         });
 
-
-
+        //Set activity ending hour
         fromHourPickerTextView.setOnClickListener(v -> {
 
             TimePickerFragment timePickerFragment = new TimePickerFragment(fromHourPickerTextView);
@@ -149,13 +165,45 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             timePickerFragment.show(getFragmentManager(),"timePicker");
         });
 
-
-
+        //Add button handler
         addButton.setOnClickListener(v -> {
+            boolean allDataVerified = false;
 //            String date = df.format(calendar.getTime());
             String date = dayTextView.getText().toString();
             hour2 = toHourPickerTextView.getText().toString();
             hour1 = fromHourPickerTextView.getText().toString();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date d1 = null;
+            Date d2 = null;
+            long elapse = 0;
+            try {
+                d1 = sdf.parse(hour1);
+                d2 = sdf.parse(hour2);
+                elapse = d2.getTime() - d1.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println(elapse);
+
+            if(elapse <=0){
+                messageFrame.setBackgroundResource(R.drawable.bubble_red);
+                    fromHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
+                    toHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
+                    wrongHourTextView.setVisibility(View.VISIBLE);
+
+            }else{
+                fromHourPickerTextView.setTextColor(color);
+                toHourPickerTextView.setTextColor(color);
+                messageFrame.setBackgroundResource(R.drawable.bubble);
+                wrongHourTextView.setVisibility(View.INVISIBLE);
+                frameVisibility = false;
+                allDataVerified = true;
+
+            }
+
+
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
@@ -188,19 +236,19 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             switch(remainderTime){
                 case "15 minutes earlier":
 //                    calendar.add(Calendar.DATE,position-previousPosition);
-                    calendar.add(calendar.MINUTE,-15);
+                    calendar.add(Calendar.MINUTE,-15);
                     break;
                 case "30 minutes earlier":
-                    calendar.add(calendar.MINUTE,-30);
+                    calendar.add(Calendar.MINUTE,-30);
                     break;
                 case "1 hour earlier":
-                    calendar.add(calendar.MINUTE,-60);
+                    calendar.add(Calendar.MINUTE,-60);
                     break;
                 case "2 hours earlier":
-                    calendar.add(calendar.MINUTE,-120);
+                    calendar.add(Calendar.MINUTE,-120);
                     break;
                 case "1 day earlier":
-                    calendar.add(calendar.DATE,-1);
+                    calendar.add(Calendar.DATE,-1);
                     break;
             }
             String dateToSaveRemainder;
@@ -213,6 +261,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
             //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
+
+            if(allDataVerified) {
 
             addToListActivity(hour1,hour2,activityText.getText().toString());
             String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
@@ -227,6 +277,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 activityText.setText(activityText.getText().toString().substring(0,19)+"...");
             }
 
+
+                messageFrame.setVisibility(INVISIBLE);
+                fromHourPickerTextView.setText(R.string.start_hour);
+                toHourPickerTextView.setText(R.string.end_hour);
+                activityText.setHint(R.string.activity_add_hint);
+
+
+            }
         });
 
 
@@ -286,11 +344,18 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 //        if(getContext() != null)context=getContext();
 
-
         dynamicViews = new DynamicViews(context);
         TextView tvHour = dynamicViews.hourTextView(context,from+"-"+to);
         TextView tvActivity = dynamicViews.activityTextView(context,activ);
         LinearLayout linearLayout = dynamicViews.linearLayout(context,tvHour,tvActivity);
+
+
+
+
+        tvHour.setTextColor(color);
+        tvActivity.setTextColor(color);
+
+
 
         tvHour.setOnLongClickListener(v ->
         {
@@ -314,14 +379,13 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         });
 
 
-        if(ifAddedNewElement){context=contextToAddElement;}
-
+      //  if(ifAddedNewElement){context=contextToAddElement;}
 
         gridLayout.addView(linearLayout);
         idList.add(dynamicViews);
-        System.out.println(idList.size());
+   //     System.out.println(idList.size());
 
-        System.out.println(idList);
+        //System.out.println(idList);
 
 
     }
@@ -373,15 +437,17 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         super.onDestroyView();
     }
 
-    @Override
-    public void delete() {
 
-        System.out.println("del");
+
+    @Override
+    public void onItemDeleted(){
+
+        System.out.println("onItemDeleted");
     }
 
     @Override
-    public void edit() {
-        System.out.println("edit");
+    public void onItemEdited(){
+        System.out.println("onItemEdited");
 
     }
 

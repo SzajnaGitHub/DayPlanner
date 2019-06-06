@@ -9,7 +9,7 @@
     android:padding="16dp"
     >
 
-    <EditText
+    <TextView
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +17,5 @@
         android:gravity="bottom|center"
         android:textColor="#fff"
         android:textSize="30sp"
-        android:inputType="textPersonName"
         android:text="DayPlannner" />
 </LinearLayout>

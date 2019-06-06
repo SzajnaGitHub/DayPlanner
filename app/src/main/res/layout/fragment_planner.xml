@@ -83,15 +83,15 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="88dp"
-                android:ems="10"
-                android:textColorHint="?attr/textcolor"
-                android:shadowColor="#fff"
-                android:hint="Activity"
+                android:layout_marginBottom="60dp"
                 android:backgroundTint="?attr/textcolor"
-                android:textColor="?attr/textcolor"
+                android:ems="10"
+                android:hint="@string/activity_add_hint"
                 android:inputType="textPersonName"
+                android:shadowColor="#fff"
                 android:textAlignment="center"
+                android:textColor="?attr/textcolor"
+                android:textColorHint="?attr/textcolor"
                 app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -102,12 +102,11 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="48dp"
                 android:text="Mute mode"
                 android:textColor="?attr/textcolor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.306"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
@@ -133,7 +132,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/muteCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activityText" />
+                app:layout_constraintTop_toBottomOf="@+id/activityText"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/fromHourPicker"
@@ -143,7 +143,7 @@
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Start hour"
+                android:text="@string/start_hour"
                 android:textColor="?attr/textcolor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -157,9 +157,22 @@
                 android:textColor="?attr/textcolor"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="End hour"
+                android:text="@string/end_hour"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/wrongHoursTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="96dp"
+                android:layout_marginBottom="8dp"
+                android:text="Pick suitable hours!"
+                android:textColor="#e71837"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

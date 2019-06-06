@@ -41,17 +41,17 @@ public class PopupFragment extends AppCompatDialogFragment {
         Button editButton = v.findViewById(R.id.editDialogButton);
 
         delButton.setOnClickListener(v1 -> {
-                    activityHandlerListener.delete();
+                    activityHandlerListener.onItemDeleted();
                     dismiss();
                 });
-        editButton.setOnClickListener(v2 -> activityHandlerListener.edit());
+        editButton.setOnClickListener(v2 -> activityHandlerListener.onItemEdited());
 
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
 
     public interface ActivityHandlerListener{
-        void delete();
-        void edit();
+        void onItemDeleted();
+        void onItemEdited();
     }
 }
 

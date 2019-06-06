@@ -1,10 +1,7 @@
 package com.inc.dayplanner.ViewChange;
 
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -26,8 +23,17 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
     private Calendar calendar = Calendar.getInstance();
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
-    public static Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
-    public static List<PlannerFragment> plannerFragmentList = new ArrayList<>();
+    private static Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
+    private static List<PlannerFragment> plannerFragmentList = new ArrayList<>();
+
+
+    public static Map<Integer, Fragment> getmPageReferenceMap() {
+        return mPageReferenceMap;
+    }
+
+    public static List<PlannerFragment> getPlannerFragmentList() {
+        return plannerFragmentList;
+    }
 
     private int previousPosition = 4999;
 
@@ -53,14 +59,15 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         plannerFragmentList.add((PlannerFragment) pageFragment);
 
         bundle.putString("Date", date);
+        bundle.putInt("Position",position);
 
         mPageReferenceMap.put(position, pageFragment);
-
 
         previousPosition=position;
 //        ((PlannerFragment) pageFragment).read(date);
         return pageFragment;
     }
+/*
 
     public static PlannerFragment getMiddleFragment(){
 
@@ -75,8 +82,7 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
 
     }
-
-
+*/
 
 
     @Override
