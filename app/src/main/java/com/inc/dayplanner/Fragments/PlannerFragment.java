@@ -2,6 +2,7 @@ package com.inc.dayplanner.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -17,12 +18,14 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -101,6 +104,20 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         context = mcontext;
     }
 
+   /* @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.goToButton:
+                System.out.println("lol");
+                return true;
+
+        }
+
+        return false;
+    }*/
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
@@ -121,6 +138,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
         delButton = view.findViewById(R.id.deleteButton);
+  //      setHasOptionsMenu(true);
+
+
 
         contextList.add(context);
         TypedValue typedValue = new TypedValue();
@@ -450,6 +470,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         System.out.println("onItemEdited");
 
     }
+
+    DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> System.out.println("lol");
 
 
 }

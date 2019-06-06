@@ -1,25 +1,27 @@
 package com.inc.dayplanner.Activities;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.Switch;
 
 import com.inc.dayplanner.AlertReceiver;
-import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
+import com.inc.dayplanner.Fragments.DatePickerFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -28,7 +30,6 @@ import com.inc.dayplanner.ViewChange.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends GoogleDriveOperation implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,13 +38,37 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     private Menu menu;
     private MenuItem itemSwitch;
     private Toolbar toolbar;
-    public final PlannerFragment plannerFragment = new PlannerFragment();
+    private MenuItem goToItem;
     private String swipeChecked;
     private Intent intent;
     public static boolean importData;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+       switch(item.getItemId()){
+           case R.id.goToButton:
+               System.out.println("lolo");
+               return false;
+
+       }
+
+        return false;
+    }
+
     public static MainActivity mainActivity;
     public static String timeEarlierReminder;
     public static String contentActivityReminder;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu,menu);
+        goToItem = menu.findItem(R.id.goToButton);
+        goToItem.setVisible(false);
+
+        return true;
+    }
 
 
     @Override
@@ -54,11 +79,10 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         mainActivity=this;
 
 
+
+
        //Runnable muteChecker = new CheckMuteThread();
        // muteChecker.run();
-
-
-
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -73,6 +97,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
 
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -92,8 +117,6 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
-        drawer.closeDrawer(GravityCompat.START);
         toolbar.setTitle("Today");
 
 
@@ -106,9 +129,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 sw.setChecked(true);
             }
         }
+
+        //Run current day Fragment
+        runFragmentMethod(new PlannerFragment());
+
     }
-
-
 
 
 
@@ -117,16 +142,15 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
         switch (menuItem.getItemId()) {
             case R.id.nav_plan:
-//                setNotification();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlannerFragment(), null).commit();
-                drawer.closeDrawer(GravityCompat.START);
+                runFragmentMethod(new PlannerFragment());
                 toolbar.setTitle("Today");
+                goToItem.setVisible(false);
                 break;
 
             case R.id.nav_create_planer:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanFragment(), null).commit();
-                drawer.closeDrawer(GravityCompat.START);
+                runFragmentMethod(new CreatePlanFragment());
                 toolbar.setTitle("Daily");
+                goToItem.setVisible(true);
                 break;
 
 
@@ -184,7 +208,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         }
 
 
-        public void setNotification(String dateToParse,String activity, String timeEarlier){
+    public void setNotification(String dateToParse,String activity, String timeEarlier){
             Calendar c = Calendar.getInstance();
             timeEarlierReminder=timeEarlier;
             contentActivityReminder=activity;
@@ -206,6 +230,14 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         }
+
+
+    private void runFragmentMethod(Fragment newFragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment, null).commit();
+        drawer.closeDrawer(GravityCompat.START);
+
+    }
+
 
 
 }
