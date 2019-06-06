@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -316,7 +317,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             if(allDataVerified) {
 
-            addToListActivity(hour1,hour2,activityText.getText().toString());
+           // addToListActivity(hour1,hour2,activityText.getText().toString());
             String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
@@ -335,7 +336,13 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 toHourPickerTextView.setText(R.string.end_hour);
                 activityText.setText("");
 
-                button.callOnClick();
+             //   button.callOnClick();
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(this::refresh, 1000);
+
+
 
             }
 
@@ -346,16 +353,19 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         button.setOnClickListener(v -> {
 
 //            context=getContext();
+            activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
 
             if(!frameVisibility) {
                 messageFrame.setVisibility(View.VISIBLE);
                 frameVisibility = true;
                 ifAddedNewElement=true;
                 contextToAddElement=getContext();
+
             }else{
                 frameVisibility = false;
                 refresh();
                 messageFrame.setVisibility(INVISIBLE);
+
             }
 
 
@@ -457,7 +467,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         //remove all elements from gridLayout
         gridLayout.removeAllViews();
         //compare
-        activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
+
         //add all activities to PlannerActivity
         for(int i=0; i<activityList.size();i++){
             if(activityList.get(i)[0].equals(date)) {
@@ -540,6 +550,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             ft.setReorderingAllowed(false);
         }
         ft.detach(this).attach(this).commit();
+        System.out.println("refresh");
     }
 
 }
