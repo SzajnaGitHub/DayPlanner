@@ -20,6 +20,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +106,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private int position;
     private List<TextView> tvHourList = new LinkedList<>();
     private List<TextView> tvActList = new LinkedList<>();
-
-
+    private MenuItem goToItem;
+    private Menu menu;
     public static PlannerFragment newInstance(String date, int position) {
 
         Bundle bundle = new Bundle();
@@ -619,9 +621,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     @Override
     public void onItemDeleted(){
 
-        LinearLayout del = testLayout;
-
-        gridLayout.removeView(del);
+        gridLayout.removeView(testLayout);
         deleteFromListActivity(testDV);
 
 
@@ -629,7 +629,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
     @Override
     public void onItemEdited(){
-        System.out.println("onItemEdited");
+
+        gridLayout.removeView(testLayout);
+        editActivity(testDV);
+
+
 
     }
 

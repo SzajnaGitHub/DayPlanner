@@ -66,7 +66,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu,menu);
         goToItem = menu.findItem(R.id.goToButton);
-      //  goToItem.setVisible(false);
+        goToItem.setVisible(false);
         return true;
     }
 
@@ -130,7 +130,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             }
         }
 
-        //Run current day Fragment
+      // //Run current day Fragment
         runFragmentMethod(new PlannerFragment());
 
     }
@@ -144,13 +144,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             case R.id.nav_plan:
                 runFragmentMethod(new PlannerFragment());
                 toolbar.setTitle("Today");
-             //   goToItem.setVisible(false);
                 break;
 
             case R.id.nav_create_planer:
                 runFragmentMethod(new CreatePlanFragment());
                 toolbar.setTitle("Daily");
-             //   goToItem.setVisible(true);
                 break;
 
 

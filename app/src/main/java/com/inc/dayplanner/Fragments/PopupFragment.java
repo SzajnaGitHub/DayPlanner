@@ -45,7 +45,11 @@ public class PopupFragment extends AppCompatDialogFragment {
                     dismiss();
 
                 });
-        editButton.setOnClickListener(v2 -> activityHandlerListener.onItemEdited());
+        editButton.setOnClickListener(v2 -> {
+            activityHandlerListener.onItemEdited();
+            dismiss();
+
+        });
 
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
