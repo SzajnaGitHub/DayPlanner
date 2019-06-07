@@ -20,7 +20,7 @@ import java.util.Map;
 public class SwipeAdapter extends FragmentStatePagerAdapter {
 
 
-    private Calendar calendar = Calendar.getInstance();
+    public Calendar calendar = Calendar.getInstance();
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private static Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
     private static List<PlannerFragment> plannerFragmentList = new ArrayList<>();

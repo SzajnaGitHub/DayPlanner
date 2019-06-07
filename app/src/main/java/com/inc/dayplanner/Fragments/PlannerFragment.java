@@ -38,6 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.CheckMuteThread;
@@ -94,6 +95,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private ImageButton button;
     private boolean isDaily = false;
     private static String dateToDelete;
+    public static boolean isSkipToDate=false;
+    public static Calendar skipToCalendar;
 
 
     private String date;
@@ -597,8 +600,15 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         String goToSpecificDate = DateFormat.getDateInstance().format(c.getTime());
 
        // dayTextView.setText(goToSpecificDate);
-
-        refresh();
+//        System.out.println(goToSpecificDate);
+        isSkipToDate=true;
+        skipToCalendar=c;
+        SwipeAdapter swipeAdapterSkipTo = new SwipeAdapter(getFragmentManager());
+        swipeAdapterSkipTo.calendar=c;
+        CreatePlanFragment.viewPager.setAdapter(swipeAdapterSkipTo);
+        CreatePlanFragment.viewPager.setCurrentItem(4999);
+        CreatePlanFragment.viewPager.getAdapter().notifyDataSetChanged();
+//        refresh();
     };
 
 

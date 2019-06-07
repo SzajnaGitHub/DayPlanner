@@ -16,6 +16,8 @@ import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 public class CreatePlanFragment extends Fragment {
 
+    public static ViewPager viewPager;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,16 +32,11 @@ public class CreatePlanFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_create_plan, container, false);
-        ViewPager viewPager = view.findViewById(R.id.view_pager);
+        viewPager = view.findViewById(R.id.view_pager);
         SwipeAdapter swipeAdapter = new SwipeAdapter(getFragmentManager());
         viewPager.setAdapter(swipeAdapter);
         viewPager.setCurrentItem(4999);
         viewPager.getAdapter().notifyDataSetChanged();
-        viewPager.getCurrentItem();
-
-
-
-
 
         return view;
     }

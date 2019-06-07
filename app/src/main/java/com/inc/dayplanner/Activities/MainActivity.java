@@ -39,7 +39,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     private Switch sw;
     private Menu menu;
     private MenuItem itemSwitch;
-    private Toolbar toolbar;
+    public Toolbar toolbar;
     private MenuItem goToItem;
     private String swipeChecked;
     private Intent intent;
@@ -242,7 +242,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         }
 
 
-    private void runFragmentMethod(Fragment newFragment) {
+    public void runFragmentMethod(Fragment newFragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
 
