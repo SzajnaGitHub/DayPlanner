@@ -406,21 +406,42 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             dateToDelete=df.format(calendar.getTime());
         }
 
-/*        for (int i=0;i<idList.size();i++){
-            if(idList.get(i).equals(dynamicViewsToDelete)){
-                hour=idList.get(i).getHourText().split("-");
-                deleteElement[0]=dateToDelete;
-                deleteElement[1]=hour[0];
-                deleteElement[2]=hour[1];
-                deleteElement[3]=idList.get(i).getActivityText();
-                for(int j=0;j<activityList.size();j++){
-                    if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j).equals(deleteElement[3])){
-                        activityList.remove(j);
-                        saveFromArrayListToFile();
-                    }
-                }
-            }
-        }*/
+//        for (int i=0;i<idList.size();i++){
+//            if(idList.get(i).equals(dynamicViewsToDelete)){
+//                hour=idList.get(i).getHourText().split("-");
+//                deleteElement[0]=dateToDelete;
+//                deleteElement[1]=hour[0];
+//                deleteElement[2]=hour[1];
+//                deleteElement[3]=idList.get(i).getActivityText();
+//                for(int j=0;j<activityList.size();j++){
+//                    if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
+//                        activityList.remove(j);
+//                        saveFromArrayListToFile();
+//                    }
+//                }
+//            }
+//        }
+
+//TESTY na sztywno
+//        for (int i=0;i<idList.size();i++){
+////            if(idList.get(i).equals(dynamicViewsToDelete)){
+////                hour=idList.get(i).getHourText().split("-");
+//            deleteElement[0]="7 cze 2019";
+//            deleteElement[1]="10:02";
+//            deleteElement[2]="12:02";
+//            deleteElement[3]="dailytest";
+//            for(int j=0;j<activityList.size();j++){
+//                if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
+//                    activityList.remove(j);
+//                    saveFromArrayListToFile();
+//                }
+//            }
+//           }
+//        }
+        //KONIEC TESTOW NA SZTYWNO
+
+
+
     }
 
 
@@ -555,6 +576,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 View viewToDelete = gridLayout.findViewById((idList.get(i)));
                 deleteFromListActivity(dynamicViews);
                 gridLayout.removeView(viewToDelete);
+//                deleteFromListActivity(idList.get(i));
                 idList.remove(i);
             }
         }
