@@ -322,6 +322,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 if(date1.after(dateCurrent)) {
                     dateToSaveRemainder = remainderDF.format(calendar.getTime());
                     MainActivity.mainActivity.setNotification(dateToSaveRemainder, activityText.getText().toString(), remainderTime);
+                }else {
+                    dateToSaveRemainder="no remaind";
                 }
             }
 
@@ -333,12 +335,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 if(isDaily){
                     addToListActivity(hour1,hour2,activityText.getText().toString());
                 }
-            String[] addElement = {date,hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
+            String[] addElement = {date,hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder, remainderTime};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
                 date=df.format(calendar.getTime());
             }
-            save(date,hour1,hour2,activityText.getText().toString(),mute,dateToSaveRemainder);
+            save(date,hour1,hour2,activityText.getText().toString(),mute,dateToSaveRemainder, remainderTime);
 //            sortAndAddToLayout(dayTextView.getText().toString());
 
             if(activityText.getText().length()>20){
@@ -365,27 +367,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
-
 //            context=getContext();
             //activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
-
-            if(!frameVisibility) {
-                messageFrame.setVisibility(View.VISIBLE);
-                frameVisibility = true;
-                ifAddedNewElement=true;
-                contextToAddElement=getContext();
-
-            }else{
-                frameVisibility = false;
-                messageFrame.setVisibility(INVISIBLE);
-
-                if (isDaily) {
-                    refresh();
-                }
-            }
-
-
+            showHideAddActivityFragment();
         });
+
+
 
 
         remindSpinner = view.findViewById(R.id.reminderSpinner);
@@ -403,9 +390,28 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-    private void deleteFromListActivity(DynamicViews dynamicViewsToDelete){
+    private void showHideAddActivityFragment(){
+        if(!frameVisibility) {
+            messageFrame.setVisibility(View.VISIBLE);
+            frameVisibility = true;
+            ifAddedNewElement=true;
+            contextToAddElement=getContext();
+
+        }else{
+            frameVisibility = false;
+            messageFrame.setVisibility(INVISIBLE);
+
+            if (isDaily) {
+                refresh();
+            }
+        }
+    }
+
+
+    private String[] deleteFromListActivity(DynamicViews dynamicViewsToDelete){
         String[] deleteElement = new String[4];// = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
         String[] hour;
+        String[] dateToEdit=new String[5];
         if(dateToDelete.equals("Sunday")||dateToDelete.equals("Monday")||dateToDelete.equals("Tuesday")||dateToDelete.equals("Wednesday")||dateToDelete.equals("Thursday")||dateToDelete.equals("Friday")||dateToDelete.equals("Saturday")){
             dateToDelete=df.format(calendar.getTime());
         }
@@ -419,33 +425,52 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 deleteElement[3]=idList.get(i).getActivityText();
                 for(int j=0;j<activityList.size();j++){
                     if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
+                        dateToEdit=activityList.get(j);
                         activityList.remove(j);
                         saveFromArrayListToFile();
                     }
                 }
             }
         }
+        return dateToEdit;
+    }
 
-//TESTY na sztywno
-//        for (int i=0;i<idList.size();i++){
-////            if(idList.get(i).equals(dynamicViewsToDelete)){
-////                hour=idList.get(i).getHourText().split("-");
-//            deleteElement[0]="7 cze 2019";
-//            deleteElement[1]="10:02";
-//            deleteElement[2]="12:02";
-//            deleteElement[3]="dailytest";
-//            for(int j=0;j<activityList.size();j++){
-//                if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
-//                    activityList.remove(j);
-//                    saveFromArrayListToFile();
-//                }
-//            }
-//           }
-//        }
-        //KONIEC TESTOW NA SZTYWNO
+    private void editActivity(DynamicViews dynamicViews){
+        showHideAddActivityFragment();
+        String[] dateToEdit = deleteFromListActivity(dynamicViews);
+        fromHourPickerTextView.setText(dateToEdit[1]);
+        toHourPickerTextView.setText(dateToEdit[2]);
+        activityText.setText(dateToEdit[3]);
+        if(dateToEdit[4].equals("true")){
+            muteCheckbox.setChecked(true);
+        }else{
+            muteCheckbox.setChecked(false);
+        }
+        if(!dateToEdit[5].equals("Remaind me") && !dateToEdit[5].equals("No remaind me")){
 
+           switch (dateToEdit[6]){
+               case "15 minutes earlier":
+//                    calendar.add(Calendar.DATE,position-previousPosition);
+                   remindSpinner.setSelection(1);
+                   break;
+               case "30 minutes earlier":
+                   remindSpinner.setSelection(2);
+                   break;
+               case "1 hour earlier":
+                   remindSpinner.setSelection(3);
+                   break;
+               case "2 hours earlier":
+                   remindSpinner.setSelection(4);
+                   break;
+               case "1 day earlier":
+                   remindSpinner.setSelection(5);
+                   break;
 
-
+                   default:
+                       remindSpinner.setSelection(6);
+                       break;
+           }
+        }
     }
 
 
@@ -516,8 +541,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
     }
 
-    private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
-        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
+    private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder, String remainderTime){
+        String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"&!&#&"+remainderTime+"&!&#&"+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
@@ -525,7 +550,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         String textToSave;//=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         textToSave="";
         for(int i=0;i<activityList.size();i++){
-            textToSave+=activityList.get(i)[0]+"&!&#&"+activityList.get(i)[1]+"&!&#&"+activityList.get(i)[2]+"&!&#&"+activityList.get(i)[3]+"&!&#&"+activityList.get(i)[4]+"&!&#&"+activityList.get(i)[5]+"\n";
+            textToSave+=activityList.get(i)[0]+"&!&#&"+activityList.get(i)[1]+"&!&#&"+activityList.get(i)[2]+"&!&#&"+activityList.get(i)[3]+"&!&#&"+activityList.get(i)[4]+"&!&#&"+activityList.get(i)[5]+"&!&#&"+activityList.get(i)[6]+"\n";
         }
         saveToGoogleDrive.rewriteContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
@@ -592,7 +617,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 */
 
 
-      // refresh();
+       refresh();
     }
 
     @Override
