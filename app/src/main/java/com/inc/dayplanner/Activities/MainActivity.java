@@ -170,9 +170,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 break;
 
             case R.id.app_bar_import:
-
                 importData=true;
-
                 openFileExplorerGoogleDrive(getApplicationContext());
 //                LoginActivity.loginActivityInstance.recreate();
                 break;

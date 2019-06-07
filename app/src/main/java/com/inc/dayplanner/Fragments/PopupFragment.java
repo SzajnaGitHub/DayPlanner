@@ -43,6 +43,7 @@ public class PopupFragment extends AppCompatDialogFragment {
         delButton.setOnClickListener(v1 -> {
                     activityHandlerListener.onItemDeleted();
                     dismiss();
+
                 });
         editButton.setOnClickListener(v2 -> activityHandlerListener.onItemEdited());
 

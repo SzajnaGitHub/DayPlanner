@@ -93,6 +93,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private TextView wrongHourTextView;
     private ImageButton button;
     private boolean isDaily = false;
+    private static String dateToDelete;
 
 
     private String date;
@@ -328,7 +329,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 if(isDaily){
                     addToListActivity(hour1,hour2,activityText.getText().toString());
                 }
-            String[] addElement = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
+            String[] addElement = {date,hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
             activityList.add(addElement);
             if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
                 date=df.format(calendar.getTime());
@@ -352,8 +353,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
                 Handler handler = new Handler();
                 handler.postDelayed(this::refresh, 1000);
-
-
 
             }
 
@@ -400,7 +399,29 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
+    private void deleteFromListActivity(DynamicViews dynamicViewsToDelete){
+        String[] deleteElement = new String[4];// = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
+        String[] hour;
+        if(dateToDelete.equals("Sunday")||dateToDelete.equals("Monday")||dateToDelete.equals("Tuesday")||dateToDelete.equals("Wednesday")||dateToDelete.equals("Thursday")||dateToDelete.equals("Friday")||dateToDelete.equals("Saturday")){
+            dateToDelete=df.format(calendar.getTime());
+        }
 
+        for (int i=0;i<idList.size();i++){
+            if(idList.get(i).equals(dynamicViewsToDelete)){
+                hour=idList.get(i).getHourText().split("-");
+                deleteElement[0]=dateToDelete;
+                deleteElement[1]=hour[0];
+                deleteElement[2]=hour[1];
+                deleteElement[3]=idList.get(i).getActivityText();
+                for(int j=0;j<activityList.size();j++){
+                    if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j).equals(deleteElement[3])){
+                        activityList.remove(j);
+                        saveFromArrayListToFile();
+                    }
+                }
+            }
+        }
+    }
 
 
     private void addToListActivity(String from, String to, String activ){
@@ -424,6 +445,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         tvHour.setOnLongClickListener(v ->
         {
+            dateToDelete=dayTextView.getText().toString();
             PopupFragment dialog = new PopupFragment();
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
@@ -436,6 +458,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         tvActivity.setOnLongClickListener(v ->
         {
+            dateToDelete=dayTextView.getText().toString();
             PopupFragment dialog = new PopupFragment();
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
@@ -462,6 +485,15 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
+    }
+
+    private void saveFromArrayListToFile(){
+        String textToSave;//=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
+        textToSave="";
+        for(int i=0;i<activityList.size();i++){
+            textToSave+=activityList.get(i)[0]+"&!&#&"+activityList.get(i)[1]+"&!&#&"+activityList.get(i)[2]+"&!&#&"+activityList.get(i)[3]+"&!&#&"+activityList.get(i)[4]+"&!&#&"+activityList.get(i)[5]+"\n";
+        }
+        saveToGoogleDrive.rewriteContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
 
 

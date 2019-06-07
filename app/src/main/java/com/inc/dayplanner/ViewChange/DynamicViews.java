@@ -18,8 +18,16 @@ public class DynamicViews {
     private int id;
     private boolean isToDelete = false;
     private LinearLayout linearLayout;
+    private String hourText;
+    private String activityText;
 
+    public String getHourText() {
+        return hourText;
+    }
 
+    public String getActivityText() {
+        return activityText;
+    }
 
     private int getWidth(Context context) {
 
@@ -40,7 +48,7 @@ public class DynamicViews {
 
         final TextView textView = new TextView(context);
 
-
+        hourText=text;
         textView.setText(text);
         textView.setWidth((int) (getWidth(context) * 0.2));
         textView.setTextSize(15);
@@ -51,6 +59,7 @@ public class DynamicViews {
 
     public TextView activityTextView(Context context, final String text) {
 
+        activityText=text;
         final TextView textView = new TextView(context);
         textView.setText(text);
         textView.setWidth((int) (getWidth(context) * 0.8));
