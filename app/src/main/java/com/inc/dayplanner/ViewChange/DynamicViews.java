@@ -19,6 +19,15 @@ public class DynamicViews {
     private boolean isToDelete = false;
     private LinearLayout linearLayout;
     private String hourText;
+
+    public void setHourText(String hourText) {
+        this.hourText = hourText;
+    }
+
+    public void setActivityText(String activityText) {
+        this.activityText = activityText;
+    }
+
     private String activityText;
 
     public String getHourText() {

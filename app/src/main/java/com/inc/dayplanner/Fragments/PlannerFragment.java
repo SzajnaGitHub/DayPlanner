@@ -102,6 +102,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private boolean performDelete = false;
     private String date;
     private int position;
+    private List<TextView> tvHourList = new LinkedList<>();
+    private List<TextView> tvActList = new LinkedList<>();
 
 
     public static PlannerFragment newInstance(String date, int position) {
@@ -248,7 +250,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             System.out.println(elapse);
 
-            if(elapse ==0){
+  /*          if(elapse ==0){
                 messageFrame.setBackgroundResource(R.drawable.bubble_red);
                     fromHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
                     toHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
@@ -262,7 +264,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 frameVisibility = false;
                 allDataVerified = true;
 
-            }
+            }*/
 
 
 
@@ -330,7 +332,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
 
-            if(allDataVerified) {
+          //  if(allDataVerified) {
 
                 if(isDaily){
                     addToListActivity(hour1,hour2,activityText.getText().toString());
@@ -360,7 +362,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 Handler handler = new Handler();
                 handler.postDelayed(this::refresh, 1000);
 
-            }
+         //   }
 
         });
 
@@ -474,7 +476,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-    private void addToListActivity(String from, String to, String activ){
+    private void addToListActivity(String from, String to, String activ) {
 //        if(getContext() != null)context=getContext();
 //        if(ifAddedNewElement==true)context=contextToAddElement;
 
@@ -482,11 +484,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicViews = new DynamicViews(context);
-        TextView tvHour = dynamicViews.hourTextView(context,from+"-"+to);
-        TextView tvActivity = dynamicViews.activityTextView(context,activ);
-        LinearLayout linearLayout = dynamicViews.linearLayout(context,tvHour,tvActivity);
+        TextView tvHour = dynamicViews.hourTextView(context, from + "-" + to);
+        TextView tvActivity = dynamicViews.activityTextView(context, activ);
+        LinearLayout linearLayout = dynamicViews.linearLayout(context, tvHour, tvActivity);
 
-       // System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
+        // System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
 
         tvHour.setTextColor(color);
         tvActivity.setTextColor(color);
@@ -494,53 +496,77 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         tvHour.setOnLongClickListener(v ->
         {
-            dateToDelete=dayTextView.getText().toString();
-            PopupFragment dialog = new PopupFragment();
-            if (getFragmentManager() != null) {
-                dialog.setTargetFragment(PlannerFragment.this,1);
-                dialog.show(getFragmentManager(),"dialog");
-
-            }
-
-/*            dynamicViews.setToDelete(true);
-            System.out.println(dynamicViews.isToDelete());*/
-
-            if(performDelete){
+            if (performDelete) {
                 gridLayout.removeView(linearLayout);
                 deleteFromListActivity(dynamicViews);
+            } else {
+
+                dateToDelete = dayTextView.getText().toString();
+                PopupFragment dialog = new PopupFragment();
+                if (getFragmentManager() != null) {
+                    dialog.setTargetFragment(PlannerFragment.this, 1);
+                    dialog.show(getFragmentManager(), "dialog");
+
+                }
+
+    /*            dynamicViews.setToDelete(true);
+                System.out.println(dynamicViews.isToDelete());*/
             }
+            performDelete = false;
 
             return false;
 
         });
+
+
+        performDelete = false;
+        final int[] id = {0};
 
         tvActivity.setOnLongClickListener(v ->
         {
-            dateToDelete=dayTextView.getText().toString();
-            PopupFragment dialog = new PopupFragment();
-            if (getFragmentManager() != null) {
-                dialog.setTargetFragment(PlannerFragment.this,1);
-                dialog.show(getFragmentManager(),"dialog");
-            }
+/*
+     dateToDelete = dayTextView.getText().toString();
+            id[0] = linearLayout.getId();
+   for(int i =0; i< idList.size(); i++){
 
-            if(performDelete){
+                if(idList.get(i).getId() == id[0]){
+                    gridLayout.removeView(linearLayout);
+                     deleteFromListActivity(idList.get(i));
+                }
+            }
+            */
+
+            if (performDelete) {
                 gridLayout.removeView(linearLayout);
                 deleteFromListActivity(dynamicViews);
+                onItemDeleted();
+            } else {
+                dateToDelete = dayTextView.getText().toString();
+                PopupFragment dialog = new PopupFragment();
+                if (getFragmentManager() != null) {
+                    dialog.setTargetFragment(PlannerFragment.this, 1);
+                    dialog.show(getFragmentManager(), "dialog");
+
+                }
+
+                if (performDelete) {
+                    gridLayout.removeView(linearLayout);
+                    deleteFromListActivity(dynamicViews);
+                }
+                performDelete = false;
+
+
             }
+
+            //  if(ifAddedNewElement){context=contextToAddElement;}
+
+            gridLayout.addView(linearLayout);
+            idList.add(dynamicViews);
 
             return false;
         });
 
-
-      //  if(ifAddedNewElement){context=contextToAddElement;}
-
-
-        gridLayout.addView(linearLayout);
-        idList.add(dynamicViews);
-
-
     }
-
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder, String remainderTime){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"&!&#&"+remainderTime+"&!&#&"+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
@@ -600,6 +626,15 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
     @Override
     public void onItemDeleted(){
+        TextView tvToDelete = null;
+
+        System.out.println(tvHourList);
+        for(int i = 0; i<tvHourList.size(); i++){
+
+            if(tvHourList.get(i).getText().equals("delete")){
+                tvToDelete = tvHourList.get(i);
+            }
+        }
 
         System.out.println("onItemDeleted");
         performDelete = true;
@@ -616,8 +651,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
 */
 
+     //   Handler handler = new Handler();
+     //   handler.postDelayed(this::refresh, 1000);
 
-       refresh();
+        if(tvToDelete!= null) {
+            tvToDelete.performLongClick();
+        }
     }
 
     @Override
@@ -666,6 +705,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
         ft.detach(this).attach(this).commit();
         System.out.println("refresh");
+    }
+    private void refresh2(){
+        PlannerFragment rSum = new PlannerFragment(); getFragmentManager().beginTransaction().remove(rSum).commit();
     }
 
 }
