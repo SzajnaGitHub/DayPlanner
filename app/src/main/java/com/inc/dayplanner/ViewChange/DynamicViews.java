@@ -101,10 +101,7 @@ public class DynamicViews {
         return isToDelete;
     }
 
-
-
-
-
-
-
+    public void setToDelete(boolean toDelete) {
+        isToDelete = toDelete;
+    }
 }
