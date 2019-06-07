@@ -99,6 +99,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public static Calendar skipToCalendar;
 
 
+    private boolean performDelete = false;
     private String date;
     private int position;
 
@@ -473,13 +474,17 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
+
             }
 
 /*            dynamicViews.setToDelete(true);
             System.out.println(dynamicViews.isToDelete());*/
 
-            gridLayout.removeView(linearLayout);
-            deleteFromListActivity(dynamicViews);
+            if(performDelete){
+                gridLayout.removeView(linearLayout);
+                deleteFromListActivity(dynamicViews);
+            }
+
             return false;
 
         });
@@ -493,10 +498,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 dialog.show(getFragmentManager(),"dialog");
             }
 
-/*            dynamicViews.setToDelete(true);
-            System.out.println(dynamicViews.isToDelete());*/
-            gridLayout.removeView(linearLayout);
-            deleteFromListActivity(dynamicViews);
+            if(performDelete){
+                gridLayout.removeView(linearLayout);
+                deleteFromListActivity(dynamicViews);
+            }
 
             return false;
         });
@@ -572,7 +577,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public void onItemDeleted(){
 
         System.out.println("onItemDeleted");
-
+        performDelete = true;
         /*for(int i =0; i<idList.size(); i++){
                 if(idList.get(i).isToDelete()){
 
