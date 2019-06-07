@@ -402,7 +402,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-    private void deleteFromListActivity(View dynamicViewsToDelete){
+    private void deleteFromListActivity(DynamicViews dynamicViewsToDelete){
         String[] deleteElement = new String[4];// = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
         String[] hour;
         if(dateToDelete.equals("Sunday")||dateToDelete.equals("Monday")||dateToDelete.equals("Tuesday")||dateToDelete.equals("Wednesday")||dateToDelete.equals("Thursday")||dateToDelete.equals("Friday")||dateToDelete.equals("Saturday")){
@@ -454,18 +454,16 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 //        if(getContext() != null)context=getContext();
 
-
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicViews = new DynamicViews(context);
         TextView tvHour = dynamicViews.hourTextView(context,from+"-"+to);
         TextView tvActivity = dynamicViews.activityTextView(context,activ);
         LinearLayout linearLayout = dynamicViews.linearLayout(context,tvHour,tvActivity);
 
-
        // System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
 
         tvHour.setTextColor(color);
         tvActivity.setTextColor(color);
-
 
 
         tvHour.setOnLongClickListener(v ->
@@ -475,10 +473,13 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
-                dynamicViews.setToDelete(true);
-                System.out.println(dynamicViews.isToDelete());
-
             }
+
+/*            dynamicViews.setToDelete(true);
+            System.out.println(dynamicViews.isToDelete());*/
+
+            gridLayout.removeView(linearLayout);
+            deleteFromListActivity(dynamicViews);
             return false;
 
         });
@@ -490,9 +491,13 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this,1);
                 dialog.show(getFragmentManager(),"dialog");
-                dynamicViews.setToDelete(true);
-                System.out.println(dynamicViews.isToDelete());
             }
+
+/*            dynamicViews.setToDelete(true);
+            System.out.println(dynamicViews.isToDelete());*/
+            gridLayout.removeView(linearLayout);
+            deleteFromListActivity(dynamicViews);
+
             return false;
         });
 
@@ -568,7 +573,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         System.out.println("onItemDeleted");
 
-        for(int i =0; i<idList.size(); i++){
+        /*for(int i =0; i<idList.size(); i++){
                 if(idList.get(i).isToDelete()){
 
                     System.out.println("usuwam element: " + idList.get(i));
@@ -579,6 +584,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     idList.remove(i);
             }
         }
+*/
+
 
       // refresh();
     }
