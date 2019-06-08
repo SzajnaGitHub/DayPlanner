@@ -46,12 +46,11 @@
     <string name="activity_add_hint">Activity</string>
 
     <string-array name="remainder">
-        <item>Remaind me</item>
+        <item>Set reminder</item>
         <item>15 minutes earlier</item>
         <item>30 minutes earlier</item>
         <item>1 hour earlier</item>
         <item>2 hours earlier</item>
         <item>1 day earlier</item>
-        <item>No remaind me</item>
     </string-array>
 </resources>

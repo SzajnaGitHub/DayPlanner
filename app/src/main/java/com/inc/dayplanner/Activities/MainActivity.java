@@ -1,13 +1,12 @@
 package com.inc.dayplanner.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,13 +15,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.Switch;
 
-import com.google.android.gms.drive.DriveFile;
 import com.inc.dayplanner.AlertReceiver;
+import com.inc.dayplanner.Fragments.AboutFragment;
 import com.inc.dayplanner.Fragments.CreatePlanFragment;
-import com.inc.dayplanner.Fragments.DatePickerFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -31,18 +28,12 @@ import com.inc.dayplanner.ViewChange.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends GoogleDriveOperation implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private Switch sw;
-    private Menu menu;
-    private MenuItem itemSwitch;
     public Toolbar toolbar;
-    private MenuItem goToItem;
-    private String swipeChecked;
-    private Intent intent;
     public static boolean importData;
 
     @Override
@@ -65,8 +56,8 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu,menu);
-        goToItem = menu.findItem(R.id.goToButton);
-        goToItem.setVisible(false);
+        MenuItem goToItem = menu.findItem(R.id.goToButton);
+       // goToItem.setVisible(false);
         return true;
     }
 
@@ -79,11 +70,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         mainActivity=this;
 
 
-
-
-       //Runnable muteChecker = new CheckMuteThread();
-       // muteChecker.run();
-
+        String swipeChecked;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -111,13 +98,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        menu = navigationView.getMenu();
-        itemSwitch = menu.findItem(R.id.app_bar_switch);
+        Menu menu = navigationView.getMenu();
+        MenuItem itemSwitch = menu.findItem(R.id.app_bar_switch);
         itemSwitch.setActionView(R.layout.switch_item);
         sw = menu.findItem(R.id.app_bar_switch).getActionView().findViewById(R.id.switcher);
 
-
-        toolbar.setTitle("Today");
 
 
         if (swipeChecked != null){
@@ -130,8 +115,8 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             }
         }
 
-      // //Run current day Fragment
         runFragmentMethod(new PlannerFragment());
+        toolbar.setTitle("Today");
 
     }
 
@@ -151,13 +136,12 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 toolbar.setTitle("Daily");
                 break;
 
-
             case R.id.app_bar_switch:
                 switchButtonHandler(sw);
                 break;
 
             case R.id.app_bar_logout:
-                intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 LoginActivity.loginActivityInstance.signOutGoogleAccount();
                 LoginActivity.loginActivityInstance.recreate();
@@ -170,33 +154,23 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             case R.id.app_bar_import:
                 importData=true;
                 openFileExplorerGoogleDrive(getApplicationContext());
-//                LoginActivity.loginActivityInstance.recreate();
                 break;
 
+            case R.id.app_bar_info:
+                runFragmentMethod(new AboutFragment());
+                toolbar.setTitle("About");
+                break;
 
         }
-
 
         return true;
     }
-/*
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
 
-    }
-*/
-    //minimize instead of going back to loginActivity
     @Override
     public void onBackPressed() {
         this.moveTaskToBack(true);
     }
-
 
 
     public void switchButtonHandler(Switch sw) {
@@ -220,7 +194,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             timeEarlierReminder=timeEarlier;
             contentActivityReminder=activity;
 
-            SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat reminderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
             try {
                     c.setTime(reminderDF.parse(dateToParse));
 
@@ -228,10 +202,6 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 e.printStackTrace();
             }
 
-//            c.setTime(date);
-//            c.set(Calendar.HOUR_OF_DAY,hour);
-//            c.set(Calendar.MINUTE, minute);
-//            c.set(Calendar.SECOND, 0);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);

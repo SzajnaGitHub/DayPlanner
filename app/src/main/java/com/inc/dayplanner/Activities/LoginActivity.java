@@ -1,52 +1,15 @@
 package com.inc.dayplanner.Activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.media.AudioManager;
-import android.os.ParcelFileDescriptor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveContents;
-import android.widget.TextView;
-
-import com.google.android.gms.drive.DriveFile;
-import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.Metadata;
-import com.google.android.gms.drive.MetadataBuffer;
-import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.Query;
-import com.google.android.gms.drive.query.SearchableField;
-import com.google.android.gms.drive.widget.DataBufferAdapter;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.Fragments.PlannerFragment;
-import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
-import com.inc.dayplanner.GoogleDriveApi.ReadFileLocal;
-import com.inc.dayplanner.GoogleDriveApi.SaveFileLocal;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Date;
-
-
-import static com.google.android.gms.drive.DriveId.decodeFromString;
 
 
 public class LoginActivity extends GoogleDriveOperation {
@@ -82,16 +45,8 @@ public class LoginActivity extends GoogleDriveOperation {
     public void Login(View view) {
         changeActivity();
         loginActivityInstance=this;
-
-//        changeActivity();
-
-
-//        ReadFileLocal readFileLocal = new ReadFileLocal();
-//        String fileData=readFileLocal.readFile(getApplicationContext());
-//        System.out.println(fileData);
-
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     private void changeActivity(){
@@ -101,19 +56,16 @@ public class LoginActivity extends GoogleDriveOperation {
 
 
     public void selectDatabaseFileFromGoogleDrive(){
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        openFileExplorerGoogleDrive(getApplicationContext());
-                        break;
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    openFileExplorerGoogleDrive(getApplicationContext());
+                    break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        createFile(getApplicationContext());
-                        PlannerFragment.activityList.clear();
-                        break;
-                }
+                case DialogInterface.BUTTON_NEGATIVE:
+                    createFile(getApplicationContext());
+                    PlannerFragment.activityList.clear();
+                    break;
             }
         };
 

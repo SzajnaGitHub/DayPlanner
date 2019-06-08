@@ -19,9 +19,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     private  TextView tv1;
 
-
-
-
     @SuppressLint("ValidFragment")
     public TimePickerFragment(TextView tv1) {
 

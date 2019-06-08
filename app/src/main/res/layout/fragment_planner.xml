@@ -108,6 +108,7 @@
                 android:textColor="?attr/textcolor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.45"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
@@ -178,16 +179,6 @@
         </android.support.constraint.ConstraintLayout>
 
     </FrameLayout>
-
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="104dp"
-        android:text="delete"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/addButton" />
 
 
 </android.support.constraint.ConstraintLayout>

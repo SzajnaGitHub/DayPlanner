@@ -46,29 +46,11 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
         plannerFragmentList.add(pageFragment);
 
-
         mPageReferenceMap.put(position, pageFragment);
 
         previousPosition=position;
-//        ((PlannerFragment) pageFragment).read(date);
         return pageFragment;
     }
-/*
-
-    public static PlannerFragment getMiddleFragment(){
-
-        return (PlannerFragment) mPageReferenceMap.get(4998);
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void replaceMiddleFragment(Fragment fr){
-
-        mPageReferenceMap.replace(4999,fr);
-
-
-    }
-*/
 
 
     @Override
@@ -128,5 +110,3 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
 
 }
-
-

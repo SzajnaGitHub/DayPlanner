@@ -1,11 +1,8 @@
 package com.inc.dayplanner.Fragments;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -20,29 +17,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.Activities.MainActivity;
-import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
@@ -56,26 +44,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import static android.view.View.INVISIBLE;
-import static android.view.View.resolveSize;
 
 
 public class PlannerFragment extends Fragment  implements PopupFragment.ActivityHandlerListener, AdapterView.OnItemSelectedListener {
 
 
-    private static GridLayout gridLayout;
-    private DynamicViews dynamicViews;
+    private GridLayout gridLayout;
     public TextView dayTextView;
-    private static Context context;
-    private static Context prevContext;
-    private static Context contextToAddElement;
+    private Context context;
     private FrameLayout messageFrame;
     private TextView activityText;
     private CheckBox muteCheckbox;
-    private CheckBox remindCheckbox;
     private Spinner remindSpinner;
     private TextView fromHourPickerTextView;
     private TextView toHourPickerTextView;
@@ -88,26 +70,16 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private Calendar calendar = Calendar.getInstance();
     public static List<String[]> activityList = new ArrayList<>();
     public static List<Context> contextList = new ArrayList<>();
-    private static boolean ifAddedNewElement=false;
-    private Button delButton;
     private List<DynamicViews> idList = new ArrayList<>();
     private String remainderTime;
     private @ColorInt int color;
     private TextView wrongHourTextView;
-    private ImageButton button;
     private boolean isDaily = false;
     private static String dateToDelete;
     public static boolean isSkipToDate=false;
     public static Calendar skipToCalendar;
 
 
-    private boolean performDelete = false;
-    private String date;
-    private int position;
-    private List<TextView> tvHourList = new LinkedList<>();
-    private List<TextView> tvActList = new LinkedList<>();
-    private MenuItem goToItem;
-    private Menu menu;
     public static PlannerFragment newInstance(String date, int position) {
 
         Bundle bundle = new Bundle();
@@ -124,8 +96,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     @Override
     public void onStart() {
         super.onStart();
-        String date = df.format(calendar.getTime());
-//        read(date);
         context=getContext();
     }
 
@@ -170,14 +140,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         messageFrame = view.findViewById(R.id.messageFrame);
         activityText = view.findViewById(R.id.activityText);
         muteCheckbox = view.findViewById(R.id.muteCheckBox);
-        remindSpinner = view.findViewById(R.id.reminderSpinner);
         wrongHourTextView = view.findViewById(R.id.wrongHoursTextView);
-//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
         fromHourPickerTextView = view.findViewById(R.id.fromHourPicker);
         toHourPickerTextView = view.findViewById(R.id.toHourPicker);
         final ImageButton addButton = view.findViewById(R.id.addButton2);
         audioManager = (AudioManager)getContext().getSystemService(getContext().AUDIO_SERVICE);
-        delButton = view.findViewById(R.id.deleteButton);
         activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
 
         contextList.add(context);
@@ -190,14 +157,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         Thread thread = new Thread(new CheckMuteThread());
         thread.start();
 
-
-
         readBundle(getArguments());
 
 
 
         //View fragment date
-        String message = null;
+        String message;
         if (getArguments()!=null) {
             message = getArguments().getString("Date");
             dayTextView.setText(message);
@@ -211,6 +176,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             String date = df.format(calendar.getTime());
             read(date);
             isDaily = true;
+        }
+
+        if(isDaily) {
+            //getActivity().getActionBar().setDisplay
         }
 
 
@@ -233,14 +202,13 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         //Add button handler
         addButton.setOnClickListener(v -> {
             boolean allDataVerified = false;
-//            String date = df.format(calendar.getTime());
             String date = dayTextView.getText().toString();
             hour2 = toHourPickerTextView.getText().toString();
             hour1 = fromHourPickerTextView.getText().toString();
 
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Date d1 = null;
-            Date d2 = null;
+            Date d1;
+            Date d2;
             long elapse = 0;
             try {
                 d1 = sdf.parse(hour1);
@@ -252,7 +220,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             System.out.println(elapse);
 
-  /*          if(elapse ==0){
+            if(elapse <=0){
                 messageFrame.setBackgroundResource(R.drawable.bubble_red);
                     fromHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
                     toHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
@@ -266,15 +234,15 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 frameVisibility = false;
                 allDataVerified = true;
 
-            }*/
+            }
 
 
 
             if(muteCheckbox.isChecked())  {
                 //ADD BUTTON METHODS
-//                if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
-//                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-//                 }
+               if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                 }
 
             }
             String mute;
@@ -300,7 +268,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             }
             switch(remainderTime){
                 case "15 minutes earlier":
-//                    calendar.add(Calendar.DATE,position-previousPosition);
                     calendar.add(Calendar.MINUTE,-15);
                     break;
                 case "30 minutes earlier":
@@ -334,7 +301,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
 
-          //  if(allDataVerified) {
+            if(allDataVerified) {
 
                 if(isDaily){
                     addToListActivity(hour1,hour2,activityText.getText().toString());
@@ -357,36 +324,29 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 toHourPickerTextView.setText(R.string.end_hour);
                 activityText.setText("");
 
-             //   button.callOnClick();
-
-
 
                 Handler handler = new Handler();
                 handler.postDelayed(this::refresh, 1000);
 
-         //   }
+
+            }
 
         });
 
 
-        button = view.findViewById(R.id.addButton);
+        ImageButton button = view.findViewById(R.id.addButton);
         button.setOnClickListener(v -> {
-//            context=getContext();
             //activityList.sort((o1, o2) -> o1[1].compareTo(o2[1]));
             showHideAddActivityFragment();
         });
 
 
 
-
         remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
-//        remindCheckbox = view.findViewById(R.id.remindCheckBox);
-//        read(dayTextView.getText().toString());
-
         Spinner spinner = view.findViewById(R.id.reminderSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.remainder, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.remainder, R.layout.spinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -398,8 +358,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         if(!frameVisibility) {
             messageFrame.setVisibility(View.VISIBLE);
             frameVisibility = true;
-            ifAddedNewElement=true;
-            contextToAddElement=getContext();
 
         }else{
             frameVisibility = false;
@@ -416,19 +374,26 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         String[] deleteElement = new String[4];// = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
         String[] hour;
         String[] dateToEdit=new String[5];
-        if(dateToDelete.equals("Sunday")||dateToDelete.equals("Monday")||dateToDelete.equals("Tuesday")||dateToDelete.equals("Wednesday")||dateToDelete.equals("Thursday")||dateToDelete.equals("Friday")||dateToDelete.equals("Saturday")){
+        if(dateToDelete.equals("Sunday")||dateToDelete.equals("Monday")||dateToDelete.equals("Tuesday")||
+                dateToDelete.equals("Wednesday")||dateToDelete.equals("Thursday")||dateToDelete.equals("Friday")|| dateToDelete.equals("Saturday")){
+
             dateToDelete=df.format(calendar.getTime());
         }
 
         for (int i=0;i<idList.size();i++){
+
             if(idList.get(i).equals(dynamicViewsToDelete)){
+
                 hour=idList.get(i).getHourText().split("-");
                 deleteElement[0]=dateToDelete;
                 deleteElement[1]=hour[0];
                 deleteElement[2]=hour[1];
                 deleteElement[3]=idList.get(i).getActivityText();
                 for(int j=0;j<activityList.size();j++){
-                    if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) && activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
+
+                    if(activityList.get(j)[0].equals(deleteElement[0]) && activityList.get(j)[1].equals(deleteElement[1]) &&
+                            activityList.get(j)[2].equals(deleteElement[2]) && activityList.get(j)[3].equals(deleteElement[3])){
+
                         dateToEdit=activityList.get(j);
                         activityList.remove(j);
                         saveFromArrayListToFile();
@@ -480,49 +445,37 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     DynamicViews testDV;
 
     private void addToListActivity(String from, String to, String activ) {
-//        if(getContext() != null)context=getContext();
-//        if(ifAddedNewElement==true)context=contextToAddElement;
 
-//        if(getContext() != null)context=getContext();
-
-        dynamicViews = new DynamicViews(context);
+        DynamicViews dynamicViews = new DynamicViews(context);
         TextView tvHour = dynamicViews.hourTextView(context, from + "-" + to);
         TextView tvActivity = dynamicViews.activityTextView(context, activ);
         LinearLayout linearLayout = dynamicViews.linearLayout(context, tvHour, tvActivity);
-
-        // System.out.println(linearLayout.getId() + "id w fragmencie LINEARLAYOUT");
-
         tvHour.setTextColor(color);
         tvActivity.setTextColor(color);
-
+        final int[] id = {0};
 
         tvHour.setOnLongClickListener(v ->
         {
-            if (performDelete) {
-                gridLayout.removeView(linearLayout);
-                deleteFromListActivity(dynamicViews);
-            } else {
+            testLayout = linearLayout;
+            id[0] = linearLayout.getId();
 
-                dateToDelete = dayTextView.getText().toString();
-                PopupFragment dialog = new PopupFragment();
-                if (getFragmentManager() != null) {
-                    dialog.setTargetFragment(PlannerFragment.this, 1);
-                    dialog.show(getFragmentManager(), "dialog");
+            for(int i =0; i< idList.size(); i++){
 
+                if(idList.get(i).getId() == id[0]){
+                    testDV= idList.get(i);
                 }
-
-    /*            dynamicViews.setToDelete(true);
-                System.out.println(dynamicViews.isToDelete());*/
             }
-            performDelete = false;
+
+            dateToDelete = dayTextView.getText().toString();
+            PopupFragment dialog = new PopupFragment();
+            if (getFragmentManager() != null) {
+                dialog.setTargetFragment(PlannerFragment.this, 1);
+                dialog.show(getFragmentManager(), "dialog");
+            }
 
             return false;
-
         });
 
-
-        performDelete = false;
-        final int[] id = {0};
 
         tvActivity.setOnLongClickListener(v ->
         {
@@ -532,13 +485,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
              for(int i =0; i< idList.size(); i++){
 
                 if(idList.get(i).getId() == id[0]){
-                 //   gridLayout.removeView(linearLayout);
-                  //   deleteFromListActivity(idList.get(i));
                     testDV= idList.get(i);
                 }
             }
-
-
 
                 dateToDelete = dayTextView.getText().toString();
                 PopupFragment dialog = new PopupFragment();
@@ -546,21 +495,16 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     dialog.setTargetFragment(PlannerFragment.this, 1);
                     dialog.show(getFragmentManager(), "dialog");
 
-
-
-
-
             }
-
-            //  if(ifAddedNewElement){context=contextToAddElement;}
-
-           // performDelete = false;
 
             return false;
         });
+
         gridLayout.addView(linearLayout);
         idList.add(dynamicViews);
     }
+
+
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder, String remainderTime){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"&!&#&"+remainderTime+"&!&#&"+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
@@ -603,7 +547,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         remainderTime = parent.getItemAtPosition(position).toString();
-//        Toast.makeText(parent.getContext(),remainderTime, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -664,8 +607,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            date = bundle.getString("name");
-            position = bundle.getInt("age");
+            bundle.getString("name");
+            bundle.getInt("age");
         }
 
     }

@@ -1,7 +1,6 @@
 package com.inc.dayplanner.ViewChange;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -16,38 +15,8 @@ public class DynamicViews {
 
     private Context ctx;
     private int id;
-    private boolean isToDelete = false;
-    private LinearLayout linearLayout;
     private String hourText;
-
-    public void setHourText(String hourText) {
-        this.hourText = hourText;
-    }
-
-    public void setActivityText(String activityText) {
-        this.activityText = activityText;
-    }
-
     private String activityText;
-
-    public String getHourText() {
-        return hourText;
-    }
-
-    public String getActivityText() {
-        return activityText;
-    }
-
-    private int getWidth(Context context) {
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((MainActivity) context).getWindowManager()
-                .getDefaultDisplay()
-                .getMetrics(displayMetrics);
-
-        return displayMetrics.widthPixels;
-
-    }
 
     public DynamicViews(Context ctx) {
         this.ctx = ctx;
@@ -80,7 +49,7 @@ public class DynamicViews {
 
     public LinearLayout linearLayout(Context context,TextView tvHour, TextView tvActivity) {
 
-        linearLayout = new LinearLayout(context);
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(tvHour);
         linearLayout.addView(tvActivity);
@@ -106,11 +75,23 @@ public class DynamicViews {
         return id;
     }
 
-    public boolean isToDelete() {
-        return isToDelete;
+    public String getHourText() {
+        return hourText;
     }
 
-    public void setToDelete(boolean toDelete) {
-        isToDelete = toDelete;
+    public String getActivityText() {
+        return activityText;
     }
+
+    private int getWidth(Context context) {
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((MainActivity) context).getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(displayMetrics);
+
+        return displayMetrics.widthPixels;
+
+    }
+
 }

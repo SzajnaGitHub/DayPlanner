@@ -23,7 +23,13 @@
 
     </group>
 
-    <group android:checkableBehavior="single">
+    <item android:title="Settings"
+        >
+
+    <menu>
+        <item
+            android:id="@+id/app_bar_synchronize"
+            android:title="Synchronize" />
 
         <item
             android:id="@+id/app_bar_switch"
@@ -39,7 +45,13 @@
             android:id="@+id/app_bar_logout"
             android:title="Logout" />
 
-    </group>
+
+        <item
+            android:id="@+id/app_bar_info"
+            android:title="App info" />
 
 
+    </menu>
+
+    </item>
 </menu>
