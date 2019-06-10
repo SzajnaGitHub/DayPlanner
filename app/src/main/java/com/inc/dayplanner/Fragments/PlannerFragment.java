@@ -379,7 +379,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             dateToDelete=df.format(calendar.getTime());
         }
-
         for (int i=0;i<idList.size();i++){
 
             if(idList.get(i).equals(dynamicViewsToDelete)){
@@ -415,7 +414,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }else{
             muteCheckbox.setChecked(false);
         }
-        if(!dateToEdit[5].equals("Remaind me") && !dateToEdit[5].equals("No remaind me")){
+        if(!dateToEdit[5].equals("Set reminder")){
 
            switch (dateToEdit[6]){
                case "15 minutes earlier":
@@ -436,7 +435,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                    break;
 
                    default:
-                       remindSpinner.setSelection(6);
+                       remindSpinner.setSelection(0);
                        break;
            }
         }
