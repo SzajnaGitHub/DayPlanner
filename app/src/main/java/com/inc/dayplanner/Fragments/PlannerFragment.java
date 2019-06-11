@@ -325,9 +325,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                 activityText.setText("");
 
 
-                Handler handler = new Handler();
-                handler.postDelayed(this::refresh, 1000);
-
+                if(!isDaily) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(this::refresh, 1000);
+                }
 
             }
 
@@ -365,6 +366,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
             if (isDaily) {
                 refresh();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    activityList.sort(((o1, o2) -> o1[1].compareTo(o2[1])));
+                }
             }
         }
     }
@@ -519,12 +523,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     public void read(String date){
         //remove all elements from gridLayout
         gridLayout.removeAllViews();
         //compare
-        activityList.sort(((o1, o2) -> o1[1].compareTo(o2[1])));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            activityList.sort(((o1, o2) -> o1[1].compareTo(o2[1])));
+        }
         //add all activities to PlannerActivity
         for(int i=0; i<activityList.size();i++){
             if(activityList.get(i)[0].equals(date)) {
@@ -587,10 +593,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, monthOfYear);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String goToSpecificDate = DateFormat.getDateInstance().format(c.getTime());
 
-       // dayTextView.setText(goToSpecificDate);
-//        System.out.println(goToSpecificDate);
         isSkipToDate=true;
         skipToCalendar=c;
         SwipeAdapter swipeAdapterSkipTo = new SwipeAdapter(getFragmentManager());
@@ -618,7 +621,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             ft.setReorderingAllowed(false);
         }
         ft.detach(this).attach(this).commit();
-//        System.out.println("refresh");
+        System.out.println("refresh");
     }
 
 
