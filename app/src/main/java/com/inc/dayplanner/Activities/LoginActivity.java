@@ -43,15 +43,9 @@ public class LoginActivity extends GoogleDriveOperation {
     }
 
     public void Login(View view) {
-        changeActivity();
-        loginActivityInstance=this;
-    }
-
-
-
-    private void changeActivity(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        loginActivityInstance=this;
     }
 
 

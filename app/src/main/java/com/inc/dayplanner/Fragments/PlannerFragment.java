@@ -618,7 +618,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             ft.setReorderingAllowed(false);
         }
         ft.detach(this).attach(this).commit();
-        System.out.println("refresh");
+//        System.out.println("refresh");
     }
 
 

@@ -27,10 +27,10 @@
         >
 
     <menu>
-    <!--    <item
+        <item
             android:id="@+id/app_bar_synchronize"
             android:title="Synchronize" />
--->
+
         <item
             android:id="@+id/app_bar_switch"
             android:title="Dark Theme"

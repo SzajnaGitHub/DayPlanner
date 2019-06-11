@@ -161,6 +161,10 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 toolbar.setTitle("About");
                 break;
 
+            case R.id.app_bar_synchronize:
+                synchronize();
+                break;
+
         }
 
         return true;
@@ -214,6 +218,12 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    private void synchronize(){
+        retrieveContents(GoogleDriveOperation.driveFileToOpen);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 
