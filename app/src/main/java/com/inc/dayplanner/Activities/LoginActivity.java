@@ -27,6 +27,7 @@ public class LoginActivity extends GoogleDriveOperation {
 
     /**
      * metoda onDriveClientReady
+     * sprawdza czy użytkownik ma już zaimportowany plik bazy danych, jeżeli nie, informuje go o możliwości importu lub stworzenia nowego pliku bazy danych
      */
 
 
@@ -61,7 +62,10 @@ public class LoginActivity extends GoogleDriveOperation {
         loginActivityInstance=this;
     }
 
-
+    /**
+     * metoda selectDatabaseFileFromGoogleDrive
+     * umożliwia zaimportowanie pliku z dysku Google Drive
+     */
     public void selectDatabaseFileFromGoogleDrive(){
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which){

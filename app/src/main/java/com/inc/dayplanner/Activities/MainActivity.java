@@ -269,6 +269,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
     }
 
+
+    /**
+     * metoda synchronizujaca dane znajdujace sie w aplikacji z danymi na dysku Google Drive
+     *
+     */
     private void synchronize(){
         retrieveContents(GoogleDriveOperation.driveFileToOpen);
         Intent intent = new Intent(this, MainActivity.class);

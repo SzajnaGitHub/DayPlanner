@@ -135,19 +135,31 @@ public class DynamicViews {
 
         return linearLayout;
     }
-
+    /**
+     *funkcja zwracajaca ID obiektu
+     * @return id
+     */
     public int getId() {
         return id;
     }
-
+    /**
+     *funkcja zwracajaca godzine pobrana z fragmentu
+     * @return hourText
+     */
     public String getHourText() {
         return hourText;
     }
-
+    /**
+     *funkcja zwracajaca tekst aktywnosci pobranej z fragmentu
+     * @return activityText
+     */
     public String getActivityText() {
         return activityText;
     }
-
+    /**
+     *funkcja zwracajaca szerokosc ekranu
+     * @param context
+     */
     private int getWidth(Context context) {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();

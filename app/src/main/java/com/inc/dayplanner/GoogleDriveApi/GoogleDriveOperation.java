@@ -52,12 +52,18 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 //        retrieveContents(GoogleDriveOperation.driveFileToOpen);
     }
 
+    /**
+     * Metoda zapisujaca lokalnie id pliku utworzonego na Google Drive.
+     */
     public void createNewGoogleFileAndAppendID(Context context){
         SaveFileLocal saveFileLocal = new SaveFileLocal();
         saveFileLocal.saveFile(context,getUsername(context), pathToDataFile);
     }
 
 
+    /**
+     * Tworzy plik na dysku Google Drive, przekazuje ID pliku do zapisania lokalnie.
+     */
     public void createFile(Context context) {
         // [START drive_android_create_file]
         final Task<DriveFolder> rootFolderTask = getDriveResourceClient().getRootFolder();
@@ -95,7 +101,11 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
-
+    /**
+     * Umozliwia dodanie fragmentu tekstu do pliku tekstowego.
+     * @param file plik na dysku Google Drive
+     * @param contentToAppend Zawartosc, ktora bedzie dodana na koncu pliku tekstowego.
+     */
     public void appendContents(DriveFile file, String contentToAppend) {
         // [START drive_android_open_for_append]
         Task<DriveContents> openTask =
@@ -141,7 +151,11 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
-
+    /**
+     * Nadpisuje zawartosc pliku na dysku GoogleDrive
+     * @param file plik na dysku Google Drive
+     * @param contentToRewrite tekst, ktory zostanie wpisany do pliku po podmienieniu
+     */
     public void rewriteContents(DriveFile file, String contentToRewrite) {
         // [START drive_android_open_for_write]
         Task<DriveContents> openTask =
@@ -174,7 +188,10 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
 
     public static ArrayList<String> contentFromGoogleFile= new ArrayList<String>();
-
+    /**
+     * Odczytuje dane z dysku Google Drive
+     * @param file plik, z ktorego beda odczytane dane
+     */
     public void retrieveContents(DriveFile file) throws NullPointerException {
         contentFromGoogleFile.clear();
         try {
@@ -243,7 +260,11 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
-
+    /**
+     * Metoda zwracajaca nazwe uzytkownika Google aktualnie zalogowanego.
+     * @param  context context
+     * @return signInAccount.getEmail()
+     */
     public String getUsername(Context context) {
         signInAccount = GoogleSignIn.getLastSignedInAccount(context);
         return signInAccount.getEmail();
@@ -251,7 +272,9 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
-
+    /**
+     * Konwertuje dane pobrane z pliku do postaci zrozumialej przez aplikacje.
+     */
     public void readFile(Context context){
         ReadFileLocal readFileLocal = new ReadFileLocal();
         String fileData=readFileLocal.readFile(context);
@@ -273,7 +296,9 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
 
 
-
+    /**
+     * Zamienia ID pliku zapisanego w postaci Stringa na sciezke do pliku Google.
+     */
     private void decodePathToGoogleFile(){
         try {
             driveFileToOpen = decodeFromString(pathToDataFile).asDriveFile();
@@ -281,7 +306,9 @@ public class GoogleDriveOperation extends BaseDemoActivity {
             driveFileToOpen=null;
         }
     }
-
+    /**
+     * Metoda wywolywana podczas klikniecia przycisku logout.
+     */
     public void signOutGoogleAccount(){
         signOut();
         revokeAccess();
@@ -289,7 +316,10 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
-
+    /**
+     * Otwiera manager plikow, umozliwiajacy zaimportowanie bazy danych z Google Drive
+     * @param context
+     */
     public void openFileExplorerGoogleDrive(Context context) {
         pickTextFile()
                 .addOnSuccessListener(this,

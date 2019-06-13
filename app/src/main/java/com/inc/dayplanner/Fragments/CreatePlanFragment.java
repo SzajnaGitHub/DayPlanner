@@ -47,7 +47,7 @@ public class CreatePlanFragment extends Fragment {
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
+     * @return View
      */
 
     @Nullable

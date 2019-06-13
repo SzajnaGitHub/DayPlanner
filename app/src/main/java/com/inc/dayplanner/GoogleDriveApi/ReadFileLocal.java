@@ -13,7 +13,11 @@ import java.io.InputStreamReader;
 public class ReadFileLocal {
 
     private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
-
+    /**
+     * metoda odczytujaca dane z dysku lokalnego
+     * @param ctx context
+     * @return filedata
+     */
     public String readFile(Context ctx){
         String filename = "DayPlannerIDdataFile";
 
@@ -33,6 +37,10 @@ public class ReadFileLocal {
         return fileData;
     }
 
+    /**
+     * metoda otwierająca buffor pliku, z którego później są pobierane dane odczytane
+     * @param fileInputStream
+     */
     private String readFromFileInputStream(FileInputStream fileInputStream)
     {
         StringBuffer retBuf = new StringBuffer();

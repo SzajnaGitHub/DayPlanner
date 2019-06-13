@@ -201,6 +201,9 @@ public abstract class BaseDemoActivity extends AppCompatActivity {
 
 
     GoogleSignInClient mGoogleSignInClient;
+    /**
+     * Metoda umozliwiajaca wylogowanie sie z aplikacji.
+     */
     public void signOut() {
 
 
@@ -220,6 +223,9 @@ public abstract class BaseDemoActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * metoda odbierajaca uprawnienia przyznane podczas logowania przy pomocy konta google
+     */
     public void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {

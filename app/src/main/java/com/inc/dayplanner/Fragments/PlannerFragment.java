@@ -354,7 +354,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         return view;
     }
 
-
+    /**
+     *  pokazuje oraz ukrywa fragment umozliwiajacy dodawanie oraz edycje aktywnosci
+     */
     private void showHideAddActivityFragment(){
         if(!frameVisibility) {
             messageFrame.setVisibility(View.VISIBLE);
@@ -373,7 +375,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
     }
 
-
+    /**
+     *  metoda usuwajaca dana aktywnosc z array list, na ktorym pracuje nasza aplikacja
+     * @param dynamicViewsToDelete
+     */
     private String[] deleteFromListActivity(DynamicViews dynamicViewsToDelete){
         String[] deleteElement = new String[4];// = {hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder};
         String[] hour;
@@ -406,7 +411,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
         return dateToEdit;
     }
-
+    /**
+     *  metoda umozliwiajaca edycje poszczegolnych aktywnosci
+     * @param dynamicViews
+     */
     private void editActivity(DynamicViews dynamicViews){
         showHideAddActivityFragment();
         String[] dateToEdit = deleteFromListActivity(dynamicViews);
@@ -447,6 +455,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     LinearLayout testLayout;
     DynamicViews testDV;
 
+    /**
+     *  metoda dodaje pojedyncza aktywnosc do fragmentu
+     * @param from
+     * @param to
+     * @param activ
+     */
     private void addToListActivity(String from, String to, String activ) {
 
         DynamicViews dynamicViews = new DynamicViews(context);
@@ -507,12 +521,23 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         idList.add(dynamicViews);
     }
 
-
+    /**
+     * metoda wywolujaca zapisanie na dysku Google Drive
+     * @param dateString data aktywnosci
+     * @param fromText godzina rozpoczecia
+     * @param toText godzina zakonczenia
+     * @param activityText tekst aktywnosci
+     * @param mute tryb wyciszenia
+     * @param dateRemainder data przypomnienia
+     * @param remainderTime godzina przypomnienia
+     */
     private void save(String dateString, String fromText,String toText, String activityText, String mute,String dateRemainder, String remainderTime){
         String textToSave=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"&!&#&"+remainderTime+"&!&#&"+"\n";
         saveToGoogleDrive.appendContents(GoogleDriveOperation.driveFileToOpen,textToSave);
     }
-
+    /**
+     * metoda konwertujaca array list na ktorym operuje aplikacja, na tekst ktory mozna zapisac na dysku Google Drive w bazie danych
+     */
     private void saveFromArrayListToFile(){
         String textToSave;//=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         textToSave="";
@@ -523,7 +548,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-
+    /**
+     *  metoda czuwajaca nad poprawnoscia wczytywanych danych z dysku Google Drive, sortuje elementy pobrane po dacie
+     * @param date
+     */
     public void read(String date){
         //remove all elements from gridLayout
         gridLayout.removeAllViews();
@@ -540,7 +568,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     }
 
 
-
+    /**
+     *  metoda odpowiedzialna za wylaczenie trybu cichego w telefonie
+     * @param audioManager
+     */
     private void unMutePhone(AudioManager audioManager) {
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 
@@ -584,7 +615,14 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
     }
-
+    /**
+     *  metoda pobierajaca date z kalendarza, ktory umozliwia przemieszczenie sie np. z dnia dzisiejszego
+     *  bezposrednio na 10 dni do przodu.
+     * @param view
+     * @param year
+     * @param monthOfYear
+     * @param dayOfMonth
+     */
     DatePickerDialog.OnDateSetListener ondate = (view, year, monthOfYear, dayOfMonth) -> {
 
         System.out.println("DateListener");
@@ -606,7 +644,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
 
-
+    /**
+     * metoda odczytujaca zawartosc Bundle
+     */
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             bundle.getString("name");
@@ -614,7 +654,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
 
     }
-
+    /**
+     *  metoda umozliwiajaca odswiezenie strony aktualnie wyswietlanej
+     */
     private void refresh(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) {

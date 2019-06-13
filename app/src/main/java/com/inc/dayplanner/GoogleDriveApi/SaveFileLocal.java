@@ -13,7 +13,12 @@ import java.io.OutputStreamWriter;
 public class SaveFileLocal extends AppCompatActivity {
 
     private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
-
+    /**
+     * metoda tworzaca plik znajdujacy sie na dysku
+     * @param ctx context
+     * @param username nazwa uzytkownika dysku, na ktorym znajduje sie plik z baza danych
+     * @param pathToDataFile sciezka do pliku otwieranego
+     */
     public void saveFile(Context ctx, String username, String pathToDataFile){
         String filename = "DayPlannerIDdataFile";
         ReadFileLocal readFileLocal = new ReadFileLocal();
@@ -40,7 +45,11 @@ public class SaveFileLocal extends AppCompatActivity {
 
 
 
-
+    /**
+     * metoda zapisujaca plik na dysku lokalnym
+     * @param fileOutputStream
+     * @param data
+     */
     private void writeDataToFile(FileOutputStream fileOutputStream, String data)
     {
         try {

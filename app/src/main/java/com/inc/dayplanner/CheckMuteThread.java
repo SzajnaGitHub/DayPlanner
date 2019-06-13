@@ -18,6 +18,12 @@ public class CheckMuteThread implements Runnable{
     private boolean appMutedPhone=false;
 
 
+    /**
+     * funkcja odpowiedzialna za włączenie dzwieku w telefonie o odpowiedniej porze
+     *
+     * @param audioManager
+     *
+     */
     private void unMutePhone(AudioManager audioManager) {
         audioManager=PlannerFragment.audioManager;
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
@@ -28,6 +34,11 @@ public class CheckMuteThread implements Runnable{
 
 
 
+    /**
+     * funkcja wywolywana przez watek
+     * sprawdza czy aktywnosc, ktora trwa w tym momencie jest priorytetowa i czy nalezy uruchomic tryb cichy w telefonie
+     *
+     */
     @Override
     public void run() {
         int[] timeToUnmute = new int[2];
