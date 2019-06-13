@@ -5,6 +5,14 @@ import android.content.Intent;
 
 import com.inc.dayplanner.R;
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa pozwalająca na zachowanie zmian przy restarcie aktywności
+ * dzięki niej możemy zapamiętać czy użytkownik wybrał tryb nocny czy dzienny
+ *
+ */
+
 
 public class Utils {
     private static int sTheme;

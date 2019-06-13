@@ -14,6 +14,19 @@ import android.widget.TimePicker;
 import com.inc.dayplanner.R;
 import java.util.Calendar;
 
+
+
+
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa, która pozwala na wyświetlanie zegara przy wciśnięciu przycisku
+ *
+ * dziedziczy z klasy DialogFragment
+ * implementuje interfejs OnTimeSetListener
+ */
+
+
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
 
@@ -28,6 +41,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public TimePickerFragment(){
     }
 
+    /**
+     * metoda uruchamia się przy tworzeniu fragmentu
+     * w tej metodzie ustawia się wszystkie parametry oraz wygląd zwracanego zegara
+     * @param savedInstanceState
+     * @return zegar
+     */
 
     @NonNull
     @Override
@@ -41,6 +60,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         hour,minute, DateFormat.is24HourFormat(getActivity()));
     }
 
+    /**
+     * metoda obsługująca wybranie danej godziny na zegarze
+     * @param view aktualnyy widok
+     * @param hourOfDay podana przez nas godzina
+     * @param minute ponada przez nas minuta
+     */
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

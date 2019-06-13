@@ -16,6 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * klasa obsługująca menu przesuwalne
+ *
+ * dziedziczy z FragmentStatePagerAdapter
+ */
+
 
 public class SwipeAdapter extends FragmentStatePagerAdapter {
 
@@ -28,14 +36,32 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
     private int previousPosition = 4999;
 
+    /**
+     * konstruktor pozwalający na zmianę fragmentów
+     * @param fm menadżer zmiany fragmentów
+     */
+
     public SwipeAdapter(FragmentManager fm) {
         super(fm);
     }
+
+    /**
+     * metoda zwraca aktualną pozycje
+     * @param object obiekt
+     * @return pozycja
+     */
 
     public int getItemPosition(Object object){
         return POSITION_NONE;
     }
 
+    /**
+     * metoda pozwalająca na zmianę fragmentów oraz zwrócenie
+     * aktualnie wybranego fragmentu
+     *
+     * @param position
+     * @return
+     */
 
     @Override
     public Fragment getItem(int position) {
@@ -52,15 +78,32 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         return pageFragment;
     }
 
+    /**
+     * metoda ustawia nam liczbę przesuwalnych fragmentów na 10000
+     * @return liczbę zainicjowanych fragmentów
+     */
 
     @Override
     public int getCount() {
         return 10000;
     }
 
+    /**
+     * metoda zwraca fragment na podstawie klucza
+     * @param key klucz
+     * @return fragment
+     */
+
     public Fragment getFragment(int key) {
         return mPageReferenceMap.get(key);
     }
+
+    /**
+     * metoda usuwa dany fragment z hashMapy przy usunięciu fragmentu
+     * @param container
+     * @param position
+     * @param object
+     */
 
 
     @Override
@@ -68,6 +111,12 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         super.destroyItem(container, position, object);
         mPageReferenceMap.remove(position);
     }
+
+    /**
+     * metoda pozwala na wyświetlanie dnia na podstawie informacji z kalendarza
+     * @param position
+     * @return
+     */
 
     static public String setDay(int position) {
 

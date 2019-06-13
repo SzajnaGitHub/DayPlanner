@@ -12,11 +12,26 @@ import android.view.ViewGroup;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa posiadająca viewpager obsługujący przewijalny layout
+ *
+ * dziedziczy z klasy Fragment
+ *
+ */
 
 public class CreatePlanFragment extends Fragment {
 
     public static ViewPager viewPager;
 
+
+    /**
+     * metoda uruchamia się przy tworzeniu fragmentu
+     * ustawia menu aplikacji
+     *
+     * @param savedInstanceState
+     */
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +40,15 @@ public class CreatePlanFragment extends Fragment {
         setHasOptionsMenu(true);
 
     }
+
+    /**
+     * metoda ustawia viewpager oraz swipeAdapter
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
 
     @Nullable
     @Override

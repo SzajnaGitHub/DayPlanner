@@ -11,6 +11,15 @@ import android.widget.Button;
 
 import com.inc.dayplanner.R;
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa, która pozwala na wyświetlanie okienka pop-up
+ * które umożliwia nam wybranie edycji lub usunięcia danej aktywności
+ *
+ * dziedziczy z klasy AppCompatDialogFragment
+ *
+ */
 
 
 public class PopupFragment extends AppCompatDialogFragment {
@@ -31,6 +40,14 @@ public class PopupFragment extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * metoda tworząca fragment pop-up
+     * zawiera deklaracje oraz definicje parametrów
+     * oraz obsługę przycisków delete oraz edit
+     *
+     * @param savedInstanceState
+     * @return fragment pop-up
+     */
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -53,6 +70,10 @@ public class PopupFragment extends AppCompatDialogFragment {
 
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
+
+    /**
+     * interfejs obsługujący zdarzenie usunięcia oraz edycji danej dziennej aktywności
+     */
 
     public interface ActivityHandlerListener{
         void onItemDeleted();

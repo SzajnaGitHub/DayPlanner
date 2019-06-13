@@ -29,12 +29,25 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Klasa MainActivity jest główną klasą projektu, zarządza ona wymianą fragmentów
+ * dziedziczy z klasy GoogleDriveOperation i implementuje interfejs OnNavigationItemSelectedListener
+ */
+
+
 public class MainActivity extends GoogleDriveOperation implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private Switch sw;
     public Toolbar toolbar;
     public static boolean importData;
+
+
+    /**
+     * metoda deklaruje obsługę przycisków na toolbarze
+     * @param item dany przycisk na toolbarze
+     * @return fałsz, ponieważ w tym miejscu tylko dany przycisk jest zadeklaorwany
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,6 +66,12 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public static String contentActivityReminder;
 
 
+    /**
+     * metoda ustawiająca menu aplikacji na podane przez nas
+     * @param menu podane przez nas menu
+     * @return true
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu,menu);
@@ -61,6 +80,12 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         return true;
     }
 
+    /**
+     * funkcja ustawiająca wszystkie parametry
+     * uruchamiana jest podczas tworzenia Aktywności
+     *
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +146,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     }
 
 
+    /**
+     * metoda obsługująca wszystkie  przyciski na panelu bocznym
+     * @param menuItem dany przycisk na panelu bocznym
+     * @return
+     */
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -171,11 +201,19 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     }
 
 
+    /**
+     * metoda obsługująca przycisk back* powodująca minimalizacje aplikacji przy
+     * wciśnięciu przycisku
+     */
     @Override
     public void onBackPressed() {
         this.moveTaskToBack(true);
     }
 
+    /**
+     * metoda obsługująca przycik do zmiany trybu z dziennego na nocny
+     * @param sw podany przycisk
+     */
 
     public void switchButtonHandler(Switch sw) {
 
@@ -191,6 +229,12 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
         }
 
+    /**
+     * ustawianie powiadomienia przy ustawieniu aktywności na aktywności przypomnienia
+     * @param dateToParse  dokładny czas w którym ma się pojawić powiadomienie
+     * @param activity dana  aktywność
+     * @param timeEarlier ile czasu wcześniej wyświetlić komunikat
+     */
 
     public void setNotification(String dateToParse,String activity, String timeEarlier){
             Calendar c = Calendar.getInstance();
@@ -213,6 +257,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         }
 
+
+    /**
+     * metoda zamieniająca fragmenty
+     * @param newFragment nowy fragment, który zostanie wyświetlony
+     */
 
     public void runFragmentMethod(Fragment newFragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment, null).commit();

@@ -10,6 +10,19 @@ import android.view.ViewGroup;
 
 import com.inc.dayplanner.R;
 
+
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa, która pośredniczy między viewpagerem a danym fragmentem wyświetlanym w przewijalnym menu
+ *
+ *
+ * dziedziczy z klasy Fragment
+ *
+ */
+
+
+
 public class DayOfTheWeekFragment extends Fragment {
 
 

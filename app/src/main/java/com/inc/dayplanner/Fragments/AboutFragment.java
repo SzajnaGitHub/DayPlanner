@@ -13,12 +13,30 @@ import android.widget.TextView;
 
 import com.inc.dayplanner.R;
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Klasa posiadająca opis aplikacji, twórców oraz linki do mediów socialnych
+ *
+ * dziedziczy z klasy Fragment
+ *
+ */
+
 public class AboutFragment extends Fragment {
 
     TextView mstv;
     TextView kctv;
     TextView infotv;
 
+    /**
+     * metoda wykonuje się przy uruchomieniu fragmentu
+     * ustawia wszystkie parametry oraz uruchamia metody
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

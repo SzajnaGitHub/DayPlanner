@@ -11,11 +11,24 @@ import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
 
 
+/**
+ * @author Marcin Szajna, Kacper Seweryn
+ *
+ * Login Activity jest klasą uruchamiającą się zawsze jako pierwsza
+ * dziedziczy z klasy GoogleDriveOperation
+ *
+ */
+
 
 public class LoginActivity extends GoogleDriveOperation {
 
 
     public static LoginActivity loginActivityInstance;
+
+    /**
+     * metoda onDriveClientReady
+     */
+
 
     @Override
     protected void onDriveClientReady() {
