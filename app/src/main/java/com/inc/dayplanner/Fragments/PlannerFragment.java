@@ -237,14 +237,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
             }
 
 
-
-            if(muteCheckbox.isChecked())  {
-                //ADD BUTTON METHODS
-               if(audioManager.getRingerMode()!=AudioManager.RINGER_MODE_VIBRATE){
-                    audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                 }
-
-            }
             String mute;
             if(muteCheckbox.isChecked()){
                 mute="true";
