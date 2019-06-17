@@ -57,7 +57,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu,menu);
         MenuItem goToItem = menu.findItem(R.id.goToButton);
-       // goToItem.setVisible(false);
+        goToItem.setVisible(false);
         return true;
     }
 
@@ -174,6 +174,8 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     @Override
     public void onBackPressed() {
         this.moveTaskToBack(true);
+       // synchronize();
+
     }
 
 
@@ -224,6 +226,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         retrieveContents(GoogleDriveOperation.driveFileToOpen);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        System.out.println("synchronize");
     }
 
 

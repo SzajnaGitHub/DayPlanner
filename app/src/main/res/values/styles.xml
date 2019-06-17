@@ -21,6 +21,7 @@
         <item name="popupcolor">#fff</item>
         <item name="popupbordercolor">#000</item>
         <item name="buttoncolor">#FFE299</item>
+        <item name="canceltextcolor">#c7c7c7</item>
 
 
         <item name="android:listDivider">@color/black</item>
@@ -41,12 +42,15 @@
         <item name="android:textSize">18sp</item>
         <item name="drawerArrowStyle">@style/DrawerIconWhite</item>
 
+
         <item name="backgroundcolor">#120e13</item>
         <item name="textcolor">#fff</item>
         <item name="toolbarcolor">#000</item>
         <item name="popupcolor">#000</item>
         <item name="popupbordercolor">#fff</item>
         <item name="buttoncolor">#fff</item>
+        <item name="canceltextcolor">#5c5c5c</item>
+
 
         <item name="android:listDivider">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>

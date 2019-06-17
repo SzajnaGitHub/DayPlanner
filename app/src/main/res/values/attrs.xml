@@ -3,6 +3,7 @@
 
     <attr name="backgroundcolor" format="color"/>
     <attr name="textcolor" format="color"/>
+    <attr name="canceltextcolor" format="color"/>
     <attr name="toolbarcolor" format="color"/>
     <attr name="popupcolor" format="color"/>
     <attr name="popupbordercolor" format="color"/>

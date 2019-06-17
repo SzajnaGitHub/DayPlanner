@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.inc.dayplanner.R;
-
+import com.inc.dayplanner.ViewChange.DynamicViews;
 
 
 public class PopupFragment extends AppCompatDialogFragment {
@@ -39,6 +39,7 @@ public class PopupFragment extends AppCompatDialogFragment {
 
         Button delButton = v.findViewById(R.id.deleteDialogButton);
         Button editButton = v.findViewById(R.id.editDialogButton);
+        Button cancelButton = v.findViewById(R.id.cancelDialogButton);
 
         delButton.setOnClickListener(v1 -> {
                     activityHandlerListener.onItemDeleted();
@@ -51,12 +52,24 @@ public class PopupFragment extends AppCompatDialogFragment {
 
         });
 
+        cancelButton.setOnClickListener(v3 -> {
+
+            activityHandlerListener.onItemCanceled();
+            dismiss();
+
+        });
+
+
+
+
+
         return new AlertDialog.Builder(getActivity()).setView(v).create();
     }
 
     public interface ActivityHandlerListener{
         void onItemDeleted();
         void onItemEdited();
+        void onItemCanceled();
     }
 }
 

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.R;
 
+import org.w3c.dom.Text;
+
 
 public class DynamicViews {
 
@@ -17,6 +19,10 @@ public class DynamicViews {
     private int id;
     private String hourText;
     private String activityText;
+    private LinearLayout linearLayoutVariable;
+    private TextView houtTV;
+    private TextView activityTV;
+
 
     public DynamicViews(Context ctx) {
         this.ctx = ctx;
@@ -24,51 +30,51 @@ public class DynamicViews {
 
     public TextView hourTextView(Context context, String text) {
 
-        final TextView textView = new TextView(context);
+        houtTV = new TextView(context);
 
         hourText=text;
-        textView.setText(text);
-        textView.setWidth((int) (getWidth(context) * 0.2));
-        textView.setTextSize(15);
-        textView.setClickable(true);
-        return textView;
+        houtTV.setText(text);
+        houtTV.setWidth((int) (getWidth(context) * 0.2));
+        houtTV.setTextSize(15);
+        houtTV.setClickable(true);
+        return houtTV;
     }
 
 
     public TextView activityTextView(Context context, final String text) {
 
         activityText=text;
-        final TextView textView = new TextView(context);
-        textView.setText(text);
-        textView.setWidth((int) (getWidth(context) * 0.8));
-        textView.setTextSize(20);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textView.setClickable(true);
-        return textView;
+        activityTV = new TextView(context);
+        activityTV.setText(text);
+        activityTV.setWidth((int) (getWidth(context) * 0.8));
+        activityTV.setTextSize(20);
+        activityTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        activityTV.setClickable(true);
+        return activityTV;
     }
 
     public LinearLayout linearLayout(Context context,TextView tvHour, TextView tvActivity) {
 
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.addView(tvHour);
-        linearLayout.addView(tvActivity);
+        linearLayoutVariable = new LinearLayout(context);
+        linearLayoutVariable.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutVariable.addView(tvHour);
+        linearLayoutVariable.addView(tvActivity);
 
-        linearLayout.setBackgroundResource(R.drawable.border_shape);
+        linearLayoutVariable.setBackgroundResource(R.drawable.border_shape);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(100, 20, 0, 20);
+        params.setMargins(0, 20, 0, 20);
 
-        linearLayout.setId(ViewCompat.generateViewId());
+        linearLayoutVariable.setId(ViewCompat.generateViewId());
 
-        id = linearLayout.getId();
+        id = linearLayoutVariable.getId();
 
-        linearLayout.setLayoutParams(params);
+        linearLayoutVariable.setLayoutParams(params);
 
 
-        return linearLayout;
+        return linearLayoutVariable;
     }
 
     public int getId() {
@@ -81,6 +87,18 @@ public class DynamicViews {
 
     public String getActivityText() {
         return activityText;
+    }
+
+    public TextView getHoutTV() {
+        return houtTV;
+    }
+
+    public TextView getActivityTV() {
+        return activityTV;
+    }
+
+    public LinearLayout getLinearLayoutVariable() {
+        return linearLayoutVariable;
     }
 
     private int getWidth(Context context) {
