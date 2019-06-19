@@ -29,9 +29,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inc.dayplanner.Activities.MainActivity;
 import com.inc.dayplanner.CheckMuteThread;
+import com.inc.dayplanner.NetworkState;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -221,133 +223,139 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         //Add button handler
         addButton.setOnClickListener(v -> {
-            boolean allDataVerified = false;
-            String date = dayTextView.getText().toString();
-            hour2 = toHourPickerTextView.getText().toString();
-            hour1 = fromHourPickerTextView.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Date d1;
-            Date d2;
-            long elapse = 0;
-            try {
-                d1 = sdf.parse(hour1);
-                d2 = sdf.parse(hour2);
-                elapse = d2.getTime() - d1.getTime();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Boolean status = NetworkState.getConnectivityStatusString(getContext());
+            if(status==false) {
+                Toast noConnection = Toast.makeText(getContext(),"No internet connection. Turn on Wi-Fi or Mobile Data", Toast.LENGTH_LONG);
+                noConnection.show();
+            }else {
 
-            System.out.println(elapse);
+                boolean allDataVerified = false;
+                String date = dayTextView.getText().toString();
+                hour2 = toHourPickerTextView.getText().toString();
+                hour1 = fromHourPickerTextView.getText().toString();
 
-            if(elapse <=0){
-                messageFrame.setBackgroundResource(R.drawable.bubble_red);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                Date d1;
+                Date d2;
+                long elapse = 0;
+                try {
+                    d1 = sdf.parse(hour1);
+                    d2 = sdf.parse(hour2);
+                    elapse = d2.getTime() - d1.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(elapse);
+
+                if (elapse <= 0) {
+                    messageFrame.setBackgroundResource(R.drawable.bubble_red);
                     fromHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
                     toHourPickerTextView.setTextColor(Color.parseColor("#e71837"));
                     wrongHourTextView.setVisibility(View.VISIBLE);
 
-            }else{
-                fromHourPickerTextView.setTextColor(textcolor);
-                toHourPickerTextView.setTextColor(textcolor);
-                messageFrame.setBackgroundResource(R.drawable.bubble);
-                wrongHourTextView.setVisibility(INVISIBLE);
-                frameVisibility = false;
-                allDataVerified = true;
+                } else {
+                    fromHourPickerTextView.setTextColor(textcolor);
+                    toHourPickerTextView.setTextColor(textcolor);
+                    messageFrame.setBackgroundResource(R.drawable.bubble);
+                    wrongHourTextView.setVisibility(INVISIBLE);
+                    frameVisibility = false;
+                    allDataVerified = true;
 
-            }
-
-
-            String mute;
-            if(muteCheckbox.isChecked()){
-                mute="true";
-            }else{
-                mute="false";
-            }
-            //---------------------------------------------------------------------------------------REMAINDER---------------------------------------------------------------------------------------
-            calendar = Calendar.getInstance();
-            String dateToParse="";
-            if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
-                dateToParse = hour1+"-"+ df.format(calendar.getTime());
-            }else{
-                dateToParse = hour1+"-"+dayTextView.getText().toString();
-            }
-
-            SimpleDateFormat remainderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
-            try {
-                calendar.setTime(remainderDF.parse(dateToParse));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            switch(remainderTime){
-                case "15 minutes earlier":
-                    calendar.add(Calendar.MINUTE,-15);
-                    break;
-                case "30 minutes earlier":
-                    calendar.add(Calendar.MINUTE,-30);
-                    break;
-                case "1 hour earlier":
-                    calendar.add(Calendar.MINUTE,-60);
-                    break;
-                case "2 hours earlier":
-                    calendar.add(Calendar.MINUTE,-120);
-                    break;
-                case "1 day earlier":
-                    calendar.add(Calendar.DATE,-1);
-                    break;
-            }
-            String dateToSaveRemainder="";
-            if(remainderTime.equals("Remaind me")||remainderTime.equals("No remaind me")){
-                dateToSaveRemainder = "no remaind";
-            }else{
-                Calendar cCurrent = Calendar.getInstance();
-                Date date1 = calendar.getTime();
-                Date dateCurrent = cCurrent.getTime();
-                if(date1.after(dateCurrent)) {
-                    dateToSaveRemainder = remainderDF.format(calendar.getTime());
-                    MainActivity.mainActivity.setNotification(dateToSaveRemainder, activityText.getText().toString(), remainderTime);
-                }else {
-                    dateToSaveRemainder="no remaind";
                 }
-            }
 
 
-            //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
-
-            if(allDataVerified) {
-
-                if(isDaily){
-                    addToListActivity(hour1,hour2,activityText.getText().toString());
+                String mute;
+                if (muteCheckbox.isChecked()) {
+                    mute = "true";
+                } else {
+                    mute = "false";
                 }
-            String[] addElement = {date,hour1,hour2,activityText.getText().toString(),mute, dateToSaveRemainder, remainderTime};
-            activityList.add(addElement);
-            if(date.equals("Sunday")||date.equals("Monday")||date.equals("Tuesday")||date.equals("Wednesday")||date.equals("Thursday")||date.equals("Friday")||date.equals("Saturday")){
-                date=df.format(calendar.getTime());
-            }
+
+                //---------------------------------------------------------------------------------------REMAINDER---------------------------------------------------------------------------------------
+                calendar = Calendar.getInstance();
+                String dateToParse = "";
+                if (date.equals("Sunday") || date.equals("Monday") || date.equals("Tuesday") || date.equals("Wednesday") || date.equals("Thursday") || date.equals("Friday") || date.equals("Saturday")) {
+                    dateToParse = hour1 + "-" + df.format(calendar.getTime());
+                } else {
+                    dateToParse = hour1 + "-" + dayTextView.getText().toString();
+                }
+
+                SimpleDateFormat remainderDF = new SimpleDateFormat("HH:mm-d MMM yyyy");
+                try {
+                    calendar.setTime(remainderDF.parse(dateToParse));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                switch (remainderTime) {
+                    case "15 minutes earlier":
+                        calendar.add(Calendar.MINUTE, -15);
+                        break;
+                    case "30 minutes earlier":
+                        calendar.add(Calendar.MINUTE, -30);
+                        break;
+                    case "1 hour earlier":
+                        calendar.add(Calendar.MINUTE, -60);
+                        break;
+                    case "2 hours earlier":
+                        calendar.add(Calendar.MINUTE, -120);
+                        break;
+                    case "1 day earlier":
+                        calendar.add(Calendar.DATE, -1);
+                        break;
+                }
+                String dateToSaveRemainder = "";
+                if (remainderTime.equals("Remaind me") || remainderTime.equals("No remaind me")) {
+                    dateToSaveRemainder = "no remaind";
+                } else {
+                    Calendar cCurrent = Calendar.getInstance();
+                    Date date1 = calendar.getTime();
+                    Date dateCurrent = cCurrent.getTime();
+                    if (date1.after(dateCurrent)) {
+                        dateToSaveRemainder = remainderDF.format(calendar.getTime());
+                        MainActivity.mainActivity.setNotification(dateToSaveRemainder, activityText.getText().toString(), remainderTime);
+                    } else {
+                        dateToSaveRemainder = "no remaind";
+                    }
+                }
 
 
+                //---------------------------------------------------------------------------------------END REMAINDER---------------------------------------------------------------------------------------
+
+                if (allDataVerified) {
+
+                    if (isDaily) {
+                        addToListActivity(hour1, hour2, activityText.getText().toString());
+                    }
+                    String[] addElement = {date, hour1, hour2, activityText.getText().toString(), mute, dateToSaveRemainder, remainderTime};
+                    activityList.add(addElement);
+                    if (date.equals("Sunday") || date.equals("Monday") || date.equals("Tuesday") || date.equals("Wednesday") || date.equals("Thursday") || date.equals("Friday") || date.equals("Saturday")) {
+                        date = df.format(calendar.getTime());
+                    }
 
 
-            save(date,hour1,hour2,activityText.getText().toString(),mute,dateToSaveRemainder, remainderTime);
+                    save(date, hour1, hour2, activityText.getText().toString(), mute, dateToSaveRemainder, remainderTime);
 //            sortAndAddToLayout(dayTextView.getText().toString());
 
-            if(activityText.getText().length()>20){
-                activityText.setText(activityText.getText().toString().substring(0,19)+"...");
-            }
+                    if (activityText.getText().length() > 20) {
+                        activityText.setText(activityText.getText().toString().substring(0, 19) + "...");
+                    }
 
 
-                messageFrame.setVisibility(INVISIBLE);
-                fromHourPickerTextView.setText(R.string.start_hour);
-                toHourPickerTextView.setText(R.string.end_hour);
-                activityText.setText("");
+                    messageFrame.setVisibility(INVISIBLE);
+                    fromHourPickerTextView.setText(R.string.start_hour);
+                    toHourPickerTextView.setText(R.string.end_hour);
+                    activityText.setText("");
 
 
-                if(!isDaily) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(this::refresh, 1000);
+                    if (!isDaily) {
+                        Handler handler = new Handler();
+                        handler.postDelayed(this::refresh, 1000);
+                    }
+
                 }
-
             }
-
         });
 
 
@@ -367,6 +375,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
         return view;
     }
 
