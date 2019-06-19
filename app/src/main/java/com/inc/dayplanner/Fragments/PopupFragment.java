@@ -15,7 +15,7 @@ import com.inc.dayplanner.ViewChange.DynamicViews;
 
 public class PopupFragment extends AppCompatDialogFragment {
 
-
+    public static String status;
     private ActivityHandlerListener activityHandlerListener;
     public PopupFragment(){
 
@@ -34,13 +34,17 @@ public class PopupFragment extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+//        status="active";
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.pop_up,null);
 
         Button delButton = v.findViewById(R.id.deleteDialogButton);
         Button editButton = v.findViewById(R.id.editDialogButton);
         Button cancelButton = v.findViewById(R.id.cancelDialogButton);
-
+        if(status.equals("active")){
+            cancelButton.setText("CANCEL");
+        }else{
+            cancelButton.setText("RESTORE");
+        }
         delButton.setOnClickListener(v1 -> {
                     activityHandlerListener.onItemDeleted();
                     dismiss();

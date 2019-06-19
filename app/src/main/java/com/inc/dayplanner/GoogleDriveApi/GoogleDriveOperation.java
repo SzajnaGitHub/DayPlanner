@@ -229,8 +229,8 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                             startActivity(intent);
                             MainActivity.importData=false;
                         }else{
-                            Intent intent = new Intent(this, MainActivity.class);
-                            startActivity(intent);
+//                            Intent intent = new Intent(this, MainActivity.class);
+//                            startActivity(intent);
                         }
 //                        showMessage(getString(R.string.read_failed));
                         // [END_EXCLUDE]
