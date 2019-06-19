@@ -121,6 +121,17 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        synchronize();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        retrieveContents(GoogleDriveOperation.driveFileToOpen);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
