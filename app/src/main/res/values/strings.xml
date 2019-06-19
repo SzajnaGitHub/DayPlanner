@@ -44,6 +44,10 @@
     <string name="start_hour">Start hour</string>
     <string name="end_hour">End hour</string>
     <string name="activity_add_hint">Activity</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="day_planner">Day Planner</string>
 
     <string-array name="remainder">
         <item>Set reminder</item>

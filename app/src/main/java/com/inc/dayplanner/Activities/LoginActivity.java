@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
@@ -16,6 +17,7 @@ public class LoginActivity extends GoogleDriveOperation {
 
 
     public static LoginActivity loginActivityInstance;
+    public static ProgressBar loadingBar;
 
     @Override
     protected void onDriveClientReady() {
@@ -34,12 +36,15 @@ public class LoginActivity extends GoogleDriveOperation {
                 selectDatabaseFileFromGoogleDrive();
             }
         }
+//        loadingBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loadingBar = findViewById(R.id.loadingBar);
+        loginActivityInstance=this;
     }
 
     public void Login(View view) {

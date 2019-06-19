@@ -16,7 +16,7 @@
         android:layout_marginEnd="60dp"
         android:ems="10"
         android:fontFamily="casual"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:selectAllOnFocus="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         android:drawableLeft="@drawable/ic_action_name"
         android:ems="10"
         android:fontFamily="casual"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textAutoCorrect|textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -54,7 +54,7 @@
         android:background="@drawable/round_button"
         android:fontFamily="casual"
         android:onClick="Login"
-        android:text="Login"
+        android:text="@string/login"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,10 +72,25 @@
         android:layout_marginEnd="24dp"
         android:fontFamily="casual"
         android:gravity="center"
-        android:text="Day Planner"
+        android:text="@string/day_planner"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        style="?android:attr/progressBarStyle"
+        android:visibility="visible"
+        android:layout_width="183dp"
+        android:layout_height="145dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
 </android.support.constraint.ConstraintLayout>

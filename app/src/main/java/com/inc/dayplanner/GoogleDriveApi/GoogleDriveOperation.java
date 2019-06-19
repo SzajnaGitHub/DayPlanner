@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,10 +47,12 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     private static final String TAG = "GoogleActivity";
 
 
+
     @Override
     protected void onDriveClientReady() {
 //        createFile();
 //        retrieveContents(GoogleDriveOperation.driveFileToOpen);
+//        loadingBar.setVisibility(View.INVISIBLE);
     }
 
     public void createNewGoogleFileAndAppendID(Context context){
@@ -220,10 +223,14 @@ public class GoogleDriveOperation extends BaseDemoActivity {
                         for(int i=0; i<GoogleDriveOperation.contentFromGoogleFile.size();i++){
                             PlannerFragment.activityList.add(GoogleDriveOperation.contentFromGoogleFile.get(i).split("&!&#&"));
                         }
+                        LoginActivity.loadingBar.setVisibility(View.INVISIBLE);
                         if(MainActivity.importData==true) {
                             Intent intent = new Intent(this, LoginActivity.class);
                             startActivity(intent);
                             MainActivity.importData=false;
+                        }else{
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
                         }
 //                        showMessage(getString(R.string.read_failed));
                         // [END_EXCLUDE]
