@@ -343,10 +343,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     }
 
 
-                    messageFrame.setVisibility(INVISIBLE);
-                    fromHourPickerTextView.setText(R.string.start_hour);
-                    toHourPickerTextView.setText(R.string.end_hour);
-                    activityText.setText("");
+                messageFrame.setVisibility(INVISIBLE);
+                fromHourPickerTextView.setText(R.string.start_hour);
+                toHourPickerTextView.setText(R.string.end_hour);
+                activityText.setText("");
+                muteCheckbox.setChecked(false);
 
 
                     if (!isDaily) {
