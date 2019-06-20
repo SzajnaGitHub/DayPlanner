@@ -83,11 +83,12 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public static Calendar skipToCalendar;
 
 
-    public static PlannerFragment newInstance(String date, int position) {
+    public static PlannerFragment newInstance(String date, boolean dateFormat, int position) {
 
         Bundle bundle = new Bundle();
         bundle.putString("Date", date);
-        bundle.putInt("Position",position);
+        bundle.putBoolean("dateFormat",dateFormat);
+        bundle.putInt("position",position);
 
         PlannerFragment fragment = new PlannerFragment();
         fragment.setArguments(bundle);
@@ -113,10 +114,10 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         MenuItem goToItem = menu.findItem(R.id.goToButton);
-        if(isDaily) {
-            goToItem.setVisible(false);
-        } else {
+        if(!isDaily) {
             goToItem.setVisible(true);
+        } else {
+            goToItem.setVisible(false);
         }
 
         //super.onCreateOptionsMenu(menu, inflater);
@@ -185,12 +186,18 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         //View fragment date
         String message;
-        if (getArguments()!=null) {
+        if (getArguments()!=null && !getArguments().getBoolean("dateFormat")) {
+
             message = getArguments().getString("Date");
             dayTextView.setText(message);
-            context=getContext();
+            context = getContext();
             read(dayTextView.getText().toString());
             isDaily = false;
+        } else if(getArguments()!=null && getArguments().getBoolean("dateFormat")) {
+
+            int day = getArguments().getInt("position");
+            dayTextView.setText(SwipeAdapter.setDay(calendar.get(Calendar.DAY_OF_WEEK)+day));
+            isDaily = true;
 
         }else {
             dayTextView.setText(SwipeAdapter.setDay(1));
@@ -224,8 +231,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         //Add button handler
         addButton.setOnClickListener(v -> {
 
-            Boolean status = NetworkState.getConnectivityStatusString(getContext());
-            if(status==false) {
+            boolean status = NetworkState.getConnectivityStatusString(getContext());
+            if(!status) {
                 Toast noConnection = Toast.makeText(getContext(),"No internet connection. Turn on Wi-Fi or Mobile Data", Toast.LENGTH_LONG);
                 noConnection.show();
             }else {
@@ -368,7 +375,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
 
-        remindSpinner = view.findViewById(R.id.reminderSpinner);
+       // remindSpinner = view.findViewById(R.id.reminderSpinner);
 
 
         Spinner spinner = view.findViewById(R.id.reminderSpinner);
@@ -672,11 +679,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
         isSkipToDate=true;
         skipToCalendar=c;
-        SwipeAdapter swipeAdapterSkipTo = new SwipeAdapter(getFragmentManager());
+        SwipeAdapter swipeAdapterSkipTo = new SwipeAdapter(getFragmentManager(),10000);
         swipeAdapterSkipTo.calendar=c;
-        CreatePlanFragment.viewPager.setAdapter(swipeAdapterSkipTo);
-        CreatePlanFragment.viewPager.setCurrentItem(4999);
-        CreatePlanFragment.viewPager.getAdapter().notifyDataSetChanged();
+        DailyPlanFragment.viewPager.setAdapter(swipeAdapterSkipTo);
+        DailyPlanFragment.viewPager.setCurrentItem(4999);
+        DailyPlanFragment.viewPager.getAdapter().notifyDataSetChanged();
 //        refresh();
     };
 
@@ -685,7 +692,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             bundle.getString("name");
-            bundle.getInt("age");
+            bundle.getBoolean("dateFormat");
+            bundle.getInt("position");
+
         }
 
     }

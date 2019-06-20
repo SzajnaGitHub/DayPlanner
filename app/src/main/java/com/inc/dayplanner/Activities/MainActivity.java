@@ -19,7 +19,8 @@ import android.widget.Switch;
 
 import com.inc.dayplanner.AlertReceiver;
 import com.inc.dayplanner.Fragments.AboutFragment;
-import com.inc.dayplanner.Fragments.CreatePlanFragment;
+import com.inc.dayplanner.Fragments.CreatePlan;
+import com.inc.dayplanner.Fragments.DailyPlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
 import com.inc.dayplanner.R;
@@ -126,14 +127,19 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.nav_plan:
+            case R.id.nav_today:
                 runFragmentMethod(new PlannerFragment());
                 toolbar.setTitle("Today");
                 break;
 
-            case R.id.nav_create_planer:
-                runFragmentMethod(new CreatePlanFragment());
+            case R.id.nav_daily:
+                runFragmentMethod(new DailyPlanFragment());
                 toolbar.setTitle("Daily");
+                break;
+
+            case R.id.nav_create_plan:
+                runFragmentMethod(new CreatePlan());
+                toolbar.setTitle("Plan Creator");
                 break;
 
             case R.id.app_bar_switch:

@@ -24,12 +24,22 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
     private DateFormat df = new SimpleDateFormat("d MMM yyyy");
     private static Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
     private static List<PlannerFragment> plannerFragmentList = new ArrayList<>();
+    private int count;
+    private int previousPosition;
+    private boolean dateFormat;
 
 
-    private int previousPosition = 4999;
 
-    public SwipeAdapter(FragmentManager fm) {
+    public SwipeAdapter(FragmentManager fm,int count) {
         super(fm);
+        this.count = count;
+        if(count == 7) {
+            previousPosition = 0;
+            dateFormat = true;
+        } else {
+            previousPosition = 4999;
+            dateFormat = false;
+        }
     }
 
     public int getItemPosition(Object object){
@@ -42,7 +52,8 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         calendar.add(Calendar.DATE,position-previousPosition);
         String date = df.format(calendar.getTime());
 
-        PlannerFragment pageFragment = PlannerFragment.newInstance(date,position);
+
+        PlannerFragment pageFragment = PlannerFragment.newInstance(date,dateFormat,position);
 
         plannerFragmentList.add(pageFragment);
 
@@ -55,7 +66,7 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 10000;
+        return count;
     }
 
     public Fragment getFragment(int key) {

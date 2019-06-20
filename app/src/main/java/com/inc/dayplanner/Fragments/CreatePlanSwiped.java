@@ -7,38 +7,45 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.ViewChange.SwipeAdapter;
 
 
-public class CreatePlanFragment extends Fragment {
+public class CreatePlanSwiped extends Fragment {
 
-    public static ViewPager viewPager;
+    private ViewPager viewPager;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+      //  setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_create_plan, container, false);
+        View view = inflater.inflate(R.layout.fragment_daily_plan, container, false);
         viewPager = view.findViewById(R.id.view_pager);
-        SwipeAdapter swipeAdapter = new SwipeAdapter(getFragmentManager());
+        SwipeAdapter swipeAdapter = new SwipeAdapter(getFragmentManager(),7);
         viewPager.setAdapter(swipeAdapter);
-        viewPager.setCurrentItem(4999);
+        viewPager.setCurrentItem(0);
         viewPager.getAdapter().notifyDataSetChanged();
 
         return view;
     }
+
+/*
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        MenuItem goToItem = menu.findItem(R.id.goToButton);
+        goToItem.setVisible(false);
+
+    }
+*/
 
 
 

@@ -58,4 +58,16 @@
         <item>1 day earlier</item>
     </string-array>
 
+    <string-array name="breaks">
+        <item>not applicable</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>30 min</item>
+        <item>45 min</item>
+        <item>1 hour</item>
+    </string-array>
+
+
 </resources>
