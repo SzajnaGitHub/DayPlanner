@@ -85,7 +85,7 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="12dp"
                 android:backgroundTint="?attr/textcolor"
                 android:ems="10"
                 android:hint="@string/activity_add_hint"
@@ -96,6 +96,7 @@
                 android:textColorHint="?attr/textcolor"
                 app:layout_constraintBottom_toTopOf="@+id/reminderSpinner"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <CheckBox
@@ -138,45 +139,43 @@
                 android:id="@+id/fromHourPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/start_hour"
                 android:textColor="?attr/textcolor"
                 app:layout_constraintBottom_toTopOf="@+id/activityText"
-                app:layout_constraintEnd_toStartOf="@+id/toHourPicker"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.217" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/toHourPicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="24dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/end_hour"
                 android:textColor="?attr/textcolor"
                 app:layout_constraintBottom_toTopOf="@+id/activityText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.217" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/wrongHoursTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="96dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="Pick suitable hours!"
                 android:textColor="#e71837"
                 android:textSize="12sp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>

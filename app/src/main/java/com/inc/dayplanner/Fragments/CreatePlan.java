@@ -2,6 +2,7 @@ package com.inc.dayplanner.Fragments;
 
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,6 +32,8 @@ public class CreatePlan extends Fragment {
     private TextView toDate;
     private String whichDateTextIsPicked;
     private Button createPlanButton;
+    private RadioButton radioNo;
+    private RadioButton radioYes;
 
 
     @Override
@@ -61,11 +65,23 @@ public class CreatePlan extends Fragment {
             whichDateTextIsPicked = "toDate";
         });
 
-        createPlanButton = view.findViewById(R.id.createPlanButton);
 
+
+
+
+        radioNo = view.findViewById(R.id.radioNo);
+        radioYes = view.findViewById(R.id.radioYes);
+        createPlanButton = view.findViewById(R.id.createPlanButton);
         createPlanButton.setOnClickListener(v -> {
 
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanSwiped(), null).commit();
+            if(!fromDate.getText().equals("click") || !toDate.getText().equals("click")) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanSwiped(), null).commit();
+            } else {
+                fromDate.setTextColor(Color.parseColor("#e71837"));
+                toDate.setTextColor(Color.parseColor("#e71837"));
+                createPlanButton.setBackgroundResource(R.drawable.round_button_red);
+            }
+
 
         });
 

@@ -86,6 +86,7 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         int days = setCalendar.get(Calendar.DAY_OF_YEAR);
 
 
+
         String dayofTheWeek = null;
         int realDay = (days - 7 + position) % 7 + 1;
 
@@ -117,7 +118,35 @@ public class SwipeAdapter extends FragmentStatePagerAdapter {
         return dayofTheWeek;
     }
 
+    static public String setDayOfTheWeek(int position) {
 
+            String dayofTheWeek ="";
+        switch (position) {
 
+            case 0:
+                dayofTheWeek = "Monday";
+                break;
+            case 1:
+                dayofTheWeek = "Tuesday";
+                break;
+            case 2:
+                dayofTheWeek = "Wednesday";
+                break;
+            case 3:
+                dayofTheWeek = "Thursday";
+                break;
+            case 4:
+                dayofTheWeek = "Friday";
+                break;
+            case 5:
+                dayofTheWeek = "Saturday";
+                break;
+            case 6:
+                dayofTheWeek = "Sunday";
+                break;
+        }
+        return dayofTheWeek;
+
+        }
 
 }

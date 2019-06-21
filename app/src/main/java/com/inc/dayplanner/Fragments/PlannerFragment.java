@@ -180,12 +180,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         Thread thread = new Thread(new CheckMuteThread());
         thread.start();
 
-        readBundle(getArguments());
-
 
 
         //View fragment date
         String message;
+        readBundle(getArguments());
         if (getArguments()!=null && !getArguments().getBoolean("dateFormat")) {
 
             message = getArguments().getString("Date");
@@ -196,7 +195,8 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         } else if(getArguments()!=null && getArguments().getBoolean("dateFormat")) {
 
             int day = getArguments().getInt("position");
-            dayTextView.setText(SwipeAdapter.setDay(calendar.get(Calendar.DAY_OF_WEEK)+day));
+
+            dayTextView.setText(SwipeAdapter.setDayOfTheWeek(day));
             isDaily = true;
 
         }else {

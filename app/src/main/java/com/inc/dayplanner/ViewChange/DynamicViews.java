@@ -36,6 +36,7 @@ public class DynamicViews {
         houtTV.setText(text);
         houtTV.setWidth((int) (getWidth(context) * 0.2));
         houtTV.setTextSize(15);
+        houtTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         houtTV.setClickable(true);
         return houtTV;
     }
