@@ -179,6 +179,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     public static ArrayList<String> contentFromGoogleFile= new ArrayList<String>();
 
     public void retrieveContents(DriveFile file) throws NullPointerException {
+        LoginActivity.loadingBar.setVisibility(View.VISIBLE);
         contentFromGoogleFile.clear();
         try {
             // [START drive_android_open_file]
