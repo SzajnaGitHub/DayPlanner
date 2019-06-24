@@ -1,5 +1,8 @@
 package com.inc.dayplanner.Activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.widget.ProgressBar;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.BaseDemoActivity;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
+import com.inc.dayplanner.MuteJobScheduler;
 import com.inc.dayplanner.R;
 
 
@@ -74,6 +78,7 @@ public class LoginActivity extends GoogleDriveOperation {
         });
 
         loginActivityInstance=this;
+
 
 
     }

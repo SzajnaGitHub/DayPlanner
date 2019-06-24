@@ -3,6 +3,9 @@ package com.inc.dayplanner.Activities;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -24,6 +27,7 @@ import com.inc.dayplanner.Fragments.CreatePlan;
 import com.inc.dayplanner.Fragments.DailyPlanFragment;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
+import com.inc.dayplanner.MuteJobScheduler;
 import com.inc.dayplanner.R;
 import com.inc.dayplanner.ViewChange.Utils;
 
@@ -73,6 +77,15 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         Utils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
         mainActivity=this;
+//        ComponentName componentName = new ComponentName(this, MuteJobScheduler.class);
+//        JobInfo info = new JobInfo.Builder(69,componentName)
+//                .setPeriodic(15*60*1000)
+//                .setPersisted(true)
+//                .build();
+//        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+//        scheduler.schedule(info);
+        Intent intentService = new Intent(this, MuteJobScheduler.class);
+        startService(intentService);
 
 
         String swipeChecked;

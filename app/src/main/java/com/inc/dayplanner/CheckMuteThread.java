@@ -35,7 +35,7 @@ public class CheckMuteThread implements Runnable{
         int[] timeToInt = new int[2];
         timeToUnmute[0]=-1;
         timeToUnmute[1]=-1;
-        while (true) {
+      //  while (true) {
             List<String[]> activitiesThreadList = PlannerFragment.activityList;
             @SuppressLint("SimpleDateFormat") String df = new SimpleDateFormat("d MMM yyyy").format(calendar.getTime());
             if(appMutedPhone) {
@@ -85,12 +85,14 @@ public class CheckMuteThread implements Runnable{
             }
 
             try {
-                Thread.sleep(30000);
+                System.out.println("Watek idzie spac :OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+//                Thread.sleep(30000);
+                Thread.sleep(1);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+       // }
     }
 
 
