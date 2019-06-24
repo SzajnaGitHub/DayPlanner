@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,8 +35,13 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 
     private DrawerLayout drawer;
     private Switch sw;
-    public Toolbar toolbar;
+    private Toolbar toolbar;
     public static boolean importData;
+    public static MainActivity mainActivity;
+    public static String timeEarlierReminder;
+    public static String contentActivityReminder;
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -49,9 +55,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         return false;
     }
 
-    public static MainActivity mainActivity;
-    public static String timeEarlierReminder;
-    public static String contentActivityReminder;
+
 
 
     @Override
@@ -177,12 +181,19 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     }
 
 
+
+
     @Override
     public void onBackPressed() {
-        this.moveTaskToBack(true);
+
+
+
        // synchronize();
+        this.moveTaskToBack(true);
 
     }
+
+
 
 
     public void switchButtonHandler(Switch sw) {
@@ -222,7 +233,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
         }
 
 
-    public void runFragmentMethod(Fragment newFragment) {
+    private void runFragmentMethod(Fragment newFragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment, null).commit();
         drawer.closeDrawer(GravityCompat.START);
 

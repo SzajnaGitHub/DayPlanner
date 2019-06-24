@@ -235,11 +235,11 @@ public abstract class BaseDemoActivity extends AppCompatActivity {
      */
     protected abstract void onDriveClientReady();
 
-    protected DriveClient getDriveClient() {
+    public DriveClient getDriveClient() {
         return mDriveClient;
     }
 
-    protected DriveResourceClient getDriveResourceClient() {
+    public DriveResourceClient getDriveResourceClient() {
         return mDriveResourceClient;
     }
 }

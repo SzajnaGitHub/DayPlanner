@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -362,6 +363,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                         handler.postDelayed(this::refresh, 1000);
                     }
 
+
+                    closeKeyboard(view);
+
                 }
             }
         });
@@ -584,7 +588,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
 
 
 
-    public void read(String date){
+    private void read(String date){
         //remove all elements from gridLayout
         gridLayout.removeAllViews();
         //compare
@@ -599,14 +603,6 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
     }
 
-
-
-    private void unMutePhone(AudioManager audioManager) {
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-
-        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
-    }
 
 
     @Override
@@ -698,15 +694,28 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         }
 
     }
-
     private void refresh(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 26) {
+        FragmentTransaction ft = null;
+        if (getFragmentManager() != null) {
+            ft = getFragmentManager().beginTransaction();
+        }
+        if (Build.VERSION.SDK_INT >= 26 && ft != null) {
             ft.setReorderingAllowed(false);
         }
         ft.detach(this).attach(this).commit();
         System.out.println("refresh");
     }
+    private void closeKeyboard(View view) {
+        if(view !=null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
+    }
+    private void unMutePhone(AudioManager audioManager) {
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
 
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, maxVolume, AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
+    }
 
 }

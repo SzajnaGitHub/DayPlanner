@@ -75,7 +75,10 @@ public class CreatePlan extends Fragment {
         createPlanButton.setOnClickListener(v -> {
 
             if(!fromDate.getText().equals("click") || !toDate.getText().equals("click")) {
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanSwiped(), null).commit();
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreatePlanSwiped(), null).addToBackStack(null).commit();
+                }
+
             } else {
                 fromDate.setTextColor(Color.parseColor("#e71837"));
                 toDate.setTextColor(Color.parseColor("#e71837"));
