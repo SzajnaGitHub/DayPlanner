@@ -14,8 +14,8 @@ public class ReadFileLocal {
 
     private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
 
-    public String readFile(Context ctx){
-        String filename = "DayPlannerIDdataFile";
+    public String readFile(Context ctx, String filename){
+//        String filename = "DayPlannerIDdataFile";
 
         FileInputStream fileInputStream = null;
         try {

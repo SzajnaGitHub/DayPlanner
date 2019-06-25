@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.Switch;
 
 import com.inc.dayplanner.AlertReceiver;
+import com.inc.dayplanner.CheckCancelledActivities;
 import com.inc.dayplanner.Fragments.AboutFragment;
 import com.inc.dayplanner.Fragments.CreatePlan;
 import com.inc.dayplanner.Fragments.DailyPlanFragment;
@@ -44,6 +45,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
     public static MainActivity mainActivity;
     public static String timeEarlierReminder;
     public static String contentActivityReminder;
+    public static Boolean notificationReminder=false;
 
 
 
@@ -84,8 +86,11 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
 //                .build();
 //        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 //        scheduler.schedule(info);
-        Intent intentService = new Intent(this, MuteJobScheduler.class);
-        startService(intentService);
+        Intent intentServiceMute = new Intent(this, MuteJobScheduler.class);
+        startService(intentServiceMute);
+
+        Intent intentServiceCheckCancelled = new Intent(this, CheckCancelledActivities.class);
+        startService(intentServiceCheckCancelled);
 
 
         String swipeChecked;
@@ -238,6 +243,7 @@ public class MainActivity extends GoogleDriveOperation implements NavigationView
                 e.printStackTrace();
             }
 
+            notificationReminder=true;
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);

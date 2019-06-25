@@ -14,16 +14,26 @@ public class SaveFileLocal extends AppCompatActivity {
 
     private String TAG_WRITE_READ_FILE = "TAG_WRITE_READ_FILE";
 
-    public void saveFile(Context ctx, String username, String pathToDataFile){
+    public void saveIDFile(Context ctx, String username, String pathToDataFile){
         String filename = "DayPlannerIDdataFile";
-        ReadFileLocal readFileLocal = new ReadFileLocal();
-        String fileData=readFileLocal.readFile(ctx);
+        String fileData;
 
         String content =username+"|"+pathToDataFile;
 
             fileData=content;
 
+        saveToFile(ctx,filename,fileData);
 
+
+        //Toast.makeText(ctx, "Data has been written to file " + userEmalFileName, Toast.LENGTH_LONG).show();
+    }
+
+    public void saveCheckCancelledActivities(Context ctx, String fileData){
+        String filename = "DayPlannerCheckCancelledAct";
+        saveToFile(ctx,filename,fileData);
+    }
+
+    private void saveToFile(Context ctx,String filename, String fileData){
         try
         {
             FileOutputStream fileOutputStream = ctx.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -32,14 +42,7 @@ public class SaveFileLocal extends AppCompatActivity {
         {
             Log.e(TAG_WRITE_READ_FILE, ex.getMessage(), ex);
         }
-
-        //Toast.makeText(ctx, "Data has been written to file " + userEmalFileName, Toast.LENGTH_LONG).show();
     }
-
-
-
-
-
 
     private void writeDataToFile(FileOutputStream fileOutputStream, String data)
     {

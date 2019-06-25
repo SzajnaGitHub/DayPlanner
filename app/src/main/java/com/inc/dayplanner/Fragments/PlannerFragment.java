@@ -33,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inc.dayplanner.Activities.MainActivity;
-import com.inc.dayplanner.CheckMuteThread;
 import com.inc.dayplanner.NetworkState;
 import com.inc.dayplanner.ViewChange.DynamicViews;
 import com.inc.dayplanner.GoogleDriveApi.GoogleDriveOperation;
@@ -178,8 +177,7 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
         canceltextcolor = typedValue.data;
 
 
-        Thread thread = new Thread(new CheckMuteThread());
-        thread.start();
+
 
 
 

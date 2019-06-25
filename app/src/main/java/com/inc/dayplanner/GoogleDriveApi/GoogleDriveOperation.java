@@ -1,15 +1,10 @@
 package com.inc.dayplanner.GoogleDriveApi;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.drive.DriveContents;
@@ -20,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.inc.dayplanner.Activities.LoginActivity;
 import com.inc.dayplanner.Activities.MainActivity;
+import com.inc.dayplanner.CheckCancelledActivities;
 import com.inc.dayplanner.Fragments.PlannerFragment;
 import com.inc.dayplanner.R;
 
@@ -33,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.google.android.gms.drive.DriveId.decodeFromString;
 
@@ -57,7 +54,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
     public void createNewGoogleFileAndAppendID(Context context){
         SaveFileLocal saveFileLocal = new SaveFileLocal();
-        saveFileLocal.saveFile(context,getUsername(context), pathToDataFile);
+        saveFileLocal.saveIDFile(context,getUsername(context), pathToDataFile);
     }
 
 
@@ -251,6 +248,48 @@ public class GoogleDriveOperation extends BaseDemoActivity {
     }
 
 
+    public List<String[]> retrieveContentsToCheckCancelledActivities(DriveFile file, CheckCancelledActivities checkCancelledActivities) throws NullPointerException {
+        List<String[]> arrayToCheck = new ArrayList<>();
+        ArrayList<String> contentFromGoogleFileToCheck= new ArrayList<String>();
+        contentFromGoogleFileToCheck.clear();
+        try {
+            Task<DriveContents> openFileTask =
+                    getDriveResourceClient().openFile(file, DriveFile.MODE_READ_ONLY);
+            openFileTask
+                    .continueWithTask(task -> {
+                        DriveContents contents = task.getResult();
+
+                        try (BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(contents.getInputStream()))) {
+                            StringBuilder builder = new StringBuilder();
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                if(!line.equals("")){
+                                    contentFromGoogleFileToCheck.add(line);
+                                }
+
+                            }
+                        }
+                        Task<Void> discardTask = getDriveResourceClient().discardContents(contents);
+                        return discardTask;
+                    })
+                    .addOnCompleteListener(e -> {
+                        for(int i=0; i<contentFromGoogleFileToCheck.size();i++){
+                            arrayToCheck.add(contentFromGoogleFileToCheck.get(i).split("&!&#&"));
+                        }
+                        checkCancelledActivities.saveFromArrayListToFile(arrayToCheck);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Unable to read contents", e);
+                        finish();
+                    });
+        }catch(NullPointerException e){
+            throw new NullPointerException(e.toString());
+        }
+        return arrayToCheck;
+    }
+
+
 
     public String getUsername(Context context) {
         signInAccount = GoogleSignIn.getLastSignedInAccount(context);
@@ -262,7 +301,7 @@ public class GoogleDriveOperation extends BaseDemoActivity {
 
     public void readFile(Context context){
         ReadFileLocal readFileLocal = new ReadFileLocal();
-        String fileData=readFileLocal.readFile(context);
+        String fileData=readFileLocal.readFile(context,"DayPlannerIDdataFile");
         String [] recordsFromFile;
         recordsFromFile = fileData.split("///");
         String [] [] usersAndIDFromFile = new String[recordsFromFile.length][];
