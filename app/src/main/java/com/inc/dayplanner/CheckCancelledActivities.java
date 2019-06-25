@@ -24,6 +24,7 @@ public class CheckCancelledActivities extends IntentService {
     int length;
     GoogleDriveOperation googleDriveOperation = new GoogleDriveOperation();
     public static String nameActivityCancelled;
+    public static String stateActivityNotification;
 
     public CheckCancelledActivities() {
         super("Cancelled Activities");
@@ -38,11 +39,9 @@ public class CheckCancelledActivities extends IntentService {
         new Thread(() -> {
             Looper.prepare();
             while (true){
-                System.out.println("TEST ANULACJI");
 
                 googleDriveOperation.readFile(getApplicationContext());
                 if(GoogleDriveOperation.driveFileToOpen!=null){
-                    System.out.println("drive nie jest null");
                     googleDriveOperation.retrieveContentsToCheckCancelledActivities(GoogleDriveOperation.driveFileToOpen, this);
                 }
 
@@ -69,7 +68,7 @@ public class CheckCancelledActivities extends IntentService {
                 arrayLocal.add(arrayRead[i].split("&!&#&"));
             }
 
-            System.out.println(arrayLocal.get(i)[0]);
+
         }
 
 
@@ -80,15 +79,17 @@ public class CheckCancelledActivities extends IntentService {
             length=arrayGoogle.size();
         }
         for(int i=0;i<length;i++){
-//            System.out.println("Google: "+arrayGoogle.get(i)[7]);
-//            System.out.println("Local: "+arrayLocal.get(i)[7]);
+
             if(!arrayGoogle.get(i)[7].equals(arrayLocal.get(i)[7]) && !arrayLocal.equals("BrAkAkTyWnOOsci")){
-                System.out.println("ANULOWANIE AKTYWNOSCI");
-                Toast toast = Toast.makeText(getApplicationContext(),"Anulacja aktywnosci "+arrayLocal.get(i)[3],Toast.LENGTH_LONG);
-                toast.show();
 
                 //-----------------------------NOTIFICATION-----------------------------
                 nameActivityCancelled=arrayLocal.get(i)[3];
+                if(arrayGoogle.get(i)[7].equals("active")){
+                    stateActivityNotification="restored";
+                }
+                else{
+                    stateActivityNotification="cancelled";
+                }
                 Calendar c = Calendar.getInstance();
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(this, AlertReceiver.class);

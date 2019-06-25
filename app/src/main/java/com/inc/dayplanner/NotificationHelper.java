@@ -51,7 +51,7 @@ public class NotificationHelper extends ContextWrapper {
         }else {
             return new NotificationCompat.Builder(getApplicationContext(), channelID)
                     .setContentTitle("Cancelled Activity")
-                    .setContentText("Activity " + CheckCancelledActivities.nameActivityCancelled + " has been canceled")
+                    .setContentText("Activity " + CheckCancelledActivities.nameActivityCancelled + " has been "+CheckCancelledActivities.stateActivityNotification)
                     .setSmallIcon(R.drawable.ic_notification_icon2);
         }
     }
