@@ -22,6 +22,7 @@ public class CheckCancelledActivities extends IntentService {
     String[] arrayRead;
     ReadFileLocal readFileLocal;
     int length;
+    int countCancelled=0;
     GoogleDriveOperation googleDriveOperation = new GoogleDriveOperation();
     public static String nameActivityCancelled;
     public static String stateActivityNotification;
@@ -56,6 +57,8 @@ public class CheckCancelledActivities extends IntentService {
 
     public void saveFromArrayListToFile(List<String[]> arrayGoogle){
 
+        countCancelled=0;
+        nameActivityCancelled="";
         arrayLocal = new ArrayList<>();
 //        saveFromArrayListToFile(arrayGoogle);
         readFileLocal = new ReadFileLocal();
@@ -82,26 +85,36 @@ public class CheckCancelledActivities extends IntentService {
 
             if(!arrayGoogle.get(i)[7].equals(arrayLocal.get(i)[7]) && !arrayLocal.equals("BrAkAkTyWnOOsci")){
 
-                //-----------------------------NOTIFICATION-----------------------------
-                nameActivityCancelled=arrayLocal.get(i)[3];
+                if(countCancelled>0){
+                    nameActivityCancelled+=", ";
+                }
+
+                nameActivityCancelled+=arrayLocal.get(i)[3]+" ("+arrayLocal.get(i)[0]+")";
+
                 if(arrayGoogle.get(i)[7].equals("active")){
                     stateActivityNotification="restored";
                 }
                 else{
                     stateActivityNotification="cancelled";
                 }
-                Calendar c = Calendar.getInstance();
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(this, AlertReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-
-                //---------------------------END NOTIFICATION---------------------------
-
-                googleDriveOperation.retrieveContents(GoogleDriveOperation.driveFileToOpen);
-
+                countCancelled++;
             }
+        }
+        if(countCancelled>0){
+            if(countCancelled>1){
+                stateActivityNotification="restore/cancelled";
+            }
+            //-----------------------------NOTIFICATION-----------------------------
+            Calendar c = Calendar.getInstance();
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+            //---------------------------END NOTIFICATION---------------------------
+
+            googleDriveOperation.retrieveContents(GoogleDriveOperation.driveFileToOpen);
         }
         String textToSave;//=dateString+"&!&#&"+fromText+"&!&#&"+toText+"&!&#&"+activityText+"&!&#&"+mute+"&!&#&"+dateRemainder+"\n";
         textToSave="";

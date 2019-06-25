@@ -524,8 +524,11 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     idAct[0] =i;
                 }
             }
-            PopupFragment.status = activityList.get(idAct[0])[7];
+
             dateToDelete = dayTextView.getText().toString();
+            int idActivity=searchActivity(testDV);
+            PopupFragment.status = activityList.get(idActivity)[7];
+
             PopupFragment dialog = new PopupFragment();
             if (getFragmentManager() != null) {
                 dialog.setTargetFragment(PlannerFragment.this, 1);
@@ -548,8 +551,9 @@ public class PlannerFragment extends Fragment  implements PopupFragment.Activity
                     idAct[0] =i;
                 }
             }
-                PopupFragment.status = activityList.get(idAct[0])[7];
                 dateToDelete = dayTextView.getText().toString();
+                int idActivity=searchActivity(testDV);
+                PopupFragment.status = activityList.get(idActivity)[7];
                 PopupFragment dialog = new PopupFragment();
                 if (getFragmentManager() != null) {
                     dialog.setTargetFragment(PlannerFragment.this, 1);
